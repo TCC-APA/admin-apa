@@ -8,7 +8,7 @@ import javax.persistence.Persistence;
 public class PersistenceManager {
 	
 	private static EntityManagerFactory factory =
-			Persistence.createEntityManagerFactory("perfilaprendizadoPU");
+			Persistence.createEntityManagerFactory("apaWS_PU");
 	private static EntityManager em = factory.createEntityManager();
 	
 	static EntityManager getEntityManager(){
