@@ -1,9 +1,12 @@
 package br.com.rest.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.NoResultException;
+import javax.print.attribute.HashAttributeSet;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -14,6 +17,7 @@ import br.com.rest.model.dao.QuestionarioDAO;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.QuestaoDTO;
 import br.com.rest.model.dto.QuestionarioDTO;
+import br.com.rest.model.dto.ValorAlternativaDTO;
 import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.QuestaoEntity;
@@ -42,8 +46,7 @@ public class QuestionarioServices {
 			PersistenceManager.getTransaction().begin();
 			
 			try{
-				QuestionarioEntity quest = new QuestionarioEntity();
-				questionarioDtoToEntity(questionario, quest);
+				QuestionarioEntity quest = questionarioDtoToEntity(questionario);
 				questionarioDao.incluir(quest);	
 				PersistenceManager.getTransaction().commit();
 				return true;
@@ -55,7 +58,7 @@ public class QuestionarioServices {
 		}
 	}
 	
-	public static List<QuestionarioEntity> buscarQuestionariosPorGruposAluno(String matricula){
+	public static List<QuestionarioDTO> buscarQuestionariosPorGruposAluno(String matricula){
 		List<QuestionarioEntity> questionariosBanco = new ArrayList<QuestionarioEntity>();
 		AlunoEntity aluno = null;
 		try {
@@ -77,50 +80,122 @@ public class QuestionarioServices {
 				        .build()
 				    );
 		}
-		return questionariosBanco;
+		
+		List<QuestionarioDTO> listDto = new ArrayList<QuestionarioDTO>();
+		for(QuestionarioEntity questEntity : questionariosBanco) {
+			QuestionarioDTO questDto = questionarioEntityToDto(questEntity);
+			listDto.add(questDto);
+		}
+		
+		return listDto;
 	}
 	
-	public static QuestionarioEntity questionarioDtoToEntity(QuestionarioDTO quest, QuestionarioEntity questEntity) {
-		/*if(quest.getEstilosDto() != null && quest.getEstilosDto().size() > 0) {
-			EstiloEntity estiloEntity;
-			for(EstiloDTO estilo: quest.getEstilosDto()) {
-				estiloEntity = new EstiloEntity();
-				estiloEntity.setCaracteristicas(estilo.getCaracteristicas());
-				estiloEntity.setSugestoes(estilo.getSugestoes());
-				estiloEntity.setNome(estilo.getNome());
-				estiloEntity.setId(estilo.getId());
-				questEntity.addEstilos(estiloEntity);
-			}
-		}	*/	
-		if(quest.getQuestoes() != null && quest.getQuestoes().size() > 0) {
-			EstiloEntity estilo = null;
-			QuestaoEntity questaoEntity = null;
-			for(QuestaoDTO questaoDto: quest.getQuestoes()) {
-				questaoEntity = new QuestaoEntity();
-				questaoEntity.setIdQuestao(questaoDto.getIdQuestao());
-				questaoEntity.setTexto(questaoDto.getTexto());
-				if(questaoDto.getEstilo() != null) {
-					EstiloDTO estiloDto = questaoDto.getEstilo();
-					estilo = new EstiloEntity();
-					estilo.setCaracteristicas(estiloDto.getCaracteristicas());
-					estilo.setId(estiloDto.getId());
-					estilo.setNome(estiloDto.getNome());
-					estilo.setSugestoes(estiloDto.getSugestoes());
-				} else {
-					estilo = null;
+	public static QuestionarioEntity questionarioDtoToEntity(QuestionarioDTO quest) {
+		if (quest != null) {
+			Map<String, EstiloEntity> estilosEntityIndexados = new HashMap<String, EstiloEntity>();
+			QuestionarioEntity questEntity = null;
+			if (quest.getEstilosIndexados() != null && quest.getEstilosIndexados().keySet() != null
+					&& quest.getEstilosIndexados().keySet().size() > 0) {
+				EstiloDTO estiloDto;
+				EstiloEntity estiloEntity;
+				questEntity = new QuestionarioEntity();
+				for (String index: quest.getEstilosIndexados().keySet()) {
+					estiloDto = quest.getEstilosIndexados().get(index);
+					estiloEntity = new EstiloEntity();
+					estiloEntity.setCaracteristicas(estiloDto.getCaracteristicas());
+					estiloEntity.setSugestoes(estiloDto.getSugestoes());
+					estiloEntity.setNome(estiloDto.getNome());
+					estiloEntity.setId(estiloDto.getId());
+					questEntity.addEstilos(estiloEntity);
+
+					estilosEntityIndexados.put(index, estiloEntity);
 				}
-				
-				questaoEntity.setEstilo(estilo);
-				questEntity.addQuestao(questaoEntity);
+			}
+
+			if (quest.getQuestoes() != null && quest.getQuestoes().size() > 0) {
+				if (questEntity == null)
+					questEntity = new QuestionarioEntity();
+
+				QuestaoEntity questaoEntity = null;
+				for (QuestaoDTO questaoDto : quest.getQuestoes()) {
+					questaoEntity = new QuestaoEntity();
+					questaoEntity.setIdQuestao(questaoDto.getIdQuestao());
+					questaoEntity.setTexto(questaoDto.getTexto());
+					if (questaoDto.getEstiloKey() != null) {
+						EstiloEntity estiloQuestao = estilosEntityIndexados.get(questaoDto.getEstiloKey());
+						questaoEntity.setEstilo(estiloQuestao);
+					}
+					questEntity.addQuestao(questaoEntity);
+				}
+			}
+
+			if (quest.getValoresAlternativas() != null && quest.getValoresAlternativas().size() > 0) {
+				if (questEntity == null)
+					questEntity = new QuestionarioEntity();
+
+				for (ValorAlternativaDTO valorDto : quest.getValoresAlternativas())
+					questEntity.addValorAlternativas(valorDto.getValor(), valorDto.getTextoAlternativa());
+			}
+
+			questEntity.setNome(quest.getNome());
+			return questEntity;
+
+		} else
+			return null;
+	}
+	
+	public static QuestionarioDTO questionarioEntityToDto(QuestionarioEntity questEntity) {
+		/*QuestionarioDTO quest = null;
+		if(questEntity != null){
+			quest = new QuestionarioDTO();
+			if(questEntity.getEstilos() != null && questEntity.getEstilos().size() > 0) {
+				EstiloDTO estilodto;
+				EstiloEntity estilo;
+				for(int i = 0; i <= questEntity.getEstilos().size(); i++) {
+					estilodto = new EstiloDTO();
+					estilo = questEntity.getEstilos().get(i);
+					estilodto.setCaracteristicas(estilo.getCaracteristicas());
+					estilodto.setId(estilo.getId());
+					estilodto.setNome(estilo.getNome());
+					estilodto.setSugestoes(estilo.getSugestoes());
+					quest.putEstilo(i, estilodto);
+				}
+			}
+			if(questEntity.getIdQuestionario() != null)
+				quest.setId(questEntity.getIdQuestionario());
+			
+			if(questEntity.getNome() != null)
+				quest.setNome(questEntity.getNome());
+			
+			if(questEntity.getQuestoes() != null && questEntity.getQuestoes().size() > 0) {
+				QuestaoDTO questaodto;
+				for(QuestaoEntity questao : questEntity.getQuestoes()) {
+					questaodto = new QuestaoDTO();
+					if(questao.getIdQuestao() != null) {
+						questaodto.setIdQuestao(questao.getIdQuestao());
+					}
+					
+					if(questao.getTexto() != null)
+						questaodto.setTexto(questao.getTexto());
+					
+					if(questao.getEstilo() != null) {
+						//colocar o index do estilo no questionario
+					}
+						
+					quest.addQuestao(questaodto);
+				}
+			}
+			
+			if(questEntity.getValorAlternativas() != null && questEntity.getValorAlternativas().keySet() != null && questEntity.getValorAlternativas().keySet().size() > 0) {
+				Map<Integer, String> valor = new HashMap<Integer, String>();
+				for(Integer i : questEntity.getValorAlternativas().keySet()) {
+					valor.put(i, questEntity.getValorAlternativas().get(i));
+				}
+				quest.setValorAlternativas(valor);
 			}
 		}
-		if(quest.getValorAlternativas() != null && quest.getValorAlternativas().size() > 0) {
-			for(Integer key: quest.getValorAlternativas().keySet()) {
-				questEntity.addValorAlternativas(key, quest.getValorAlternativas().get(key));				
-			}
-		}
-		questEntity.setNome(quest.getNome());
 		
-		return questEntity;		
+		return quest;*/
+		return null;
 	}
 }

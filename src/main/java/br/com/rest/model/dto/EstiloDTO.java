@@ -7,12 +7,17 @@ public class EstiloDTO {
 	private String caracteristicas;
 	private String sugestoes;
 	
+	public EstiloDTO() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -31,6 +36,8 @@ public class EstiloDTO {
 	public void setSugestoes(String sugestoes) {
 		this.sugestoes = sugestoes;
 	}
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -73,7 +80,11 @@ public class EstiloDTO {
 		return true;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "EstiloDTO [id=" + id + ", nome=" + nome + ", caracteristicas=" + caracteristicas + ", sugestoes="
+				+ sugestoes + "]";
+	}
 	
 	
 }

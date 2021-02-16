@@ -4,47 +4,41 @@ public class QuestaoDTO {
 	
 	private Long idQuestao;
 	private String texto;
-	private EstiloDTO estilo;
-
+	
+	//Relacionado ao índice da lista de estilos no QuestionarioDTO
+	private String estiloKey;
+	
 	public Long getIdQuestao() {
 		return idQuestao;
 	}
-
 	public void setIdQuestao(Long idQuestao) {
 		this.idQuestao = idQuestao;
 	}
-
 	public String getTexto() {
 		return texto;
 	}
-
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}
-
-	public EstiloDTO getEstilo() {
-		return estilo;
+	public String getEstiloKey() {
+		return estiloKey;
 	}
-
-	public void setEstilo(EstiloDTO estilo) {
-		this.estilo = estilo;
+	public void setEstiloKey(String estiloKey) {
+		this.estiloKey = estiloKey;
 	}
-
 	@Override
 	public String toString() {
-		return "QuestaoDTO [idQuestao=" + idQuestao + ", texto=" + texto + ", estilo=" + estilo + "]";
+		return "QuestaoDTO [idQuestao=" + idQuestao + ", texto=" + texto + ", estiloKey=" + estiloKey + "]";
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((estilo == null) ? 0 : estilo.hashCode());
+		result = prime * result + ((estiloKey == null) ? 0 : estiloKey.hashCode());
 		result = prime * result + ((idQuestao == null) ? 0 : idQuestao.hashCode());
 		result = prime * result + ((texto == null) ? 0 : texto.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -54,10 +48,10 @@ public class QuestaoDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		QuestaoDTO other = (QuestaoDTO) obj;
-		if (estilo == null) {
-			if (other.estilo != null)
+		if (estiloKey == null) {
+			if (other.estiloKey != null)
 				return false;
-		} else if (!estilo.equals(other.estilo))
+		} else if (!estiloKey.equals(other.estiloKey))
 			return false;
 		if (idQuestao == null) {
 			if (other.idQuestao != null)
@@ -70,6 +64,5 @@ public class QuestaoDTO {
 		} else if (!texto.equals(other.texto))
 			return false;
 		return true;
-	}
-
+	}	
 }

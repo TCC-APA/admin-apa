@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EstiloAlunoREL implements Serializable {
 
 	private static final long serialVersionUID = 2241828347376645004L;
+	
+	//TODO colocar as pontuacoes por estilo
 
 	@Id
 	@GeneratedValue
@@ -35,7 +37,7 @@ public class EstiloAlunoREL implements Serializable {
 	@JoinColumn(name = "fk_questionario")
 	private QuestionarioEntity questionario;
 
-	@JoinTable(name="COL_PONTUACAO_ESTILOS", joinColumns=@JoinColumn(name="idEstilo"))
+	@JoinTable(name="COL_PONTUACAO_ESTILOS", joinColumns=@JoinColumn(name="id"))
 	@MapKeyColumn (name="estilo")
 	@Column(name="pontuacaoPorEstilo")
 	@ElementCollection

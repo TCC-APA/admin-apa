@@ -34,7 +34,7 @@ public class EstiloAlunoServices {
 		}
 	}
 
-	public static EstiloAlunoDTO estiloAlunoToDto(EstiloAlunoREL estiloAluno) {
+	public static EstiloAlunoDTO estiloAlunoToDto(EstiloAlunoREL estiloAluno) { //TODO colocar as pontuacoes por estilo
 		EstiloAlunoDTO estiloAlunoDto = new EstiloAlunoDTO();
 
 		if (estiloAluno.getAluno() != null) {

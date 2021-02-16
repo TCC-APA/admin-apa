@@ -11,8 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import br.com.rest.model.entity.AlunoEntity_;
-import br.com.rest.model.entity.EstiloAlunoEntity_;
 import br.com.rest.model.entity.EstiloAlunoREL;
+import br.com.rest.model.entity.EstiloAlunoREL_;
 import br.com.rest.model.entity.GrupoAluno;
 import br.com.rest.model.entity.GrupoAluno_;
 import br.com.rest.model.entity.QuestionarioEntity_;
@@ -48,17 +48,17 @@ public class EstiloAlunoDAO extends GenericDAO<EstiloAlunoREL>{
 		
 		Predicate pred = cb.and();
 		
-		pred = cb.equal(rootEstilo.get(EstiloAlunoEntity_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO), idQuestionario);
+		pred = cb.equal(rootEstilo.get(EstiloAlunoREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO), idQuestionario);
 		
 		if(matricula != null) {
-			pred = cb.and(cb.equal(rootEstilo.get(EstiloAlunoEntity_.ALUNO).get(AlunoEntity_.MATRICULA), matricula));
+			pred = cb.and(cb.equal(rootEstilo.get(EstiloAlunoREL_.ALUNO).get(AlunoEntity_.MATRICULA), matricula));
 		} else {
 			if(startDate != null && endDate != null){
-				pred = cb.and(pred, cb.between(rootEstilo.get(EstiloAlunoEntity_.DATA_REALIZADO), startDate, endDate));
+				pred = cb.and(pred, cb.between(rootEstilo.get(EstiloAlunoREL_.DATA_REALIZADO), startDate, endDate));
 			} else if(startDate != null && endDate == null) {
-				pred = cb.and(cb.greaterThan(rootEstilo.get(EstiloAlunoEntity_.DATA_REALIZADO), startDate));
+				pred = cb.and(cb.greaterThan(rootEstilo.get(EstiloAlunoREL_.DATA_REALIZADO), startDate));
 			} else if(startDate == null && endDate != null) {
-				pred = cb.and(cb.lessThan(rootEstilo.get(EstiloAlunoEntity_.DATA_REALIZADO), endDate));
+				pred = cb.and(cb.lessThan(rootEstilo.get(EstiloAlunoREL_.DATA_REALIZADO), endDate));
 			}
 			
 			if(nivel != null) {
@@ -71,7 +71,7 @@ public class EstiloAlunoDAO extends GenericDAO<EstiloAlunoREL>{
 				if(turmaBanco != null) 
 					idTurma = turmaBanco.getId();
 				
-				pred = cb.and(pred, cb.equal(rootEstilo.get(EstiloAlunoEntity_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO),
+				pred = cb.and(pred, cb.equal(rootEstilo.get(EstiloAlunoREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO),
 						rootGrupo.join(TurmaEntity_.QUESTIONARIOS).get(QuestionarioEntity_.ID_QUESTIONARIO)));
 				pred = cb.and(pred, cb.equal(rootGrupo.get(GrupoAluno_.ID), idTurma));
 			}
