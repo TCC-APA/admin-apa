@@ -22,7 +22,7 @@ public class QuestionarioApi {
 	@Path("grupos")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<QuestionarioDTO> consultarQuestionariosPorGruposAluno(@QueryParam(value = "matricula") String matricula) {
-		return QuestionarioServices.buscarQuestionariosPorGruposAluno(matricula);
+		return QuestionarioServices.findQuestionariosPorGruposAluno(matricula);
 	}
 	
 	@POST

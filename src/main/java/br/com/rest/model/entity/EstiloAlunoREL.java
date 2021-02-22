@@ -22,8 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EstiloAlunoREL implements Serializable {
 
 	private static final long serialVersionUID = 2241828347376645004L;
-	
-	//TODO colocar as pontuacoes por estilo
 
 	@Id
 	@GeneratedValue

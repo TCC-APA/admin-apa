@@ -17,7 +17,7 @@ public class AlunoDAO extends GenericDAO<AlunoEntity>{
 		return instance;
 	}
 	
-	public AlunoEntity buscarByMatricula(String matricula) {
+	public AlunoEntity findByMatricula(String matricula) {
 		em.clear();
 		AlunoEntity aluno = (AlunoEntity) em.createQuery(
 					"Select a from Aluno a Where a.matricula LIKE :matricula")
@@ -28,7 +28,7 @@ public class AlunoDAO extends GenericDAO<AlunoEntity>{
 				
 	}
 	
-	public AlunoEntity buscarByMatriculaSenha(String matricula, String senha) {
+	public AlunoEntity findByMatriculaSenha(String matricula, String senha) {
 		em.clear();
 		AlunoEntity aluno = (AlunoEntity) em.createQuery(
 					"SELECT a from Aluno a WHERE a.matricula = :matricula AND a.senha = :senha")

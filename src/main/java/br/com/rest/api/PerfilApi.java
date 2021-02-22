@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -13,16 +14,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.rest.model.dto.EstiloAlunoDTO;
+import br.com.rest.model.dto.EstiloAlunoIn;
+import br.com.rest.model.dto.EstiloAlunoOut;
+import br.com.rest.model.entity.EstiloAlunoREL;
 import br.com.rest.services.EstiloAlunoServices;
 
-@Path("/resumo-turma")
-public class FiltroProfessorApi {
+@Path("/perfil")
+public class PerfilApi {
 
 	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<EstiloAlunoDTO> consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
+	public Set<EstiloAlunoOut> consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
 								  @QueryParam(value = "matricula") String matricula, 
 			  					  @QueryParam(value = "startDate") String startDate,
 			  					  @QueryParam(value = "endDate") String endDate,
@@ -55,7 +58,14 @@ public class FiltroProfessorApi {
 			}
 		}
 		
-		Set<EstiloAlunoDTO> resumoEstilos = EstiloAlunoServices.consultar(idQuestionario, matricula, dataInicio, dataFim, nivel, turma);
+		Set<EstiloAlunoOut> resumoEstilos = EstiloAlunoServices.consultar(idQuestionario, matricula, dataInicio, dataFim, nivel, turma);
 		return resumoEstilos;
+	}
+	
+	@POST
+	@Path("/pontuacao")
+	@Produces(MediaType.APPLICATION_JSON)
+	public EstiloAlunoREL inserirPontuacaoByQuestionario(EstiloAlunoIn estiloAlunoDto) {
+		return EstiloAlunoServices.inserir(estiloAlunoDto);
 	}
 }

@@ -58,11 +58,11 @@ public class QuestionarioServices {
 		}
 	}
 	
-	public static List<QuestionarioDTO> buscarQuestionariosPorGruposAluno(String matricula){
+	public static List<QuestionarioDTO> findQuestionariosPorGruposAluno(String matricula){
 		List<QuestionarioEntity> questionariosBanco = new ArrayList<QuestionarioEntity>();
 		AlunoEntity aluno = null;
 		try {
-			aluno = alunoDao.buscarByMatricula(matricula);
+			aluno = alunoDao.findByMatricula(matricula);
 		} catch(NoResultException e) {
 			throw new WebApplicationException(
 				      Response.status(Response.Status.NO_CONTENT)
@@ -88,6 +88,22 @@ public class QuestionarioServices {
 		}
 		
 		return listDto;
+	}
+	
+	public static QuestionarioEntity findQuestionariosById(Long id){
+		QuestionarioEntity questionarioBanco = null;
+		if(id != null) {
+			try {
+				questionarioBanco = questionarioDao.find(id);
+			} catch(NoResultException e) {
+				throw new WebApplicationException(
+						Response.status(Response.Status.NO_CONTENT)
+						.entity("Questionario de id "+ id + " não encontrado.")
+						.build()
+						);
+			}			
+		}
+		return questionarioBanco;
 	}
 	
 	public static QuestionarioEntity questionarioDtoToEntity(QuestionarioDTO quest) {

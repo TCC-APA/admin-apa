@@ -3,11 +3,12 @@ package br.com.rest.model.dto;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class EstiloAlunoDTO {
+public class EstiloAlunoOut {
 
 	private Long idPerfil;
 	private String matriculaAluno;
@@ -17,6 +18,7 @@ public class EstiloAlunoDTO {
 	private Date dataRealizado;
 	private String nomeQuestionario;
 	private Long idQuestionario;
+	private Map<EstiloDTO, Long> pontuacaoPorEstilo;
 
 	public Long getIdPerfil() {
 		return idPerfil;
@@ -74,6 +76,14 @@ public class EstiloAlunoDTO {
 		this.idQuestionario = idQuestionario;
 	}
 
+	public Map<EstiloDTO, Long> getPontuacaoPorEstilo() {
+		return pontuacaoPorEstilo;
+	}
+
+	public void setPontuacaoPorEstilo(Map<EstiloDTO, Long> pontuacaoPorEstilo) {
+		this.pontuacaoPorEstilo = pontuacaoPorEstilo;
+	}
+
 	public List<EstiloDTO> getEstilos() {
 		return estilos;
 	}
@@ -86,7 +96,7 @@ public class EstiloAlunoDTO {
 		
 		if(estilo != null) {
 			if(this.estilos == null)
-				this.estilos = new ArrayList();
+				this.estilos = new ArrayList<EstiloDTO>();
 		}
 		this.estilos.add(estilo);
 	}

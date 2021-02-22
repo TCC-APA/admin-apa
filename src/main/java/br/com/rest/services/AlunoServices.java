@@ -38,10 +38,30 @@ public class AlunoServices {
 		}
 	}
 	
-	public static AlunoEntity consultarAlunoPorMatriculaSenha(String matricula, String senha) {
+	public static AlunoEntity findAlunoByMatriculaSenha(String matricula, String senha) {
 		AlunoEntity aluno = null;
 		try {
-			aluno = alunoDao.buscarByMatriculaSenha(matricula, senha);
+			aluno = alunoDao.findByMatriculaSenha(matricula, senha);
+			return aluno;
+		} catch(NoResultException e) {
+			return aluno;
+		}
+	}
+	
+	public static AlunoEntity findAlunoByMatricula(String matricula) {
+		AlunoEntity aluno = null;
+		try {
+			aluno = alunoDao.findByMatricula(matricula);
+			return aluno;
+		} catch(NoResultException e) {
+			return aluno;
+		}
+	}
+	
+	public static AlunoEntity findAlunoById(Long id) {
+		AlunoEntity aluno = null;
+		try {
+			aluno = alunoDao.find(id);
 			return aluno;
 		} catch(NoResultException e) {
 			return aluno;
