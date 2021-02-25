@@ -1,5 +1,7 @@
 package br.com.rest.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.EstiloAlunoDAO;
 import br.com.rest.model.dao.PersistenceManager;
+import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloAlunoIn;
 import br.com.rest.model.dto.EstiloAlunoOut;
 import br.com.rest.model.dto.EstiloDTO;
@@ -40,7 +43,8 @@ public class EstiloAlunoServices {
 		}
 	}
 	
-	public static EstiloAlunoREL inserir(EstiloAlunoIn estiloDto) {
+	public static DefaultReturn inserir(EstiloAlunoIn estiloDto) {
+		DefaultReturn retornoPadrao = new DefaultReturn();
 		EstiloAlunoREL estiloAluno = null;
 		PersistenceManager.getTransaction().begin();
 
@@ -48,7 +52,8 @@ public class EstiloAlunoServices {
 			estiloAluno = dtoToEntity(estiloDto);
 			estiloAlunoDao.incluir(estiloAluno);
 			PersistenceManager.getTransaction().commit();
-			return estiloAluno;
+			retornoPadrao.setMsg("Pontuacao do aluno inserida com sucesso.");
+			return retornoPadrao;
 		} catch (Exception e) {
 			PersistenceManager.getTransaction().rollback();
 			e.printStackTrace();
@@ -89,7 +94,7 @@ public class EstiloAlunoServices {
 		return estiloAlunoDto;
 	}
 	
-	public static EstiloAlunoREL dtoToEntity(EstiloAlunoIn estiloAlunoDto) { //TODO colocar as pontuacoes por estilo
+	public static EstiloAlunoREL dtoToEntity(EstiloAlunoIn estiloAlunoDto) throws IllegalArgumentException{ //TODO colocar as pontuacoes por estilo
 		if(estiloAlunoDto != null && (estiloAlunoDto.getIdAluno() != null || estiloAlunoDto.getMatriculaAluno() != null) && estiloAlunoDto.getIdQuestionario() != null) {
 			EstiloAlunoREL estiloAlunoRel = new EstiloAlunoREL();
 			AlunoEntity aluno = null;
@@ -99,11 +104,9 @@ public class EstiloAlunoServices {
 				aluno = AlunoServices.findAlunoById(estiloAlunoDto.getIdAluno());
 			} else if(estiloAlunoDto.getMatriculaAluno() != null){
 				aluno = AlunoServices.findAlunoByMatricula(estiloAlunoDto.getMatriculaAluno());
-			} else {
-				return null;
 			}
 			
-			if(aluno == null) return null;
+			if(aluno == null) throw new IllegalArgumentException("Aluno inexistente no banco de dados.");
 			
 			estiloAlunoRel.setAluno(aluno);
 			
@@ -113,12 +116,20 @@ public class EstiloAlunoServices {
 				return null;
 			}
 			
-			if(questionario == null) return null;
+			if(questionario == null) throw new IllegalArgumentException("Questionário inexistente no banco de dados.");
 			
 			estiloAlunoRel.setQuestionario(questionario);
 			
-			if(estiloAlunoDto.getDataRealizado() != null)
-				estiloAlunoRel.setDataRealizado(estiloAlunoDto.getDataRealizado());
+			if(estiloAlunoDto.getDataRealizado() != null) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				Date dataFormatada;
+				try {
+					dataFormatada = dateFormat.parse(estiloAlunoDto.getDataRealizado());
+				} catch (ParseException e) {
+					throw new IllegalArgumentException("Formato de data errado, deve ser 'dd-MM-yyyy HH:mm:ss'.");
+				}
+				estiloAlunoRel.setDataRealizado(dataFormatada);
+			}
 			
 			//TODO acertar a pontuacao por estilo
 			
@@ -136,4 +147,6 @@ public class EstiloAlunoServices {
 			return null;
 		}
 	}
+	
+	
 }

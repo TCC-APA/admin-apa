@@ -14,6 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloAlunoIn;
 import br.com.rest.model.dto.EstiloAlunoOut;
 import br.com.rest.model.entity.EstiloAlunoREL;
@@ -65,7 +66,41 @@ public class PerfilApi {
 	@POST
 	@Path("/pontuacao")
 	@Produces(MediaType.APPLICATION_JSON)
-	public EstiloAlunoREL inserirPontuacaoByQuestionario(EstiloAlunoIn estiloAlunoDto) {
+	public DefaultReturn inserirPontuacaoByQuestionario(EstiloAlunoIn estiloAlunoDto) {
+		DefaultReturn retorno = validaParametroInserirPontuacaoByQuestionario(estiloAlunoDto);
+		if(retorno.getErros() != null && retorno.getErros().size() > 0)
+			return retorno;
+					
 		return EstiloAlunoServices.inserir(estiloAlunoDto);
+	}
+	
+	private DefaultReturn validaParametroInserirPontuacaoByQuestionario(EstiloAlunoIn estiloAlunoIn) {
+		DefaultReturn defaultReturn = new DefaultReturn();
+		if(estiloAlunoIn.getIdAluno() == null && estiloAlunoIn.getMatriculaAluno() == null) {
+			defaultReturn.addErro("Id do aluno e/ou matricula é obrigatório.");
+		}
+		
+		if(estiloAlunoIn.getIdQuestionario() == null) {
+			defaultReturn.addErro("Id do questionário é obrigatório.");
+		}
+		
+		if(estiloAlunoIn.getDataRealizado() == null) {
+			defaultReturn.addErro("Data que o questionário foi respondido é obrigatória.");
+		} else {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			try {
+				dateFormat.parse(estiloAlunoIn.getDataRealizado());
+			} catch (ParseException e) {
+				defaultReturn.addErro("Formato da data que foi realizado o questionário é dd-MM-yyyy HH:mm:ss'.");
+			}
+		}
+		
+		if(estiloAlunoIn.getPontuacaoPorEstilo() == null) {
+			defaultReturn.addErro("Pontuação por estilo é um parâmetro obrigatório");
+		} else if(estiloAlunoIn.getPontuacaoPorEstilo().keySet().size() == 0){
+			defaultReturn.addErro("Pontuação por estilo não pode ser vazio");
+		}
+		
+		return defaultReturn;
 	}
 }

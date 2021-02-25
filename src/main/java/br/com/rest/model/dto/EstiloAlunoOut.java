@@ -7,8 +7,10 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @XmlRootElement
-public class EstiloAlunoOut {
+public class EstiloAlunoOut extends DefaultReturn{
 
 	private Long idPerfil;
 	private String matriculaAluno;

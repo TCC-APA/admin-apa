@@ -5,12 +5,14 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @XmlRootElement
 public class EstiloAlunoIn {
 
 	private String matriculaAluno;
 	private Long idAluno;
-	private Date dataRealizado;
+	private String dataRealizado;
 	private Long idQuestionario;
 	private Map<Long, Long> pontuacaoPorEstilo; //Key: Id Estilo, Value: pontuacao
 
@@ -30,14 +32,14 @@ public class EstiloAlunoIn {
 		this.idAluno = idAluno;
 	}
 
-	public Date getDataRealizado() {
+	public String getDataRealizado() {
 		return dataRealizado;
 	}
 
-	public void setDataRealizado(Date dataRealizado) {
+	public void setDataRealizado(String dataRealizado) {
 		this.dataRealizado = dataRealizado;
 	}
- 
+
 	public Long getIdQuestionario() {
 		return idQuestionario;
 	}
