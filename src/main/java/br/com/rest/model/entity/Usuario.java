@@ -22,15 +22,9 @@ public abstract class Usuario  implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
-	@Column
-	private String cpf;
 
 	@Column
 	private String nome;
-
-	@Column
-	private String email;
 	
 	@Column
 	private Integer idade;
@@ -50,17 +44,6 @@ public abstract class Usuario  implements Serializable {
 		this.id = id;
 	}
 
-
-	public String getCpf() {
-		return cpf;
-	}
-
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-
 	public String getNome() {
 		return nome;
 	}
@@ -68,16 +51,6 @@ public abstract class Usuario  implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public Integer getIdade() {

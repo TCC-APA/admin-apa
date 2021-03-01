@@ -7,27 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity(name = "Aluno")
-@Table(name = "ALUNO")
+@Entity(name = "Visitante")
+@Table(name = "VISITANTE")
 @XmlRootElement
-public class AlunoEntity extends Usuario implements Serializable{
+public class VisitanteEntity extends Usuario implements Serializable{
 	
 	private static final long serialVersionUID = -8372293493127957905L;
 
 	@Column(unique=true)
-	private String matricula;
+	private String nivelEscolaridade;
 	
-	public String getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
-	}
-
 	@Override
 	public String toString() {
-		return "AlunoEntity [matricula=" + matricula + ", id=" + getId() +  ", nome=" + getNome()
+		return "VisitanteEntity [nivelEscolaridade=" + nivelEscolaridade + ", id=" + getId() + ", cpf=" + getNome()
 				+ ", idade=" + getIdade() + ", genero=" + getGenero()+"]";
 	}
 	
