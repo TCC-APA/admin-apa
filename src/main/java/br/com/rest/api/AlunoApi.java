@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 import br.com.rest.model.dto.AlunoIn;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.LoginDTO;
-import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.services.AlunoServices;
 
 @Path("/aluno")
@@ -24,7 +23,7 @@ public class AlunoApi {
 	@POST
 	@Path("login")
 	@Produces(MediaType.APPLICATION_JSON)
-	public AlunoEntity realizarLoginPorMatriculaSenha(LoginDTO login) {
+	public DefaultReturn realizarLoginPorMatriculaSenha(LoginDTO login) {
 		return AlunoServices.findAlunoByMatriculaSenha(login.getMatricula(), login.getSenha());
 	}
 

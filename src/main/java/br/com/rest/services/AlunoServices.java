@@ -42,14 +42,19 @@ public class AlunoServices {
 		return ao;
 	}
 	
-	public static AlunoEntity findAlunoByMatriculaSenha(String matricula, String senha) {
+	public static AlunoOut findAlunoByMatriculaSenha(String matricula, String senha) {
 		AlunoEntity aluno = null;
+		AlunoOut ao = null;
 		try {
 			aluno = alunoDao.findByMatriculaSenha(matricula, senha);
-			return aluno;
+			if(aluno != null) 
+				ao = entityToDto(aluno);
+			
 		} catch(NoResultException e) {
-			return aluno;
+			ao = new AlunoOut();
+			ao.addErro("Combinação de matricula e senha não encontrada no banco.");
 		}
+		return ao;
 	}
 	
 	public static AlunoEntity findAlunoByMatricula(String matricula) {

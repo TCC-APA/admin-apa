@@ -1,14 +1,11 @@
 package br.com.rest.model.dto;
 
-import java.util.Date;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @XmlRootElement
-public class EstiloAlunoIn {
+public class InserirPerfilIn {
 
 	private String matriculaAluno;
 	private Long idAluno;

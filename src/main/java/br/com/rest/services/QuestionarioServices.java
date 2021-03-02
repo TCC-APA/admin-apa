@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
-import javax.print.attribute.HashAttributeSet;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 

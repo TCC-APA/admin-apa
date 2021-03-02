@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity(name = "AlunoQuestionarioPerfil")
 @Table(name = "REL_ALUNO_QUESTIONARIO")
 @XmlRootElement
-public class EstiloAlunoREL implements Serializable {
+public class AlunoQuestionarioREL implements Serializable {
 
 	private static final long serialVersionUID = 2241828347376645004L;
 
@@ -86,7 +86,7 @@ public class EstiloAlunoREL implements Serializable {
 
 	@Override
 	public String toString() {
-		return "EstiloAlunoREL [id=" + id + ", aluno=" + aluno + ", questionario=" + questionario
+		return "AlunoQuestionarioREL [id=" + id + ", aluno=" + aluno + ", questionario=" + questionario
 				+ ", pontuacaoPorEstilo=" + pontuacaoPorEstilo + ", dataRealizado=" + dataRealizado + "]";
 	}
 
@@ -110,7 +110,7 @@ public class EstiloAlunoREL implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EstiloAlunoREL other = (EstiloAlunoREL) obj;
+		AlunoQuestionarioREL other = (AlunoQuestionarioREL) obj;
 		if (aluno == null) {
 			if (other.aluno != null)
 				return false;

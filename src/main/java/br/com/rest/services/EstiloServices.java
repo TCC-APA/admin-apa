@@ -2,7 +2,6 @@ package br.com.rest.services;
 
 import javax.persistence.NoResultException;
 
-import br.com.rest.model.dao.AlunoDAO;
 import br.com.rest.model.dao.EstiloDAO;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.entity.EstiloEntity;

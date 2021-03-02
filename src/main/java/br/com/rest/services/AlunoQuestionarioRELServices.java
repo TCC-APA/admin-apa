@@ -10,29 +10,29 @@ import java.util.Set;
 
 import javax.persistence.NoResultException;
 
-import br.com.rest.model.dao.EstiloAlunoDAO;
+import br.com.rest.model.dao.AlunoQuestionarioDAO;
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dto.DefaultReturn;
-import br.com.rest.model.dto.EstiloAlunoIn;
-import br.com.rest.model.dto.EstiloAlunoOut;
 import br.com.rest.model.dto.EstiloDTO;
+import br.com.rest.model.dto.InserirPerfilIn;
+import br.com.rest.model.dto.PerfilAlunoOut;
 import br.com.rest.model.entity.AlunoEntity;
-import br.com.rest.model.entity.EstiloAlunoREL;
+import br.com.rest.model.entity.AlunoQuestionarioREL;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
 
-public class EstiloAlunoServices {
+public class AlunoQuestionarioRELServices {
 
-	private static EstiloAlunoDAO estiloAlunoDao = EstiloAlunoDAO.getInstance();
+	private static AlunoQuestionarioDAO alunoQuestionarioDao = AlunoQuestionarioDAO.getInstance();
 
-	public static Set<EstiloAlunoOut> consultar(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel,
+	public static Set<PerfilAlunoOut> consultar(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel,
 			String turma) {
-		Set<EstiloAlunoREL> resumoEstiloAlunos = null;
-		Set<EstiloAlunoOut> resumoEstiloAlunosDTO = null;
+		Set<AlunoQuestionarioREL> resumoEstiloAlunos = null;
+		Set<PerfilAlunoOut> resumoEstiloAlunosDTO = null;
 		try {
-			resumoEstiloAlunos = estiloAlunoDao.dynamicQueryFiltro(idQuestionario, matricula, startDate, endDate, nivel, turma);
-			resumoEstiloAlunosDTO = new HashSet<EstiloAlunoOut>();
-			for (EstiloAlunoREL estiloAluno : resumoEstiloAlunos) {
+			resumoEstiloAlunos = alunoQuestionarioDao.dynamicQueryFiltro(idQuestionario, matricula, startDate, endDate, nivel, turma);
+			resumoEstiloAlunosDTO = new HashSet<PerfilAlunoOut>();
+			for (AlunoQuestionarioREL estiloAluno : resumoEstiloAlunos) {
 				resumoEstiloAlunosDTO.add(entityToDto(estiloAluno));
 			}
 
@@ -43,14 +43,14 @@ public class EstiloAlunoServices {
 		}
 	}
 	
-	public static DefaultReturn inserir(EstiloAlunoIn estiloDto) {
+	public static DefaultReturn inserir(InserirPerfilIn estiloDto) {
 		DefaultReturn retornoPadrao = new DefaultReturn();
-		EstiloAlunoREL estiloAluno = null;
+		AlunoQuestionarioREL estiloAluno = null;
 		PersistenceManager.getTransaction().begin();
 
 		try {
 			estiloAluno = dtoToEntity(estiloDto);
-			estiloAlunoDao.incluir(estiloAluno);
+			alunoQuestionarioDao.incluir(estiloAluno);
 			PersistenceManager.getTransaction().commit();
 			retornoPadrao.setMsg("Pontuacao do aluno inserida com sucesso.");
 			return retornoPadrao;
@@ -60,9 +60,24 @@ public class EstiloAlunoServices {
 			return null;
 		}
 	}
+	
+	public static DefaultReturn consultarPorUltimaData(String matriculaAluno, Long idQuestionario) {
+		PerfilAlunoOut perfilAlunoOut = null;
+		AlunoQuestionarioREL estiloAluno = null;
+		try {
+			estiloAluno = alunoQuestionarioDao.findPerfilPorUltimaData(matriculaAluno, idQuestionario);
+			if(estiloAluno != null)
+				perfilAlunoOut = entityToDto(estiloAluno);
 
-	public static EstiloAlunoOut entityToDto(EstiloAlunoREL estiloAluno) { //TODO colocar as pontuacoes por estilo
-		EstiloAlunoOut estiloAlunoDto = new EstiloAlunoOut();
+		} catch(NoResultException e) {
+			perfilAlunoOut = new PerfilAlunoOut();
+			perfilAlunoOut.addErro("Não foi encontrado nenhum registro de perfil do aluno neste questionario.");
+		}
+		return perfilAlunoOut;		
+	}
+
+	public static PerfilAlunoOut entityToDto(AlunoQuestionarioREL estiloAluno) { //TODO colocar as pontuacoes por estilo
+		PerfilAlunoOut estiloAlunoDto = new PerfilAlunoOut();
 
 		if (estiloAluno.getAluno() != null) {
 			estiloAlunoDto.setIdAluno(estiloAluno.getAluno().getId());
@@ -94,9 +109,9 @@ public class EstiloAlunoServices {
 		return estiloAlunoDto;
 	}
 	
-	public static EstiloAlunoREL dtoToEntity(EstiloAlunoIn estiloAlunoDto) throws IllegalArgumentException{ //TODO colocar as pontuacoes por estilo
+	public static AlunoQuestionarioREL dtoToEntity(InserirPerfilIn estiloAlunoDto) throws IllegalArgumentException{ //TODO colocar as pontuacoes por estilo
 		if(estiloAlunoDto != null && (estiloAlunoDto.getIdAluno() != null || estiloAlunoDto.getMatriculaAluno() != null) && estiloAlunoDto.getIdQuestionario() != null) {
-			EstiloAlunoREL estiloAlunoRel = new EstiloAlunoREL();
+			AlunoQuestionarioREL estiloAlunoRel = new AlunoQuestionarioREL();
 			AlunoEntity aluno = null;
 			QuestionarioEntity questionario = null;
 			

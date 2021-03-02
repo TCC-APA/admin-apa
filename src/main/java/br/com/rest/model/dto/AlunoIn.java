@@ -1,6 +1,5 @@
 package br.com.rest.model.dto;
 
-import javax.persistence.Column;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement

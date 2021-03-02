@@ -9,9 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jettison.json.JSONObject;
-
-import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.QuestionarioDTO;
 import br.com.rest.services.QuestionarioServices;
 

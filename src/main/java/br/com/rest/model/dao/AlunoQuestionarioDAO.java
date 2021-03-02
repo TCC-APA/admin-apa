@@ -11,7 +11,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import br.com.rest.model.entity.AlunoEntity_;
-import br.com.rest.model.entity.EstiloAlunoREL;
+import br.com.rest.model.entity.AlunoQuestionarioREL;
 import br.com.rest.model.entity.EstiloAlunoREL_;
 import br.com.rest.model.entity.GrupoAluno;
 import br.com.rest.model.entity.GrupoAluno_;
@@ -20,27 +20,27 @@ import br.com.rest.model.entity.TurmaEntity;
 import br.com.rest.model.entity.TurmaEntity_;
 import br.com.rest.services.TurmaServices;
 
-public class EstiloAlunoDAO extends GenericDAO<EstiloAlunoREL>{
+public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 	
-	private static EstiloAlunoDAO instance = null;
+	private static AlunoQuestionarioDAO instance = null;
 	
-	private EstiloAlunoDAO() {
-		super(EstiloAlunoREL.class, PersistenceManager.getEntityManager());
+	private AlunoQuestionarioDAO() {
+		super(AlunoQuestionarioREL.class, PersistenceManager.getEntityManager());
 	}
 	
-	public synchronized static EstiloAlunoDAO getInstance() {
+	public synchronized static AlunoQuestionarioDAO getInstance() {
 		if(instance == null) {
-			instance = new EstiloAlunoDAO();
+			instance = new AlunoQuestionarioDAO();
 		}
 		return instance;
 	}
 	
-	public Set<EstiloAlunoREL> dynamicQueryFiltro(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel, String turma) {
+	public Set<AlunoQuestionarioREL> dynamicQueryFiltro(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel, String turma) {
 		em.clear();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		
-		CriteriaQuery<EstiloAlunoREL> query = cb.createQuery(EstiloAlunoREL.class);
-		Root<EstiloAlunoREL> rootEstilo = query.from(EstiloAlunoREL.class);
+		CriteriaQuery<AlunoQuestionarioREL> query = cb.createQuery(AlunoQuestionarioREL.class);
+		Root<AlunoQuestionarioREL> rootEstilo = query.from(AlunoQuestionarioREL.class);
 		Root<GrupoAluno> rootGrupo = query.from(GrupoAluno.class);
 		//if Turna != null, colocar um where idTurma do questionario = id turma
 		
@@ -78,8 +78,8 @@ public class EstiloAlunoDAO extends GenericDAO<EstiloAlunoREL>{
 		}
 		query.where(pred);
 		
-		TypedQuery<EstiloAlunoREL> typedQuery = em.createQuery(query);
-		Set<EstiloAlunoREL> retorno = new HashSet<EstiloAlunoREL>();
+		TypedQuery<AlunoQuestionarioREL> typedQuery = em.createQuery(query);
+		Set<AlunoQuestionarioREL> retorno = new HashSet<AlunoQuestionarioREL>();
 		if(matricula != null) {
 			retorno.add(typedQuery.getSingleResult());
 		} else {
@@ -89,5 +89,25 @@ public class EstiloAlunoDAO extends GenericDAO<EstiloAlunoREL>{
 	
 		return retorno;
 	}
-	 
+	
+	@SuppressWarnings("unchecked")
+	public AlunoQuestionarioREL findPerfilPorUltimaData(String matriculaAluno, Long idQuestionario) {
+		AlunoQuestionarioREL alunoQuestionario = null;
+		em.clear();
+		
+		alunoQuestionario = (AlunoQuestionarioREL) em.createQuery(
+					"Select distinct a "
+					+ "from AlunoQuestionarioPerfil a"
+					+ " Where UPPER(a.aluno.matricula) = :matriculaAluno"
+					+ " AND a.questionario.idQuestionario = :idQuestionario"
+					+ " ORDER BY a.dataRealizado desc"
+					)
+				.setParameter("matriculaAluno", matriculaAluno.toUpperCase())
+				.setParameter("idQuestionario", idQuestionario)
+				.setMaxResults(1)
+				.getSingleResult();
+		
+				
+		return alunoQuestionario;
+	}
 }

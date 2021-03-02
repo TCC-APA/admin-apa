@@ -15,10 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.rest.model.dto.DefaultReturn;
-import br.com.rest.model.dto.EstiloAlunoIn;
-import br.com.rest.model.dto.EstiloAlunoOut;
-import br.com.rest.model.entity.EstiloAlunoREL;
-import br.com.rest.services.EstiloAlunoServices;
+import br.com.rest.model.dto.InserirPerfilIn;
+import br.com.rest.model.dto.PerfilAlunoOut;
+import br.com.rest.services.AlunoQuestionarioRELServices;
 
 @Path("/perfil")
 public class PerfilApi {
@@ -26,7 +25,7 @@ public class PerfilApi {
 	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<EstiloAlunoOut> consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
+	public Set<PerfilAlunoOut> consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
 								  @QueryParam(value = "matricula") String matricula, 
 			  					  @QueryParam(value = "startDate") String startDate,
 			  					  @QueryParam(value = "endDate") String endDate,
@@ -59,45 +58,58 @@ public class PerfilApi {
 			}
 		}
 		
-		Set<EstiloAlunoOut> resumoEstilos = EstiloAlunoServices.consultar(idQuestionario, matricula, dataInicio, dataFim, nivel, turma);
+		Set<PerfilAlunoOut> resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, matricula, dataInicio, dataFim, nivel, turma);
 		return resumoEstilos;
 	}
 	
 	@POST
 	@Path("/pontuacao")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn inserirPontuacaoByQuestionario(EstiloAlunoIn estiloAlunoDto) {
+	public DefaultReturn inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
 		DefaultReturn retorno = validaParametroInserirPontuacaoByQuestionario(estiloAlunoDto);
 		if(retorno.getErros() != null && retorno.getErros().size() > 0)
 			return retorno;
 					
-		return EstiloAlunoServices.inserir(estiloAlunoDto);
+		return AlunoQuestionarioRELServices.inserir(estiloAlunoDto);
 	}
 	
-	private DefaultReturn validaParametroInserirPontuacaoByQuestionario(EstiloAlunoIn estiloAlunoIn) {
+	@GET
+	@Path("/pontuacao/ultimaData")
+	@Produces(MediaType.APPLICATION_JSON)
+	public DefaultReturn inserirPontuacaoByQuestionario(@QueryParam(value = "matricula") String matricula, @QueryParam(value = "idQuestionario") Long idQuestionario) {
+		if(matricula == null || matricula.length() == 0 || idQuestionario == null || idQuestionario <= 0L) {
+			DefaultReturn retorno = new DefaultReturn();
+			retorno.addErro("Id do aluno e do questionário são parâmetros obrigatórios.");
+			return retorno;
+		}
+							
+		return AlunoQuestionarioRELServices.consultarPorUltimaData(matricula, idQuestionario);
+	}
+	
+	private DefaultReturn validaParametroInserirPontuacaoByQuestionario(InserirPerfilIn inserirPerfilIn) {
 		DefaultReturn defaultReturn = new DefaultReturn();
-		if(estiloAlunoIn.getIdAluno() == null && estiloAlunoIn.getMatriculaAluno() == null) {
+		if(inserirPerfilIn.getIdAluno() == null && inserirPerfilIn.getMatriculaAluno() == null) {
 			defaultReturn.addErro("Id do aluno e/ou matricula é obrigatório.");
 		}
 		
-		if(estiloAlunoIn.getIdQuestionario() == null) {
+		if(inserirPerfilIn.getIdQuestionario() == null) {
 			defaultReturn.addErro("Id do questionário é obrigatório.");
 		}
 		
-		if(estiloAlunoIn.getDataRealizado() == null) {
+		if(inserirPerfilIn.getDataRealizado() == null) {
 			defaultReturn.addErro("Data que o questionário foi respondido é obrigatória.");
 		} else {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			try {
-				dateFormat.parse(estiloAlunoIn.getDataRealizado());
+				dateFormat.parse(inserirPerfilIn.getDataRealizado());
 			} catch (ParseException e) {
 				defaultReturn.addErro("Formato da data que foi realizado o questionário é dd-MM-yyyy HH:mm:ss'.");
 			}
 		}
 		
-		if(estiloAlunoIn.getPontuacaoPorEstilo() == null) {
+		if(inserirPerfilIn.getPontuacaoPorEstilo() == null) {
 			defaultReturn.addErro("Pontuação por estilo é um parâmetro obrigatório");
-		} else if(estiloAlunoIn.getPontuacaoPorEstilo().keySet().size() == 0){
+		} else if(inserirPerfilIn.getPontuacaoPorEstilo().keySet().size() == 0){
 			defaultReturn.addErro("Pontuação por estilo não pode ser vazio");
 		}
 		
