@@ -104,6 +104,7 @@ public class AlunoQuestionarioRELServices {
 				EstiloDTO estiloDto = EstiloServices.entityToDto(estilo);
 				pontuacaoPorEstiloDto.put(estiloDto, estiloAluno.getPontuacaoPorEstilo().get(estilo));
 			}
+			estiloAlunoDto.setPontuacaoPorEstilo(pontuacaoPorEstiloDto);
 		}
 
 		return estiloAlunoDto;

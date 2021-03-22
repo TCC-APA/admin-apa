@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.ppawebservice</groupId>
-	<artifactId>rest</artifactId>
+	<artifactId>apa</artifactId>
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
@@ -114,6 +114,18 @@
 	</dependencies>
 	<build>
 		<finalName>rest</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<server>APAServer</server>
+				</configuration>
+			</plugin>
+		</plugins>
+		
 
 		<!-- plugins> <plugin> <groupId>org.bsc.maven</groupId> <artifactId>maven-processor-plugin</artifactId> 
 			<version>2.2.4</version> <executions> <execution> <id>eclipselink-jpa-metamodel</id> 
