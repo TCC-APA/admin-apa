@@ -1,7 +1,9 @@
 package br.com.rest.model.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.TypedQuery;
@@ -51,41 +53,34 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 		pred = cb.equal(rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO), idQuestionario);
 		
 		if(matricula != null) {
-			pred = cb.and(cb.equal(rootEstilo.get(AlunoQuestionarioREL_.ALUNO).get(AlunoEntity_.MATRICULA), matricula));
+			pred = cb.and(pred, cb.equal(rootEstilo.get(AlunoQuestionarioREL_.ALUNO).get(AlunoEntity_.MATRICULA), matricula));
 		} else {
-			if(startDate != null && endDate != null){
-				pred = cb.and(pred, cb.between(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate, endDate));
-			} else if(startDate != null && endDate == null) {
-				pred = cb.and(cb.greaterThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate));
-			} else if(startDate == null && endDate != null) {
-				pred = cb.and(cb.lessThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), endDate));
-			}
-			
-			if(nivel != null) {
-				
-			}
-			
 			if(turma != null) {
 				Long idTurma = 0L;
 				TurmaEntity turmaBanco = TurmaServices.consultarTurmaPorCodigo(turma);
 				if(turmaBanco != null) 
 					idTurma = turmaBanco.getId();
 				
-				pred = cb.and(pred, cb.equal(rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO),
-						rootGrupo.join(TurmaEntity_.QUESTIONARIOS).get(QuestionarioEntity_.ID_QUESTIONARIO)));
 				pred = cb.and(pred, cb.equal(rootGrupo.get(GrupoAluno_.ID), idTurma));
+				pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO).in(rootGrupo.join(TurmaEntity_.QUESTIONARIOS).get(QuestionarioEntity_.ID_QUESTIONARIO)));
+			}
+			
+			if(startDate != null && endDate != null){
+				pred = cb.and(pred, cb.between(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate, endDate));
+			} else if(startDate != null && endDate == null) {
+				pred = cb.and(pred, cb.greaterThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate));
+			} else if(startDate == null && endDate != null) {
+				pred = cb.and(pred, cb.lessThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), endDate));
 			}
 		}
 		query.where(pred);
+		query.orderBy(cb.asc(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO)));
 		
 		TypedQuery<AlunoQuestionarioREL> typedQuery = em.createQuery(query);
 		Set<AlunoQuestionarioREL> retorno = new HashSet<AlunoQuestionarioREL>();
-		if(matricula != null) {
-			retorno.add(typedQuery.getSingleResult());
-		} else {
-			retorno.addAll(typedQuery.getResultList());
-		}
 		
+		retorno.addAll(typedQuery.getResultList());
+			
 	
 		return retorno;
 	}

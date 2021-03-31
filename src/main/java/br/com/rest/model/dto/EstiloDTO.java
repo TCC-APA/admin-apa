@@ -57,26 +57,13 @@ public class EstiloDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		EstiloDTO other = (EstiloDTO) obj;
-		if (caracteristicas == null) {
-			if (other.caracteristicas != null)
-				return false;
-		} else if (!caracteristicas.equals(other.caracteristicas))
-			return false;
+		
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (sugestoes == null) {
-			if (other.sugestoes != null)
-				return false;
-		} else if (!sugestoes.equals(other.sugestoes))
-			return false;
+		
 		return true;
 	}
 	

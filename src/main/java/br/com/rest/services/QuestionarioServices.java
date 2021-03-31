@@ -160,20 +160,22 @@ public class QuestionarioServices {
 	}
 	
 	public static QuestionarioDTO questionarioEntityToDto(QuestionarioEntity questEntity) {
-		/*QuestionarioDTO quest = null;
+		QuestionarioDTO quest = null;
+		Map<EstiloDTO, String> indiceEstilos = new HashMap<EstiloDTO, String>();
 		if(questEntity != null){
 			quest = new QuestionarioDTO();
 			if(questEntity.getEstilos() != null && questEntity.getEstilos().size() > 0) {
 				EstiloDTO estilodto;
 				EstiloEntity estilo;
-				for(int i = 0; i <= questEntity.getEstilos().size(); i++) {
+				for(int i = 0; i < questEntity.getEstilos().size(); i++) {
 					estilodto = new EstiloDTO();
 					estilo = questEntity.getEstilos().get(i);
 					estilodto.setCaracteristicas(estilo.getCaracteristicas());
 					estilodto.setId(estilo.getId());
 					estilodto.setNome(estilo.getNome());
 					estilodto.setSugestoes(estilo.getSugestoes());
-					quest.putEstilo(i, estilodto);
+					quest.putEstilosIndexados(""+i, estilodto);
+					indiceEstilos.put(estilodto, ""+i);
 				}
 			}
 			if(questEntity.getIdQuestionario() != null)
@@ -195,6 +197,9 @@ public class QuestionarioServices {
 					
 					if(questao.getEstilo() != null) {
 						//colocar o index do estilo no questionario
+						EstiloDTO estilo = EstiloServices.entityToDto(questao.getEstilo());
+						String index = indiceEstilos.get(estilo);
+						questaodto.setEstiloKey(index);
 					}
 						
 					quest.addQuestao(questaodto);
@@ -202,15 +207,15 @@ public class QuestionarioServices {
 			}
 			
 			if(questEntity.getValorAlternativas() != null && questEntity.getValorAlternativas().keySet() != null && questEntity.getValorAlternativas().keySet().size() > 0) {
-				Map<Integer, String> valor = new HashMap<Integer, String>();
+				ValorAlternativaDTO vadto = null;
 				for(Integer i : questEntity.getValorAlternativas().keySet()) {
-					valor.put(i, questEntity.getValorAlternativas().get(i));
+					vadto = new ValorAlternativaDTO();
+					vadto.setValor(i);
+					vadto.setTextoAlternativa(questEntity.getValorAlternativas().get(i));
 				}
-				quest.setValorAlternativas(valor);
+				quest.addValoresAlternativas(vadto);
 			}
 		}
-		
-		return quest;*/
-		return null;
+		return quest;
 	}
 }

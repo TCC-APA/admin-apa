@@ -109,31 +109,12 @@ public class QuestionarioDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		QuestionarioDTO other = (QuestionarioDTO) obj;
-		if (estilosIndexados == null) {
-			if (other.estilosIndexados != null)
-				return false;
-		} else if (!estilosIndexados.equals(other.estilosIndexados))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (questoes == null) {
-			if (other.questoes != null)
-				return false;
-		} else if (!questoes.equals(other.questoes))
-			return false;
-		if (valoresAlternativas == null) {
-			if (other.valoresAlternativas != null)
-				return false;
-		} else if (!valoresAlternativas.equals(other.valoresAlternativas))
-			return false;
+		
 		return true;
 	}
 

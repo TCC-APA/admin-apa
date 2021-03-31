@@ -113,7 +113,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>rest</finalName>
+		<finalName>apa</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>

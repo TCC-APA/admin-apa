@@ -22,7 +22,7 @@ public class TurmaDAO extends GenericDAO<TurmaEntity>{
 	public TurmaEntity buscarByCodigo(String codigo) {
 		em.clear();
 		TurmaEntity turma = (TurmaEntity) em.createQuery(
-					"Select a from Turma a Where a.codigo LIKE :codigo")
+					"Select a from Turma a Where a.codigo = :codigo")
 				.setParameter("codigo", codigo)
 				.getSingleResult();
 		
