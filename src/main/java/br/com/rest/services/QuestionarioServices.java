@@ -212,8 +212,8 @@ public class QuestionarioServices {
 					vadto = new ValorAlternativaDTO();
 					vadto.setValor(i);
 					vadto.setTextoAlternativa(questEntity.getValorAlternativas().get(i));
+					quest.addValoresAlternativas(vadto);
 				}
-				quest.addValoresAlternativas(vadto);
 			}
 		}
 		return quest;
