@@ -1,0 +1,19 @@
+version: '2'
+services:
+  postgresql:
+    image: 'bitnami/postgresql:latest'
+    environment:
+      - POSTGRESQL_DATABASE=apaWS_DB
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+    volumes:
+      - 'postgresql_data:/bitnami'
+  api:
+    build: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgresql
+volumes:
+  postgresql_data:
+    driver: local

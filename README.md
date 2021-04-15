@@ -70,3 +70,13 @@ Certifique-se de que esta mensagem apareceu no terminal:
 ```
 
 Caso tenha aparecido, o projeto se encontra deployado.
+
+### Produção (Dockerfile)
+
+Pré-requisito: Docker [https://www.digitalocean.com/community/tutorials/como-instalar-e-usar-o-docker-no-ubuntu-18-04-pt]
+
+`mvn clean install`
+
+`docker-compose up -d`
+
+`http://localhost:8080/apa/monitoracao`
