@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.istack.NotNull;
 
+import br.com.rest.model.dto.InsereProfessorIn;
 import br.com.rest.model.entity.ProfessorEntity;
 import br.com.rest.services.ProfessorServices;
 
@@ -20,7 +21,7 @@ public class ProfessorApi {
 	@POST
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String inserirProfessor(ProfessorEntity professor) {
+	public String inserirProfessor(InsereProfessorIn professor) {
 		return ProfessorServices.incluirProfessor(professor).toString();
 	}
 

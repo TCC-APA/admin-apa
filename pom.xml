@@ -122,6 +122,9 @@
 				<configuration>
 					<url>http://localhost:8080/manager/text</url>
 					<server>APAServer</server>
+					<username>apaws</username>
+      				<password>apawspassword</password>
+                    <update>true</update>
 				</configuration>
 			</plugin>
 		</plugins>
