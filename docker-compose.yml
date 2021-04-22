@@ -1,19 +1,20 @@
-version: '2'
+version: '3'
 services:
-  postgresql:
-    image: 'bitnami/postgresql:latest'
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
     environment:
-      - POSTGRESQL_DATABASE=apaWS_DB
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=postgres
-    volumes:
-      - 'postgresql_data:/bitnami'
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=apaWS_DB
   api:
     build: .
+    restart: always
+    container_name: apa-api
     ports:
       - '8080:8080'
     depends_on:
-      - postgresql
-volumes:
-  postgresql_data:
-    driver: local
+      - db
