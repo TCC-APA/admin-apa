@@ -80,3 +80,18 @@ Pré-requisito: Docker [https://www.digitalocean.com/community/tutorials/como-in
 `docker-compose up -d`
 
 `http://localhost:8080/apa/monitoracao`
+
+
+#### Exemplo de requisição: 
+
+```
+curl --location --request POST 'http://localhost:8080/apa/aluno' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"idade": 23,
+"matricula": "12342352BCC",
+"nome": "Fernando Godoyy",
+"senha": "123456",
+"genero": "M"
+}'
+```
