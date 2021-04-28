@@ -11,7 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.istack.NotNull;
 
-import br.com.rest.model.entity.ProfessorEntity;
+import br.com.rest.model.dto.DefaultReturn;
+import br.com.rest.model.dto.InsereProfessorIn;
 import br.com.rest.services.ProfessorServices;
 
 @Path("/prof")
@@ -20,22 +21,22 @@ public class ProfessorApi {
 	@POST
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String inserirProfessor(ProfessorEntity professor) {
-		return ProfessorServices.incluirProfessor(professor).toString();
+	public DefaultReturn inserirProfessor(InsereProfessorIn professorIn) {
+		return ProfessorServices.incluirProfessor(professorIn);
 	}
 
 	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProfessorEntity buscarProfessorPorSiape(@NotNull @QueryParam(value = "siape") String siape) {
+	public DefaultReturn buscarProfessorPorSiape(@NotNull @QueryParam(value = "siape") String siape) {
 		return ProfessorServices.consultarProfessorPorSiape(siape);
 	}
 	
 	@DELETE
 	@Path("/{siape}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deletarProfessorPorSiape(@PathParam(value = "siape") String siape) {
-		return ProfessorServices.deleteProfessorPorSiape(siape).toString();
+	public DefaultReturn deletarProfessorPorSiape(@PathParam(value = "siape") String siape) {
+		return null;//ProfessorServices.deleteProfessorPorSiape(siape).toString();
 	}
 
 }

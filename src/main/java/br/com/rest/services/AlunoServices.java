@@ -16,8 +16,8 @@ public class AlunoServices {
 	
 	public static DefaultReturn incluirAluno(AlunoIn aluno) {
 		AlunoOut ao = new AlunoOut();
-		Boolean existeAluno = false;
 		AlunoEntity alunoBanco = null;
+		Boolean existeAluno = false;
 		if(aluno != null && aluno.getMatricula() != null) {
 			alunoBanco = findAlunoByMatricula(aluno.getMatricula());
 			if(alunoBanco != null)
