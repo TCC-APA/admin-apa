@@ -21,10 +21,12 @@ public class ProfessorServices {
 		Boolean existeProfessor = false;
 		if (professorIn != null && professorIn.getSiape() != null) {
 			professorBanco = consultarProfessorPorSiape(professorIn.getSiape());
-			if (professorBanco != null)
+			if (professorBanco != null && professorBanco.getId() != null)
 				existeProfessor = true;
 
 			if (existeProfessor) {
+				System.out.println(professorBanco.getId());
+				System.out.println(existeProfessor);
 				professorOut.addErro("Professor já existente no banco, nada foi incluído.");
 			} else {
 				ProfessorEntity profEntity = dtoToEntity(professorIn);
