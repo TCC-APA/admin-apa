@@ -25,8 +25,6 @@ public class ProfessorServices {
 				existeProfessor = true;
 
 			if (existeProfessor) {
-				System.out.println(professorBanco.getId());
-				System.out.println(existeProfessor);
 				professorOut.addErro("Professor já existente no banco, nada foi incluído.");
 			} else {
 				ProfessorEntity profEntity = dtoToEntity(professorIn);
