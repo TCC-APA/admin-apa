@@ -1,5 +1,7 @@
 package br.com.rest.api;
 
+import java.util.Date;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,7 +14,7 @@ public class MonitoracaoApi {
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String ping() {
-		return "Status de servidor: ok!";
+		return new Date() + ": Status de servidor: ok!";
 	}
 }
 
