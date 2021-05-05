@@ -3,6 +3,7 @@ package br.com.rest.api;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import br.com.rest.model.dto.AlunoIn;
@@ -17,9 +18,9 @@ public class AlunoApi {
 	@POST
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn inserirAluno(AlunoIn aluno, Boolean turmaDefault) {
+	public DefaultReturn inserirAluno(AlunoIn aluno, @QueryParam(value = "turmaDefault") Boolean turmaDefault) {
 		DefaultReturn dr = AlunoServices.incluirAluno(aluno);
-		if(dr.getErros() == null || dr.getErros().size() == 0) {
+		if((dr.getErros() == null || dr.getErros().size() == 0) && turmaDefault) {
 			TurmaServices.incluiAlunoTurmaDefault(aluno.getMatricula());
 		}
 		
