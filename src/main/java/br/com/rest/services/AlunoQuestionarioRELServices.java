@@ -68,6 +68,11 @@ public class AlunoQuestionarioRELServices {
 			estiloAluno = alunoQuestionarioDao.findPerfilPorUltimaData(matriculaAluno, idQuestionario);
 			if(estiloAluno != null)
 				perfilAlunoOut = entityToDto(estiloAluno);
+			else {
+				perfilAlunoOut = new PerfilAlunoOut();
+				perfilAlunoOut.addErro("Não foi encontrado nenhum registro de perfil do aluno neste questionario.");
+			}
+				
 
 		} catch(NoResultException e) {
 			perfilAlunoOut = new PerfilAlunoOut();

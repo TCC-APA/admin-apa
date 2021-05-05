@@ -4,6 +4,8 @@ import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dao.TurmaDAO;
+import br.com.rest.model.dto.DefaultReturn;
+import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.TurmaEntity;
 
 public class TurmaServices {
@@ -44,5 +46,54 @@ public class TurmaServices {
 		} catch(NoResultException e) {
 			return turma;
 		}
+	}
+	
+	public static DefaultReturn incluiAlunoTurma(String matricula, String codigoTurma) {
+		AlunoEntity aluno = AlunoServices.findAlunoByMatricula(matricula);
+		TurmaEntity turma = consultarTurmaPorCodigo(codigoTurma);
+		DefaultReturn dr = new DefaultReturn();
+		if(aluno != null && turma != null) {
+			turma.addAluno(aluno);
+			PersistenceManager.getTransaction().begin();
+			try{
+				turmaDao.alterar(turma);	
+				PersistenceManager.getTransaction().commit();
+				dr.setMsg("Aluno " + matricula + " inserido com sucesso na turma " + codigoTurma);
+			}catch(Exception e){
+				PersistenceManager.getTransaction().rollback();
+				dr.addErro("erro ao incluir aluno na turma: "+e.getMessage());
+			}
+		} else {
+			dr.addErro("turma ou aluno inválidos.");
+		}
+		return dr;
+	}
+	
+	public static DefaultReturn incluiAlunoTurmaDefault(String matricula) {
+		AlunoEntity aluno = AlunoServices.findAlunoByMatricula(matricula);
+		TurmaEntity turma = consultarTurmaPorCodigo("Default");
+		PersistenceManager.getTransaction().begin();
+		if(turma == null) {
+			turma = new TurmaEntity();
+			turma.setCodigo("Default");
+			turma.setDisciplina("Default");
+			turma.addQuestionario(QuestionarioServices.findQuestionariosPorNome("CAMEA40"));
+			incluirTurma(turma);
+		}
+		DefaultReturn dr = new DefaultReturn();
+		if(aluno != null && turma != null) {
+			turma.addAluno(aluno);
+			try{
+				turmaDao.alterar(turma);	
+				PersistenceManager.getTransaction().commit();
+				dr.setMsg("Aluno " + matricula + " inserido com sucesso na turma " + "Default");
+			}catch(Exception e){
+				PersistenceManager.getTransaction().rollback();
+				dr.addErro("erro ao incluir aluno na turma: "+e.getMessage());
+			}
+		} else {
+			dr.addErro("turma ou aluno inválidos.");
+		}
+		return dr;
 	}
 }

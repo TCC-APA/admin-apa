@@ -9,6 +9,7 @@ import br.com.rest.model.dto.AlunoIn;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.LoginDTO;
 import br.com.rest.services.AlunoServices;
+import br.com.rest.services.TurmaServices;
 
 @Path("/aluno")
 public class AlunoApi {
@@ -16,8 +17,13 @@ public class AlunoApi {
 	@POST
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn inserirAluno(AlunoIn aluno) {
-		return AlunoServices.incluirAluno(aluno);
+	public DefaultReturn inserirAluno(AlunoIn aluno, Boolean turmaDefault) {
+		DefaultReturn dr = AlunoServices.incluirAluno(aluno);
+		if(dr.getErros() == null || dr.getErros().size() == 0) {
+			TurmaServices.incluiAlunoTurmaDefault(aluno.getMatricula());
+		}
+		
+		return dr;
 	}
 
 	@POST

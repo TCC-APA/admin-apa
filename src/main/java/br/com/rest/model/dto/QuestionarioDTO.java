@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class QuestionarioDTO {
+public class QuestionarioDTO extends DefaultReturn{
 	
 	private Long id;
 	private String nome;

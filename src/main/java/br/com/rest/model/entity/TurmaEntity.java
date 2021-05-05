@@ -1,6 +1,7 @@
 package br.com.rest.model.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,5 +56,7 @@ public class TurmaEntity extends GrupoAluno implements Serializable {
 	public void setDisciplina(String disciplina) {
 		this.disciplina = disciplina;
 	}
+	
+	
 
 }

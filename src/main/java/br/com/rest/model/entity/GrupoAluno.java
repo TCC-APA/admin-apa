@@ -1,6 +1,8 @@
 package br.com.rest.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +65,24 @@ public abstract class GrupoAluno  implements Serializable {
 
 	public void setAlunos(List<AlunoEntity> alunos) {
 		this.alunos = alunos;
+	}
+	
+	public void addAluno(AlunoEntity aluno) {
+		if(aluno != null && aluno.getId() != null) {
+			if(this.alunos == null)
+				this.alunos = new ArrayList<AlunoEntity>();
+			
+			this.alunos.add(aluno);
+		}
+	}
+	
+	public void addQuestionario(QuestionarioEntity quest) {
+		if(quest != null && quest.getIdQuestionario() != null) {
+			if(this.questionarios == null)
+				this.questionarios = new HashSet<QuestionarioEntity>();
+			
+			this.questionarios.add(quest);
+		}
 	}
 	
 

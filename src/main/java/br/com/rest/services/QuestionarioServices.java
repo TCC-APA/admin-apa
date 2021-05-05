@@ -13,6 +13,7 @@ import br.com.rest.model.dao.AlunoDAO;
 import br.com.rest.model.dao.GrupoAlunoDAO;
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dao.QuestionarioDAO;
+import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.QuestaoDTO;
 import br.com.rest.model.dto.QuestionarioDTO;
@@ -87,6 +88,17 @@ public class QuestionarioServices {
 		}
 		
 		return listDto;
+	}
+	
+	public static QuestionarioEntity findQuestionariosPorNome(String nome){
+		QuestionarioEntity questionarioBanco = new QuestionarioEntity();
+		try {
+			questionarioBanco = questionarioDao.findByNome(nome);
+		} catch(NoResultException e) {
+			System.out.println("Turma nao encontrada");
+		}
+				
+		return questionarioBanco;
 	}
 	
 	public static QuestionarioEntity findQuestionariosById(Long id){
