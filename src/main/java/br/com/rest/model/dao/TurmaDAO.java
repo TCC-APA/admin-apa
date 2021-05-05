@@ -22,8 +22,8 @@ public class TurmaDAO extends GenericDAO<TurmaEntity>{
 	public TurmaEntity buscarByCodigo(String codigo) {
 		em.clear();
 		TurmaEntity turma = (TurmaEntity) em.createQuery(
-					"Select a from Turma a Where UPPER(a.codigo) = UPPER(:codigo)")
-				.setParameter("codigo", codigo)
+					"Select a from Turma a Where UPPER(a.codigo) = :codigo")
+				.setParameter("codigo", codigo.toUpperCase())
 				.getSingleResult();
 		
 		return turma;

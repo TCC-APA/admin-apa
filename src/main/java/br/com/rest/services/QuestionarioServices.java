@@ -91,7 +91,7 @@ public class QuestionarioServices {
 	}
 	
 	public static QuestionarioEntity findQuestionariosPorNome(String nome){
-		QuestionarioEntity questionarioBanco = new QuestionarioEntity();
+		QuestionarioEntity questionarioBanco = null;
 		try {
 			questionarioBanco = questionarioDao.findByNome(nome);
 		} catch(NoResultException e) {

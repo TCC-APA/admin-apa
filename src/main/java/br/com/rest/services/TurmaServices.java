@@ -42,6 +42,7 @@ public class TurmaServices {
 		TurmaEntity turma = null;
 		try {
 			turma = turmaDao.buscarByCodigo(codigo);
+			System.out.println("Turma de codigo "+codigo+" encontrada");
 			return turma;
 		} catch(NoResultException e) {
 			return turma;
@@ -72,7 +73,6 @@ public class TurmaServices {
 	public static DefaultReturn incluiAlunoTurmaDefault(String matricula) {
 		AlunoEntity aluno = AlunoServices.findAlunoByMatricula(matricula);
 		TurmaEntity turma = consultarTurmaPorCodigo("Default");
-		PersistenceManager.getTransaction().begin();
 		if(turma == null) {
 			turma = new TurmaEntity();
 			turma.setCodigo("Default");
@@ -80,6 +80,7 @@ public class TurmaServices {
 			turma.addQuestionario(QuestionarioServices.findQuestionariosPorNome("CAMEA40"));
 			incluirTurma(turma);
 		}
+		PersistenceManager.getTransaction().begin();
 		DefaultReturn dr = new DefaultReturn();
 		if(aluno != null && turma != null) {
 			turma.addAluno(aluno);
@@ -87,12 +88,15 @@ public class TurmaServices {
 				turmaDao.alterar(turma);	
 				PersistenceManager.getTransaction().commit();
 				dr.setMsg("Aluno " + matricula + " inserido com sucesso na turma " + "Default");
+				System.out.println("Aluno " + matricula + " inserido com sucesso na turma " + "Default");
 			}catch(Exception e){
 				PersistenceManager.getTransaction().rollback();
 				dr.addErro("erro ao incluir aluno na turma: "+e.getMessage());
+				System.out.println("erro ao incluir aluno na turma: "+e.getMessage());
 			}
 		} else {
 			dr.addErro("turma ou aluno inválidos.");
+			System.out.println("turma ou aluno inválidos.");
 		}
 		return dr;
 	}

@@ -25,7 +25,6 @@ public class AlunoServices {
 		}
 		
 		if(existeAluno) {
-			ao = entityToDto(alunoBanco);
 			ao.addErro("Aluno já existente no banco, nada foi incluído.");
 		} else {
 			AlunoEntity alunoEntity = dtoToEntity(aluno);
@@ -33,6 +32,7 @@ public class AlunoServices {
 			try{
 				alunoDao.incluir(alunoEntity);	
 				PersistenceManager.getTransaction().commit();
+				System.out.println("Aluno "+ aluno.getMatricula() + " incluido");
 				ao.setMsg("Aluno incluído com sucesso!");
 			}catch(Exception e){
 				PersistenceManager.getTransaction().rollback();
@@ -61,8 +61,10 @@ public class AlunoServices {
 		AlunoEntity aluno = null;
 		try {
 			aluno = alunoDao.findByMatricula(matricula);
+			System.out.println("Aluno de matricula "+matricula+" encontrado");
 			return aluno;
 		} catch(NoResultException e) {
+			System.out.println("Aluno de matricula "+matricula+" não encontrado");
 			return aluno;
 		}
 	}
