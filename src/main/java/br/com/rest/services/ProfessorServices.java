@@ -21,7 +21,7 @@ public class ProfessorServices {
 		Boolean existeProfessor = false;
 		if (professorIn != null && professorIn.getSiape() != null) {
 			professorBanco = consultarProfessorPorSiape(professorIn.getSiape());
-			if (professorBanco != null)
+			if (professorBanco != null && professorBanco.getId() != null)
 				existeProfessor = true;
 
 			if (existeProfessor) {
