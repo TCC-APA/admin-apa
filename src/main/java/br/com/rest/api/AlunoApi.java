@@ -23,7 +23,6 @@ public class AlunoApi {
 		if((dr.getErros() == null || dr.getErros().size() == 0) && (turmaDefault != null && turmaDefault)) {
 			TurmaServices.incluiAlunoTurmaDefault(aluno.getMatricula());
 		}
-		System.out.println("teste docker");
 		
 		return dr;
 	}
