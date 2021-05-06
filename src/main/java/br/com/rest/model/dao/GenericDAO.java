@@ -31,15 +31,19 @@ public class GenericDAO<T> {
 		excluir(t1);
 	}
 	
-	public void incluir(T entidade) {
+	public T incluir(T entidade) {
 		em.persist(entidade);
+		em.flush();
+		return entidade;
 	}
 	
 	public void excluir(T entidade) {
 		em.remove(entidade);
+		em.flush();
 	}
 	
 	public void alterar(T entidade) {
 		em.merge(entidade);
+		em.flush();
 	}
 }

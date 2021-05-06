@@ -30,9 +30,10 @@ public class AlunoServices {
 			AlunoEntity alunoEntity = dtoToEntity(aluno);
 			PersistenceManager.getTransaction().begin();
 			try{
-				alunoDao.incluir(alunoEntity);	
+				alunoEntity = alunoDao.incluir(alunoEntity);	
 				PersistenceManager.getTransaction().commit();
 				System.out.println("Aluno "+ aluno.getMatricula() + " incluido");
+				ao = entityToDto(alunoEntity);
 				ao.setMsg("Aluno incluído com sucesso!");
 			}catch(Exception e){
 				PersistenceManager.getTransaction().rollback();
