@@ -20,7 +20,7 @@ public class AlunoApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public DefaultReturn inserirAluno(AlunoIn aluno, @QueryParam(value = "turmaDefault") Boolean turmaDefault) {
 		DefaultReturn dr = AlunoServices.incluirAluno(aluno);
-		if((dr.getErros() == null || dr.getErros().size() == 0) && turmaDefault) {
+		if((dr.getErros() == null || dr.getErros().size() == 0) && (turmaDefault != null && turmaDefault)) {
 			TurmaServices.incluiAlunoTurmaDefault(aluno.getMatricula());
 		}
 		
