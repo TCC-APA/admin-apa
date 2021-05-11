@@ -1,21 +1,21 @@
 package br.com.rest.model.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 import br.com.rest.model.entity.AlunoEntity_;
 import br.com.rest.model.entity.AlunoQuestionarioREL;
 import br.com.rest.model.entity.AlunoQuestionarioREL_;
-import br.com.rest.model.entity.GrupoAluno;
 import br.com.rest.model.entity.GrupoAluno_;
 import br.com.rest.model.entity.QuestionarioEntity_;
 import br.com.rest.model.entity.TurmaEntity;
@@ -40,10 +40,14 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 	public Set<AlunoQuestionarioREL> dynamicQueryFiltro(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel, String turma) {
 		em.clear();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
+		//Metamodel m = em.getMetamodel();
 		
 		CriteriaQuery<AlunoQuestionarioREL> query = cb.createQuery(AlunoQuestionarioREL.class);
 		Root<AlunoQuestionarioREL> rootEstilo = query.from(AlunoQuestionarioREL.class);
-		Root<GrupoAluno> rootGrupo = query.from(GrupoAluno.class);
+		Join<AlunoQuestionarioREL, TurmaEntity> rootJoinPerfilTurma;
+		
+		//EntityType<TurmaEntity> turma_ = m.entity(TurmaEntity.class);
+		
 		//if Turna != null, colocar um where idTurma do questionario = id turma
 		
 		query.select(rootEstilo).distinct(true);
@@ -52,26 +56,25 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 		
 		pred = cb.equal(rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO), idQuestionario);
 		
+		if(startDate != null && endDate != null){
+			pred = cb.and(pred, cb.between(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate, endDate));
+		} else if(startDate != null && endDate == null) {
+			pred = cb.and(pred, cb.greaterThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate));
+		} else if(startDate == null && endDate != null) {
+			pred = cb.and(pred, cb.lessThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), endDate));
+		}
+		
 		if(matricula != null) {
 			pred = cb.and(pred, cb.equal(rootEstilo.get(AlunoQuestionarioREL_.ALUNO).get(AlunoEntity_.MATRICULA), matricula));
 		} else {
 			if(turma != null) {
-				Long idTurma = 0L;
-				TurmaEntity turmaBanco = TurmaServices.consultarTurmaPorCodigo(turma);
-				if(turmaBanco != null) 
-					idTurma = turmaBanco.getId();
-				
-				pred = cb.and(pred, cb.equal(rootGrupo.get(GrupoAluno_.ID), idTurma));
-				pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).get(QuestionarioEntity_.ID_QUESTIONARIO).in(rootGrupo.join(TurmaEntity_.QUESTIONARIOS).get(QuestionarioEntity_.ID_QUESTIONARIO)));
+				rootJoinPerfilTurma = rootEstilo.join(TurmaEntity_.CODIGO);
+								
+				pred = cb.and(pred, cb.equal(rootJoinPerfilTurma.get(TurmaEntity_.CODIGO), turma));
+				//pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).in(rootJoinPerfilTurma.join(TurmaEntity_.QUESTIONARIOS)));
 			}
 			
-			if(startDate != null && endDate != null){
-				pred = cb.and(pred, cb.between(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate, endDate));
-			} else if(startDate != null && endDate == null) {
-				pred = cb.and(pred, cb.greaterThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), startDate));
-			} else if(startDate == null && endDate != null) {
-				pred = cb.and(pred, cb.lessThan(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO), endDate));
-			}
+			
 		}
 		query.where(pred);
 		query.orderBy(cb.asc(rootEstilo.get(AlunoQuestionarioREL_.DATA_REALIZADO)));
