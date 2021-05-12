@@ -71,6 +71,7 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 				rootJoinPerfilTurma = rootEstilo.join(TurmaEntity_.CODIGO);
 								
 				pred = cb.and(pred, cb.equal(rootJoinPerfilTurma.get(TurmaEntity_.CODIGO), turma));
+				pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.ALUNO).in(rootJoinPerfilTurma.get(TurmaEntity_.ALUNOS)));
 				//pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).in(rootJoinPerfilTurma.join(TurmaEntity_.QUESTIONARIOS)));
 			}
 			
