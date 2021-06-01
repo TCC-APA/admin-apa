@@ -61,9 +61,10 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 			queryDb.setParameter("startDate", startDate);
 		if(endDate != null)
 			queryDb.setParameter("endDate", endDate);
+		
 		if(matricula != null)
 			queryDb.setParameter("matricula", matricula);
-		if(turma != null)
+		else if(turma != null)
 			queryDb.setParameter("turmaAlunos", turma.getAlunos());
 
 		listaPerfil = (List<AlunoQuestionarioREL>) queryDb.getResultList();
