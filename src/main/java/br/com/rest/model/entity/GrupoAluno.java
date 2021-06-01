@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -17,6 +18,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+
+import org.hibernate.annotations.Fetch;
 
 @Entity
 @XmlRootElement
@@ -35,7 +38,8 @@ public abstract class GrupoAluno  implements Serializable {
     joinColumns = @JoinColumn(name = "fk_turma"), inverseJoinColumns = @JoinColumn(name = "fk_questionario"))
 	private Set<QuestionarioEntity> questionarios;
 	
-	@ManyToMany
+	
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "REL_GRUPO_ALUNO",
 		joinColumns = { @JoinColumn(name = "fk_turma") },
 		inverseJoinColumns = { @JoinColumn(name = "fk_aluno") })
