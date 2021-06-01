@@ -47,7 +47,7 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 		} else {
 			if(turma != null) {
 				//Adicionar a Query: a.aluno está na turmaEntity passada como parametro
-				query.append(" AND a.aluno MEMBER OF :turmaAlunos");
+				query.append(" AND a.aluno in :turmaAlunos");
 			}
 		}
 		
@@ -68,6 +68,8 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 
 		listaPerfil = (List<AlunoQuestionarioREL>) queryDb.getResultList();
 		System.out.println("query: "+query.toString());
+		for(AlunoQuestionarioREL a: listaPerfil)
+			System.out.println(a.getIdPerfil());
 		
 		return listaPerfil;
 		/*CriteriaBuilder cb = em.getCriteriaBuilder();
