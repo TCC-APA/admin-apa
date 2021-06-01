@@ -37,13 +37,18 @@ public class AlunoQuestionarioRELServices {
 		List<PerfilAlunoOut> resumoEstiloAlunosDTO = null;
 		TurmaEntity turmaEntity = null;
 		if(turma != null) {
-			turmaEntity = turmaDao.buscarByCodigo(turma);
-			Set<QuestionarioEntity> listaQuestionarios = turmaEntity.getQuestionarios();
-			if(listaQuestionarios != null) {
-				if(!listaQuestionarios.stream().filter(o -> o.getIdQuestionario().equals(idQuestionario)).findFirst().isPresent())
-					resposta.addErro("Questionario de id: "+idQuestionario+" nao encontrado na turma de codigo "+turma);
-			} else {
-				resposta.addErro("Turma nao possui questionarios");
+			try {
+				turmaEntity = turmaDao.buscarByCodigo(turma);
+				Set<QuestionarioEntity> listaQuestionarios = turmaEntity.getQuestionarios();
+				if(listaQuestionarios != null) {
+					if(!listaQuestionarios.stream().filter(o -> o.getIdQuestionario().equals(idQuestionario)).findFirst().isPresent())
+						resposta.addErro("Questionario de id: "+idQuestionario+" nao encontrado na turma de codigo "+turma);
+				} else {
+					resposta.addErro("Turma nao possui questionarios");
+				}
+			} catch (NoResultException e) {
+				e.printStackTrace();
+				resposta.addErro("Nenhuma turma com esse codigo foi encontrada");;
 			}
 		}
 		if(resposta.getErros() == null) {
