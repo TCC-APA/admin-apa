@@ -1,5 +1,7 @@
 package br.com.rest.services;
 
+import java.util.Set;
+
 import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.PersistenceManager;
@@ -47,6 +49,19 @@ public class TurmaServices {
 		} catch(NoResultException e) {
 			return turma;
 		}
+	}
+	
+	public static Set<TurmaEntity> consultarTurmasPorAlunoMatricula(String matricula) {
+		Set<TurmaEntity> turmas = null;
+		if(matricula != null) {
+			try {
+				turmas = turmaDao.buscarTurmaByAlunoMatricula(matricula);
+						System.out.println("Turmas encontrados do aluno de matrícula "+ matricula);
+			} catch(NoResultException e) {
+				System.out.println("Turmas não encontrados do aluno de matrícula "+ matricula);
+			}
+		}
+		return turmas;
 	}
 	
 	public static DefaultReturn incluiAlunoTurma(String matricula, String codigoTurma) {

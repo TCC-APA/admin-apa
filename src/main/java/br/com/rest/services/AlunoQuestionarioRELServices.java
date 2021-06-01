@@ -2,9 +2,10 @@ package br.com.rest.services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,8 @@ import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.AlunoQuestionarioDAO;
 import br.com.rest.model.dao.PersistenceManager;
+import br.com.rest.model.dao.TurmaDAO;
+import br.com.rest.model.dto.BuscarPerfilAlunoOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.InserirPerfilIn;
@@ -20,27 +23,42 @@ import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.AlunoQuestionarioREL;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
+import br.com.rest.model.entity.TurmaEntity;
 
 public class AlunoQuestionarioRELServices {
 
 	private static AlunoQuestionarioDAO alunoQuestionarioDao = AlunoQuestionarioDAO.getInstance();
-
-	public static Set<PerfilAlunoOut> consultar(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel,
+	private static TurmaDAO turmaDao = TurmaDAO.getInstance();
+	
+	public static BuscarPerfilAlunoOut consultar(Long idQuestionario, String matricula, Date startDate, Date endDate,
 			String turma) {
-		Set<AlunoQuestionarioREL> resumoEstiloAlunos = null;
-		Set<PerfilAlunoOut> resumoEstiloAlunosDTO = null;
-		try {
-			resumoEstiloAlunos = alunoQuestionarioDao.dynamicQueryFiltro(idQuestionario, matricula, startDate, endDate, nivel, turma);
-			resumoEstiloAlunosDTO = new HashSet<PerfilAlunoOut>();
-			for (AlunoQuestionarioREL estiloAluno : resumoEstiloAlunos) {
-				resumoEstiloAlunosDTO.add(entityToDto(estiloAluno));
+		BuscarPerfilAlunoOut resposta = new BuscarPerfilAlunoOut();
+		List<AlunoQuestionarioREL> resumoEstiloAlunos = null;
+		List<PerfilAlunoOut> resumoEstiloAlunosDTO = null;
+		TurmaEntity turmaEntity = null;
+		if(turma != null) {
+			turmaEntity = turmaDao.buscarByCodigo(turma);
+			Set<QuestionarioEntity> listaQuestionarios = turmaEntity.getQuestionarios();
+			if(listaQuestionarios != null) {
+				if(!listaQuestionarios.stream().filter(o -> o.getIdQuestionario().equals(idQuestionario)).findFirst().isPresent())
+					resposta.addErro("Questionario de id: "+idQuestionario+" nao encontrado na turma de codigo "+turma);
+			} else {
+				resposta.addErro("Turma nao possui questionarios");
 			}
-
-			return resumoEstiloAlunosDTO;
-		} catch (NoResultException e) {
-			e.printStackTrace();
-			return resumoEstiloAlunosDTO;
 		}
+		if(resposta.getErros() == null) {
+			try {
+				resumoEstiloAlunos = alunoQuestionarioDao.dynamicQueryFiltro(idQuestionario, matricula, startDate, endDate, turmaEntity);
+				resumoEstiloAlunosDTO = new ArrayList<PerfilAlunoOut>();
+				for (AlunoQuestionarioREL estiloAluno : resumoEstiloAlunos) 
+					resumoEstiloAlunosDTO.add(entityToDto(estiloAluno));	
+				resposta.setListaPerfilAlunos(new ArrayList<PerfilAlunoOut>(resumoEstiloAlunosDTO));
+			} catch (NoResultException e) {
+				e.printStackTrace();
+				resposta.setMsg("nenhum registro encontrado");;
+			}
+		}
+		return resposta;
 	}
 	
 	public static DefaultReturn inserir(InserirPerfilIn estiloDto) {

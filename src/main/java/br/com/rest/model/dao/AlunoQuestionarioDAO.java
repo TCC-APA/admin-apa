@@ -1,26 +1,13 @@
 package br.com.rest.model.dao;
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
+import javax.persistence.Query;
 
-import br.com.rest.model.entity.AlunoEntity_;
 import br.com.rest.model.entity.AlunoQuestionarioREL;
-import br.com.rest.model.entity.AlunoQuestionarioREL_;
-import br.com.rest.model.entity.GrupoAluno_;
-import br.com.rest.model.entity.QuestionarioEntity_;
 import br.com.rest.model.entity.TurmaEntity;
-import br.com.rest.model.entity.TurmaEntity_;
-import br.com.rest.services.TurmaServices;
 
 public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 	
@@ -37,19 +24,59 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 		return instance;
 	}
 	
-	public Set<AlunoQuestionarioREL> dynamicQueryFiltro(Long idQuestionario, String matricula, Date startDate, Date endDate, String nivel, String turma) {
+	@SuppressWarnings("unchecked")
+	public List<AlunoQuestionarioREL> dynamicQueryFiltro(Long idQuestionario, String matricula, Date startDate, Date endDate, TurmaEntity turma) {
 		em.clear();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
+		Set<TurmaEntity> turmasAluno = null;
+		
+		StringBuilder query = new StringBuilder();
+		query.append("Select a from AlunoQuestionarioPerfil a JOIN a.questionario q"
+				   + " WHERE q.idQuestionario = :idQuestionario");
+		
+		if(startDate != null && endDate != null){
+			query.append(" AND a.dataRealizado BETWEEN :startDate and :endDate");
+		} else if(startDate != null && endDate == null) {
+			query.append(" AND a.dataRealizado >= :startDate");
+		} else if(startDate == null && endDate != null) {
+			query.append(" AND a.dataRealizado <= :endDate");
+		}
+		
+		if(matricula != null) {
+			query.append(" AND UPPER(a.aluno.matricula) = :matricula");
+		} else {
+			if(turma != null) {
+				//Adicionar a Query: a.aluno está na turmaEntity passada como parametro
+				query.append(" AND a.aluno MEMBER OF :turma");
+			}
+		}
+		
+		query.append(" ORDER BY a.dataRealizado");
+		List<AlunoQuestionarioREL> listaPerfil = null;
+		Query queryDb = em.createQuery(query.toString());
+		
+		if(idQuestionario != null)
+			queryDb.setParameter("idQuestionario", idQuestionario);
+		if(startDate != null)
+			queryDb.setParameter("startDate", startDate);
+		if(endDate != null)
+			queryDb.setParameter("endDate", endDate);
+		if(matricula != null)
+			queryDb.setParameter("matricula", matricula);
+		if(turma != null)
+			queryDb.setParameter("turma", turma);
+
+		listaPerfil = (List<AlunoQuestionarioREL>) queryDb.getResultList();
+		
+		return listaPerfil;
+		/*CriteriaBuilder cb = em.getCriteriaBuilder();
 		//Metamodel m = em.getMetamodel();
 		
 		CriteriaQuery<AlunoQuestionarioREL> query = cb.createQuery(AlunoQuestionarioREL.class);
 		Root<AlunoQuestionarioREL> rootEstilo = query.from(AlunoQuestionarioREL.class);
 		Join<AlunoQuestionarioREL, TurmaEntity> rootJoinPerfilTurma;
 		
-		//EntityType<TurmaEntity> turma_ = m.entity(TurmaEntity.class);
-		
-		//if Turna != null, colocar um where idTurma do questionario = id turma
-		
+				
 		query.select(rootEstilo).distinct(true);
 		
 		Predicate pred = cb.and();
@@ -69,9 +96,14 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 		} else {
 			if(turma != null) {
 				rootJoinPerfilTurma = rootEstilo.join(TurmaEntity_.CODIGO);
+				Subquery<Integer> sq = query.subquery(Integer.class);
+				Root<TurmaEntity> rootTurma = query.from(TurmaEntity.class);
+				sq.select(sqEmp.get(Employee_.id)).where(
+				        cb.equal(project.get(Project_.name), 
+				        cb.parameter(String.class, "project")));
 								
 				pred = cb.and(pred, cb.equal(rootJoinPerfilTurma.get(TurmaEntity_.CODIGO), turma));
-				pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.ALUNO).in(rootJoinPerfilTurma.get(TurmaEntity_.ALUNOS)));
+				pred = cb.and(pred, cb.inrootEstilo.get(AlunoQuestionarioREL_.ALUNO).in(rootJoinPerfilTurma.get(TurmaEntity_.ALUNOS)));
 				//pred = cb.and(pred, rootEstilo.get(AlunoQuestionarioREL_.QUESTIONARIO).in(rootJoinPerfilTurma.join(TurmaEntity_.QUESTIONARIOS)));
 			}
 			
@@ -86,7 +118,7 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL>{
 		retorno.addAll(typedQuery.getResultList());
 			
 	
-		return retorno;
+		return retorno;*/
 	}
 	
 	@SuppressWarnings("unchecked")

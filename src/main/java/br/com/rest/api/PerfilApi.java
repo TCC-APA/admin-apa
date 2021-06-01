@@ -14,6 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import br.com.rest.model.dto.BuscarPerfilAlunoOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InserirPerfilIn;
 import br.com.rest.model.dto.PerfilAlunoOut;
@@ -25,11 +26,10 @@ public class PerfilApi {
 	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<PerfilAlunoOut> consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
+	public BuscarPerfilAlunoOut consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
 								  @QueryParam(value = "matricula") String matricula, 
 			  					  @QueryParam(value = "startDate") String startDate,
 			  					  @QueryParam(value = "endDate") String endDate,
-								  @QueryParam(value = "nivel") String nivel, 
 								  @QueryParam(value = "turma") String turma) {
 		if (idQuestionario == null) {
 		    throw new WebApplicationException(
@@ -58,7 +58,7 @@ public class PerfilApi {
 			}
 		}
 		
-		Set<PerfilAlunoOut> resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, matricula, dataInicio, dataFim, nivel, turma);
+		BuscarPerfilAlunoOut resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, matricula, dataInicio, dataFim, turma);
 		return resumoEstilos;
 	}
 	
