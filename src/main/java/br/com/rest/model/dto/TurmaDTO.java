@@ -54,14 +54,14 @@ public class TurmaDTO extends DefaultReturn{
 	}	
 	
 	public void addAluno(AlunoOut aluno) {
-		if(this.alunos != null)
+		if(this.alunos == null)
 			this.alunos = new ArrayList<AlunoOut>();
 		if(aluno != null)
 			this.alunos.add(aluno);
 	}
 	
 	public void addQuestionario(QuestionarioDTO questionario) {
-		if(this.questionarios != null)
+		if(this.questionarios == null)
 			this.questionarios = new ArrayList<QuestionarioDTO>();
 		if(questionario != null)
 			this.questionarios.add(questionario);

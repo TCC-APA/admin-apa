@@ -16,7 +16,7 @@ public class BuscarTurmasOut extends DefaultReturn {
 	}
 	
 	public void addTurma(TurmaDTO turma) {
-		if(this.turmas != null)
+		if(this.turmas == null)
 			this.turmas = new ArrayList<TurmaDTO>();
 		if(turma != null)
 			this.turmas.add(turma);
