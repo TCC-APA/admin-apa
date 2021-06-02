@@ -1,5 +1,6 @@
 package br.com.rest.model.dao;
 
+import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.ProfessorEntity;
 
 public class ProfessorDAO extends GenericDAO<ProfessorEntity>{
@@ -26,6 +27,17 @@ public class ProfessorDAO extends GenericDAO<ProfessorEntity>{
 		
 		return professor;
 				
+	}
+	
+	public ProfessorEntity findByMatriculaSenha(String matricula, String senha) {
+		em.clear();
+		ProfessorEntity professor = (ProfessorEntity) em.createQuery(
+					"SELECT a from Professor a WHERE a.siape = :matricula AND a.senha = :senha")
+				.setParameter("matricula", matricula)
+				.setParameter("senha", senha)
+				.getSingleResult();
+		
+		return professor;
 	}
 
 }

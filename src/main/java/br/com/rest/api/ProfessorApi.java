@@ -13,6 +13,8 @@ import com.sun.istack.NotNull;
 
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InsereProfessorIn;
+import br.com.rest.model.dto.LoginDTO;
+import br.com.rest.services.AlunoServices;
 import br.com.rest.services.ProfessorServices;
 
 @Path("/prof")
@@ -37,6 +39,13 @@ public class ProfessorApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public DefaultReturn deletarProfessorPorSiape(@PathParam(value = "siape") String siape) {
 		return null;//ProfessorServices.deleteProfessorPorSiape(siape).toString();
+	}
+	
+	@POST
+	@Path("login")
+	@Produces(MediaType.APPLICATION_JSON)
+	public DefaultReturn realizarLoginPorMatriculaSenha(LoginDTO login) {
+		return ProfessorServices.findProfessorByMatriculaSenha(login.getMatricula(), login.getSenha());
 	}
 
 }

@@ -4,6 +4,7 @@ import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dao.ProfessorDAO;
+import br.com.rest.model.dto.AlunoOut;
 import br.com.rest.model.dto.InsereProfessorIn;
 import br.com.rest.model.dto.ProfessorOut;
 import br.com.rest.model.entity.AlunoEntity;
@@ -40,6 +41,21 @@ public class ProfessorServices {
 			}
 		}
 		return professorOut;
+	}
+	
+	public static ProfessorOut findProfessorByMatriculaSenha(String matricula, String senha) {
+		ProfessorEntity professor = null;
+		ProfessorOut ao = null;
+		try {
+			professor = professorDao.findByMatriculaSenha(matricula, senha);
+			if(professor != null) 
+				ao = entityToDto(professor);
+			
+		} catch(NoResultException e) {
+			ao = new ProfessorOut();
+			ao.addErro("Combinação de matricula e senha não encontrada no banco.");
+		}
+		return ao;
 	}
 
 	public static ProfessorOut consultarProfessorPorSiape(String siape) {

@@ -45,7 +45,7 @@ public class TurmaDAO extends GenericDAO<TurmaEntity>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<TurmaEntity> buscarByIdProfessor(Integer idProfessor) {
+	public List<TurmaEntity> buscarByIdProfessor(Long idProfessor) {
 		em.clear();
 		List<TurmaEntity> turmas = em.createQuery(
 					"SELECT a from Turma a WHERE a.professor.id = :idProfessor")
