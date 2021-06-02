@@ -71,7 +71,7 @@ public class TurmaServices {
 			turmas = findAll();
 		}
 		
-		if(turmas != null) {
+		if(turmas != null && turmas.size() > 0) {
 			List<TurmaDTO> turmasDto = new ArrayList<TurmaDTO>();
 			for(TurmaEntity turmaEntity: turmas) {
 				TurmaDTO turmaDto = entityToDto(turmaEntity);
