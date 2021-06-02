@@ -64,8 +64,10 @@ public class TurmaServices {
 		List<TurmaEntity> turmas = null;
 		
 		if(idProfessor != null) {
+			System.out.println("idProfessor passado como parametro, buscando para id: "+ idProfessor);
 			turmas = findByIdProfessor(idProfessor);
 		} else {
+			System.out.println("idProfessor nulo, buscando todas as turmas");
 			turmas = findAll();
 		}
 		
