@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 @XmlRootElement
 public class QuestionarioDTO extends DefaultReturn{
 	
@@ -53,10 +56,12 @@ public class QuestionarioDTO extends DefaultReturn{
 		this.id = id;
 	}
 	
+	@JsonAnyGetter
 	public Map<String, EstiloDTO> getEstilosIndexados() {
 		return estilosIndexados;
 	}
 
+	@JsonAnySetter 
 	public void setEstilosIndexados(Map<String, EstiloDTO> estilosIndexados) {
 		this.estilosIndexados = estilosIndexados;
 	}
