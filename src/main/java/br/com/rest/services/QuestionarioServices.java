@@ -9,6 +9,8 @@ import javax.persistence.NoResultException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.Gson;
+
 import br.com.rest.model.dao.AlunoDAO;
 import br.com.rest.model.dao.GrupoAlunoDAO;
 import br.com.rest.model.dao.PersistenceManager;
@@ -228,6 +230,8 @@ public class QuestionarioServices {
 				}
 			}
 		}
+		System.out.println("Json Questionario:");
+		System.out.println(new Gson().toJson(quest));
 		return quest;
 	}
 }
