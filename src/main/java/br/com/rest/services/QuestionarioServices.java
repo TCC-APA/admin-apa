@@ -15,6 +15,7 @@ import br.com.rest.model.dao.AlunoDAO;
 import br.com.rest.model.dao.GrupoAlunoDAO;
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dao.QuestionarioDAO;
+import br.com.rest.model.dto.BuscarQuestionariosOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.QuestaoDTO;
@@ -63,24 +64,29 @@ public class QuestionarioServices {
 	public static List<QuestionarioDTO> findQuestionariosPorGruposAluno(String matricula){
 		List<QuestionarioEntity> questionariosBanco = new ArrayList<QuestionarioEntity>();
 		AlunoEntity aluno = null;
+		BuscarQuestionariosOut questionariosOut = new BuscarQuestionariosOut();
+		
 		try {
 			aluno = alunoDao.findByMatricula(matricula);
 		} catch(NoResultException e) {
-			throw new WebApplicationException(
+			/*throw new WebApplicationException(
 				      Response.status(Response.Status.NO_CONTENT)
 				        .entity("Aluno não existe no banco")
 				        .build()
-				    );
+				    );*/
+			questionariosOut.addErro("Aluno não existe no banco");
 		}
 		
 		try {
 			questionariosBanco = grupoAlunoDao.findQuestionariosByGruposAluno(aluno);
 		} catch(NoResultException e) {
-			throw new WebApplicationException(
+			/*throw new WebApplicationException(
 				      Response.status(Response.Status.NO_CONTENT)
 				        .entity("Aluno não está em nenhum grupo de alunos com questionários disponíveis")
 				        .build()
-				    );
+				    );*/
+			questionariosOut.addErro("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
+
 		}
 		
 		List<QuestionarioDTO> listDto = new ArrayList<QuestionarioDTO>();
@@ -88,6 +94,7 @@ public class QuestionarioServices {
 			QuestionarioDTO questDto = questionarioEntityToDto(questEntity);
 			listDto.add(questDto);
 		}
+		questionariosOut.setQuestionarios(listDto);
 		
 		return listDto;
 	}

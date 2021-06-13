@@ -14,6 +14,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.Gson;
+
 import br.com.rest.model.dto.BuscarPerfilAlunoOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InserirPerfilIn;
@@ -76,14 +78,14 @@ public class PerfilApi {
 	@GET
 	@Path("/pontuacao/ultimaData")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn inserirPontuacaoByQuestionario(@QueryParam(value = "matricula") String matricula, @QueryParam(value = "idQuestionario") Long idQuestionario) {
+	public String buscarPontuacaoUltimaDataByMatriculaQuestionario(@QueryParam(value = "matricula") String matricula, @QueryParam(value = "idQuestionario") Long idQuestionario) {
 		if(matricula == null || matricula.length() == 0 || idQuestionario == null || idQuestionario <= 0L) {
 			DefaultReturn retorno = new DefaultReturn();
 			retorno.addErro("Id do aluno e do questionário são parâmetros obrigatórios.");
-			return retorno;
+			return new Gson().toJson(retorno);
 		}
 							
-		return AlunoQuestionarioRELServices.consultarPorUltimaData(matricula, idQuestionario);
+		return new Gson().toJson(AlunoQuestionarioRELServices.consultarPorUltimaData(matricula, idQuestionario));
 	}
 	
 	private DefaultReturn validaParametroInserirPontuacaoByQuestionario(InserirPerfilIn inserirPerfilIn) {
