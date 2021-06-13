@@ -61,7 +61,7 @@ public class QuestionarioServices {
 		}
 	}
 	
-	public static List<QuestionarioDTO> findQuestionariosPorGruposAluno(String matricula){
+	public static BuscarQuestionariosOut findQuestionariosPorGruposAluno(String matricula){
 		List<QuestionarioEntity> questionariosBanco = new ArrayList<QuestionarioEntity>();
 		AlunoEntity aluno = null;
 		BuscarQuestionariosOut questionariosOut = new BuscarQuestionariosOut();
@@ -74,7 +74,9 @@ public class QuestionarioServices {
 				        .entity("Aluno não existe no banco")
 				        .build()
 				    );*/
+			System.out.println("Aluno não existe no banco");
 			questionariosOut.addErro("Aluno não existe no banco");
+			return questionariosOut;
 		}
 		
 		try {
@@ -85,7 +87,9 @@ public class QuestionarioServices {
 				        .entity("Aluno não está em nenhum grupo de alunos com questionários disponíveis")
 				        .build()
 				    );*/
+			System.out.println("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
 			questionariosOut.addErro("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
+			return questionariosOut;
 
 		}
 		
@@ -94,9 +98,13 @@ public class QuestionarioServices {
 			QuestionarioDTO questDto = questionarioEntityToDto(questEntity);
 			listDto.add(questDto);
 		}
-		questionariosOut.setQuestionarios(listDto);
 		
-		return listDto;
+		if(listDto.size() > 0)
+			questionariosOut.setQuestionarios(listDto);
+		else
+			questionariosOut.addErro("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
+		
+		return questionariosOut;
 	}
 	
 	public static QuestionarioEntity findQuestionariosPorNome(String nome){
