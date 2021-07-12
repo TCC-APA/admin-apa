@@ -82,11 +82,11 @@
 			<artifactId>jersey-server</artifactId>
 			<version>1.19.4</version>
 		</dependency-->
-		<!-- dependency>
+		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
 			<version>1.19.4</version>
-		</dependency-->
+		</dependency>
 		<dependency>
 		    <groupId>javax.annotation</groupId>
 		    <artifactId>javax.annotation-api</artifactId>
