@@ -46,12 +46,12 @@
 		    <artifactId>jersey-server</artifactId>
 		    <version>3.0.2</version>
 		</dependency>
-		< dependency>
+		<dependency>
 		    <groupId>org.glassfish.jersey.containers</groupId>
 		    <artifactId>jersey-container-servlet</artifactId>
 		    <version>3.0.2</version>
 		</dependency>
-		<!-- dependency>
+		<!-- <dependency>
 		    <groupId>org.glassfish.jersey.containers</groupId>
 		    <artifactId>jersey-container-servlet-core</artifactId>
 		    <version>3.0.2</version>
@@ -60,7 +60,7 @@
 		    <groupId>org.glassfish.jersey.core</groupId>
 		    <artifactId>jersey-client</artifactId>
 		    <version>3.0.2</version>
-		</dependency-->
+		</dependency>-->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-core</artifactId>
