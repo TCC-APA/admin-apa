@@ -70,13 +70,16 @@ public class PerfilApi {
 	@POST
 	@Path("/pontuacao")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
+	public Response inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
+		Response resp = null;
 		DefaultReturn retorno = validaParametroInserirPontuacaoByQuestionario(estiloAlunoDto);
-		if(retorno.getErros() != null && retorno.getErros().size() > 0)
-			return retorno;
-					
-		return AlunoQuestionarioRELServices.inserir(estiloAlunoDto);
-	}
+		if(retorno.getErros() != null && retorno.getErros().size() > 0) {
+			resp = Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(retorno).build();
+		} else {
+			resp = Response.ok().entity(AlunoQuestionarioRELServices.inserir(estiloAlunoDto)).build();
+		}
+		return resp;
+		}
 	
 	@GET
 	@Path("/pontuacao/ultimaData")
