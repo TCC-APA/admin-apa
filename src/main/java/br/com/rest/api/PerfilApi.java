@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
+import com.sun.jersey.api.core.HttpResponseContext;
 
 import br.com.rest.model.dto.BuscarPerfilAlunoOut;
 import br.com.rest.model.dto.DefaultReturn;
@@ -78,14 +81,16 @@ public class PerfilApi {
 	@GET
 	@Path("/pontuacao/ultimaData")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String buscarPontuacaoUltimaDataByMatriculaQuestionario(@QueryParam(value = "matricula") String matricula, @QueryParam(value = "idQuestionario") Long idQuestionario) {
+	public Response buscarPontuacaoUltimaDataByMatriculaQuestionario(@QueryParam(value = "matricula") String matricula, @QueryParam(value = "idQuestionario") Long idQuestionario) {
+		Response resp = null;
 		if(matricula == null || matricula.length() == 0 || idQuestionario == null || idQuestionario <= 0L) {
 			DefaultReturn retorno = new DefaultReturn();
 			retorno.addErro("Id do aluno e do questionário são parâmetros obrigatórios.");
-			return new Gson().toJson(retorno);
+			resp = Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(new Gson().toJson(retorno)).build();
 		}
+		resp = Response.ok().entity(new Gson().toJson(AlunoQuestionarioRELServices.consultarPorUltimaData(matricula, idQuestionario))).build();
 							
-		return new Gson().toJson(AlunoQuestionarioRELServices.consultarPorUltimaData(matricula, idQuestionario));
+		return resp;
 	}
 	
 	private DefaultReturn validaParametroInserirPontuacaoByQuestionario(InserirPerfilIn inserirPerfilIn) {

@@ -1,5 +1,6 @@
 package br.com.rest.model.dto;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,7 +12,7 @@ public class InserirPerfilIn {
 	private Long idAluno;
 	private String dataRealizado;
 	private Long idQuestionario;
-	private Map<Long, Long> pontuacaoPorEstilo; //Key: Id Estilo, Value: pontuacao
+	private HashMap<Long, Long> pontuacaoPorEstilo; //Key: Id Estilo, Value: pontuacao
 
 	public String getMatriculaAluno() {
 		return matriculaAluno;
@@ -45,11 +46,11 @@ public class InserirPerfilIn {
 		this.idQuestionario = idQuestionario;
 	}
 
-	public Map<Long, Long> getPontuacaoPorEstilo() {
+	public HashMap<Long, Long> getPontuacaoPorEstilo() {
 		return pontuacaoPorEstilo;
 	}
 
-	public void setPontuacaoPorEstilo(Map<Long, Long> pontuacaoPorEstilo) {
+	public void setPontuacaoPorEstilo(HashMap<Long, Long> pontuacaoPorEstilo) {
 		this.pontuacaoPorEstilo = pontuacaoPorEstilo;
 	}
 }
