@@ -141,7 +141,7 @@
 	</dependencies>
 	<build>
 		<finalName>apa</finalName>
-		<plugins>
+		<!-- plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -151,7 +151,7 @@
 					<server>APAServer</server>
 				</configuration>
 			</plugin>
-		</plugins>
+		</plugins-->
 		
 
 		<!-- plugins> <plugin> <groupId>org.bsc.maven</groupId> <artifactId>maven-processor-plugin</artifactId> 
