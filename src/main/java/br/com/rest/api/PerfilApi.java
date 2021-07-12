@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.activation.MimeType;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -68,8 +69,8 @@ public class PerfilApi {
 	
 	@POST
 	@Path("/pontuacao")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes("application/json")
+	@Produces("application/json")
 	public Response inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
 		System.out.println(estiloAlunoDto);
 		Response resp = null;
