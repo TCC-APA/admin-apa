@@ -1,13 +1,8 @@
 package br.com.rest.model.dto;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @XmlRootElement
 public class InserirPerfilIn {
