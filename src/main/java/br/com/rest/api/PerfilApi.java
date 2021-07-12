@@ -83,6 +83,7 @@ public class PerfilApi {
 		mapa.put(5L, 6L);
 		mapa.put(7L, 8L);
 		estiloAlunoDto.setPontuacaoPorEstilo(mapa);
+		System.out.println(estiloAlunoDto);
 		return resp;
 		}
 	
