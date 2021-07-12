@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -38,6 +39,8 @@ public class AppConfig extends Application{
 		for(Object o : allClasses) {
 			resources.add((Class<Object>) o);
 		}
+		resources.add(JacksonFeature.class);
+
 		
 		System.out.println("AppConfig Criado!");
 	}
