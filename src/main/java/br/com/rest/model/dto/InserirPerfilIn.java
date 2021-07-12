@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 public class InserirPerfilIn {
 
 	private String matriculaAluno;
