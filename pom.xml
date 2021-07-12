@@ -61,10 +61,7 @@
 		    <artifactId>jersey-client</artifactId>
 		    <version>3.0.2</version>
 		</dependency>
-				
-
-				
-		<!-- dependency>
+		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-core</artifactId>
 			<version>1.19.4</version>
@@ -83,7 +80,7 @@
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
 			<version>1.19.4</version>
-		</dependency-->
+		</dependency>
 		<dependency>
 		    <groupId>javax.annotation</groupId>
 		    <artifactId>javax.annotation-api</artifactId>
