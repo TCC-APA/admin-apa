@@ -71,6 +71,7 @@ public class PerfilApi {
 	@Path("/pontuacao")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
+		System.out.println(estiloAlunoDto);
 		Response resp = null;
 		DefaultReturn retorno = validaParametroInserirPontuacaoByQuestionario(estiloAlunoDto);
 		if(retorno.getErros() != null && retorno.getErros().size() > 0) {
