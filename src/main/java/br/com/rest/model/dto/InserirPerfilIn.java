@@ -5,13 +5,19 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@XmlRootElement
 public class InserirPerfilIn {
 
 	private String matriculaAluno;
 	private Long idAluno;
 	private String dataRealizado;
 	private Long idQuestionario;
-	private HashMap<Long, Long> pontuacaoPorEstilo; //Key: Id Estilo, Value: pontuacao
+	
+	private Map<Long, Long> pontuacaoPorEstilo; //Key: Id Estilo, Value: pontuacao
 
 	public String getMatriculaAluno() {
 		return matriculaAluno;
@@ -45,11 +51,11 @@ public class InserirPerfilIn {
 		this.idQuestionario = idQuestionario;
 	}
 
-	public HashMap<Long, Long> getPontuacaoPorEstilo() {
+	public Map<Long, Long> getPontuacaoPorEstilo() {
 		return pontuacaoPorEstilo;
 	}
 
-	public void setPontuacaoPorEstilo(HashMap<Long, Long> pontuacaoPorEstilo) {
+	public void setPontuacaoPorEstilo(Map<Long, Long> pontuacaoPorEstilo) {
 		this.pontuacaoPorEstilo = pontuacaoPorEstilo;
 	}
 
