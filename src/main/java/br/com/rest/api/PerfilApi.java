@@ -3,9 +3,9 @@ package br.com.rest.api;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,12 +17,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
-import com.sun.jersey.api.core.HttpResponseContext;
 
 import br.com.rest.model.dto.BuscarPerfilAlunoOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InserirPerfilIn;
-import br.com.rest.model.dto.PerfilAlunoOut;
 import br.com.rest.services.AlunoQuestionarioRELServices;
 
 @Path("/perfil")
@@ -79,6 +77,12 @@ public class PerfilApi {
 		} else {
 			resp = Response.ok().entity(AlunoQuestionarioRELServices.inserir(estiloAlunoDto)).build();
 		}
+		HashMap<Long, Long> mapa= new HashMap<Long, Long>();
+		mapa.put(2L, 3L);
+		mapa.put(3L, 4L);
+		mapa.put(5L, 6L);
+		mapa.put(7L, 8L);
+		estiloAlunoDto.setPontuacaoPorEstilo(mapa);
 		return resp;
 		}
 	

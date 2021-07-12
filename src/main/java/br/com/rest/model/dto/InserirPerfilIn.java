@@ -53,4 +53,11 @@ public class InserirPerfilIn {
 	public void setPontuacaoPorEstilo(HashMap<Long, Long> pontuacaoPorEstilo) {
 		this.pontuacaoPorEstilo = pontuacaoPorEstilo;
 	}
+
+	@Override
+	public String toString() {
+		return "InserirPerfilIn [matriculaAluno=" + matriculaAluno + ", idAluno=" + idAluno + ", dataRealizado="
+				+ dataRealizado + ", idQuestionario=" + idQuestionario + ", pontuacaoPorEstilo=" + pontuacaoPorEstilo
+				+ "]";
+	}
 }
