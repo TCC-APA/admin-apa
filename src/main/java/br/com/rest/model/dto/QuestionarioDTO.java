@@ -7,11 +7,6 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-
 @XmlRootElement
 public class QuestionarioDTO extends DefaultReturn{
 	
@@ -58,12 +53,10 @@ public class QuestionarioDTO extends DefaultReturn{
 		this.id = id;
 	}
 	
-	@JsonDeserialize(as=HashMap.class)
 	public Map<String, EstiloDTO> getEstilosIndexados() {
 		return estilosIndexados;
 	}
 
-	@JsonDeserialize(as=HashMap.class)
 	public void setEstilosIndexados(Map<String, EstiloDTO> estilosIndexados) {
 		this.estilosIndexados = estilosIndexados;
 	}
