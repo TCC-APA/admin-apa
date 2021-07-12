@@ -69,8 +69,8 @@ public class PerfilApi {
 	
 	@POST
 	@Path("/pontuacao")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
 		System.out.println(estiloAlunoDto);
 		Response resp = null;
