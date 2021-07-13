@@ -51,11 +51,6 @@
 	    <artifactId>java-jwt</artifactId>
 	    <version>2.1.0</version>
 	</dependency>
-	<dependency>
-   		<groupId>org.jrimum</groupId>
-   		<artifactId>jrimum-bopepo</artifactId>
-   		<version>0.2.3-SNAPSHOT</version><!-- 0.2.3-DEV-SNAPSHOT em desenvolvimento -->
-	</dependency>
 	  <dependency>
 		  <groupId>javax.servlet</groupId>
 		  <artifactId>servlet-api</artifactId>
