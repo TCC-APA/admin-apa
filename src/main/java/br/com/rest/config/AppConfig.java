@@ -15,8 +15,6 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import com.fasterxml.jackson.core.util.JacksonFeature;
-
 @ApplicationPath("")
 public class AppConfig extends Application{
 
@@ -40,7 +38,6 @@ public class AppConfig extends Application{
 		for(Object o : allClasses) {
 			resources.add((Class<Object>) o);
 		}
-		resources.add(JacksonFeature.class);
 
 		
 		System.out.println("AppConfig Criado!");
