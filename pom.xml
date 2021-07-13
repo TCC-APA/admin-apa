@@ -25,32 +25,7 @@
 		  <artifactId>hibernate-entitymanager</artifactId>
 		  <version>5.5.3.Final</version>
 	  </dependency>
-	  <dependency>
-		  <groupId>io.swagger</groupId>
-		  <artifactId>swagger-jersey2-jaxrs</artifactId>
-		  <version>1.6.2</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>io.swagger</groupId>
-		  <artifactId>swagger-jaxrs</artifactId>
-		  <version>1.6.2</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>io.swagger</groupId>
-		  <artifactId>swagger-models</artifactId>
-		  <version>1.6.2</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>io.swagger</groupId>
-		  <artifactId>swagger-annotations</artifactId>
-		  <version>1.6.2</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>io.swagger</groupId>
-		  <artifactId>swagger-core</artifactId>
-		  <version>1.6.2</version>
-	  </dependency>
-	<dependency>
+	 	<dependency>
 	    <groupId>org.glassfish.jersey.containers</groupId>
 	    <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
 	    <artifactId>jersey-container-servlet</artifactId>
@@ -70,11 +45,6 @@
 	    <groupId>org.glassfish.jersey.media</groupId>
 	    <artifactId>jersey-media-multipart</artifactId>
 	    <version>2.23.2</version>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.commons</groupId>
-		<artifactId>commons-compress</artifactId>
-		<version>1.10</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.auth0</groupId>
