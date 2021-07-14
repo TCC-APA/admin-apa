@@ -139,6 +139,9 @@ public class AlunoQuestionarioRELServices {
 	}
 	
 	public static AlunoQuestionarioREL dtoToEntity(InserirPerfilIn estiloAlunoDto) throws IllegalArgumentException{ //TODO colocar as pontuacoes por estilo
+		System.out.println("estiloAlunoDto:-------------------------------");
+		System.out.println(estiloAlunoDto);
+
 		if(estiloAlunoDto != null && (estiloAlunoDto.getIdAluno() != null || estiloAlunoDto.getMatriculaAluno() != null) && estiloAlunoDto.getIdQuestionario() != null) {
 			AlunoQuestionarioREL estiloAlunoRel = new AlunoQuestionarioREL();
 			AlunoEntity aluno = null;
@@ -185,6 +188,8 @@ public class AlunoQuestionarioRELServices {
 				}
 				estiloAlunoRel.setPontuacaoPorEstilo(pontuacaoPorEstilo);
 			}
+			System.out.println("estiloAlunoRel:-------------------------------");
+			System.out.println(estiloAlunoRel);
 			
 			return estiloAlunoRel;
 		} else {
