@@ -79,7 +79,7 @@ public class AlunoQuestionarioRELServices {
 			return retornoPadrao;
 		} catch (Exception e) {
 			PersistenceManager.getTransaction().rollback();
-			e.printStackTrace();
+			retornoPadrao.addErro(e.getMessage());
 			return null;
 		}
 	}
@@ -139,9 +139,6 @@ public class AlunoQuestionarioRELServices {
 	}
 	
 	public static AlunoQuestionarioREL dtoToEntity(InserirPerfilIn estiloAlunoDto) throws IllegalArgumentException{ //TODO colocar as pontuacoes por estilo
-		System.out.println("estiloAlunoDto:-------------------------------");
-		System.out.println(estiloAlunoDto);
-
 		if(estiloAlunoDto != null && (estiloAlunoDto.getIdAluno() != null || estiloAlunoDto.getMatriculaAluno() != null) && estiloAlunoDto.getIdQuestionario() != null) {
 			AlunoQuestionarioREL estiloAlunoRel = new AlunoQuestionarioREL();
 			AlunoEntity aluno = null;
@@ -184,12 +181,13 @@ public class AlunoQuestionarioRELServices {
 				Map<EstiloEntity, Long> pontuacaoPorEstilo = new HashMap<EstiloEntity, Long>();
 				for(Long estiloId: estiloAlunoDto.getPontuacaoPorEstilo().keySet()) {
 					EstiloEntity estiloEntity = EstiloServices.findEstiloById(estiloId);
-					pontuacaoPorEstilo.put(estiloEntity, estiloAlunoDto.getPontuacaoPorEstilo().get(estiloId));
+					if(estiloEntity != null)
+						pontuacaoPorEstilo.put(estiloEntity, estiloAlunoDto.getPontuacaoPorEstilo().get(estiloId));
+					else
+						throw new IllegalArgumentException("Estilo indexado de id inexistente no banco de dados");
 				}
 				estiloAlunoRel.setPontuacaoPorEstilo(pontuacaoPorEstilo);
 			}
-			System.out.println("estiloAlunoRel:-------------------------------");
-			System.out.println(estiloAlunoRel);
 			
 			return estiloAlunoRel;
 		} else {
