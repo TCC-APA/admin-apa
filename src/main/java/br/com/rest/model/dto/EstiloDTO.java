@@ -1,5 +1,7 @@
 package br.com.rest.model.dto;
 
+import com.google.gson.Gson;
+
 public class EstiloDTO {
 
 	private Long id;
@@ -69,8 +71,7 @@ public class EstiloDTO {
 	
 	@Override
 	public String toString() {
-		return "EstiloDTO [id=" + id + ", nome=" + nome + ", caracteristicas=" + caracteristicas + ", sugestoes="
-				+ sugestoes + "]";
+		return new Gson().toJson(this);
 	}
 	
 	
