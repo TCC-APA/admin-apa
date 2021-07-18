@@ -18,7 +18,8 @@ public class PerfilAlunoOut extends DefaultReturn{
 	private Date dataRealizado;
 	private String nomeQuestionario;
 	private Long idQuestionario;
-	private Map<EstiloDTO, Long> pontuacaoPorEstilo;
+	//Key: Estilo id; Value: pontuacao
+	private Map<Long, Long> pontuacaoPorEstilo;
 
 	public Long getIdPerfil() {
 		return idPerfil;
@@ -76,11 +77,11 @@ public class PerfilAlunoOut extends DefaultReturn{
 		this.idQuestionario = idQuestionario;
 	}
 
-	public Map<EstiloDTO, Long> getPontuacaoPorEstilo() {
+	public Map<Long, Long> getPontuacaoPorEstilo() {
 		return pontuacaoPorEstilo;
 	}
 
-	public void setPontuacaoPorEstilo(Map<EstiloDTO, Long> pontuacaoPorEstilo) {
+	public void setPontuacaoPorEstilo(Map<Long, Long> pontuacaoPorEstilo) {
 		this.pontuacaoPorEstilo = pontuacaoPorEstilo;
 	}
 

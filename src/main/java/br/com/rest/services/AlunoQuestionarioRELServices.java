@@ -127,10 +127,9 @@ public class AlunoQuestionarioRELServices {
 		estiloAlunoDto.setIdPerfil(estiloAluno.getIdPerfil());
 		
 		if(estiloAluno.getPontuacaoPorEstilo() != null && estiloAluno.getPontuacaoPorEstilo().keySet() != null && estiloAluno.getPontuacaoPorEstilo().keySet().size() > 0) {
-			Map<EstiloDTO, Long> pontuacaoPorEstiloDto = new HashMap<EstiloDTO, Long>();
+			Map<Long, Long> pontuacaoPorEstiloDto = new HashMap<Long, Long>();
 			for(EstiloEntity estilo: estiloAluno.getPontuacaoPorEstilo().keySet()) {
-				EstiloDTO estiloDto = EstiloServices.entityToDto(estilo);
-				pontuacaoPorEstiloDto.put(estiloDto, estiloAluno.getPontuacaoPorEstilo().get(estilo));
+				pontuacaoPorEstiloDto.put(estilo.getId(), estiloAluno.getPontuacaoPorEstilo().get(estilo));
 			}
 			estiloAlunoDto.setPontuacaoPorEstilo(pontuacaoPorEstiloDto);
 		}

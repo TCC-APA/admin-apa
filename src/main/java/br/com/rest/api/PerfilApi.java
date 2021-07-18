@@ -72,7 +72,6 @@ public class PerfilApi {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
-		System.out.println(estiloAlunoDto);
 		Response resp = null;
 		DefaultReturn retorno = validaParametroInserirPontuacaoByQuestionario(estiloAlunoDto);
 		if(retorno.getErros() != null && retorno.getErros().size() > 0) {
@@ -80,16 +79,8 @@ public class PerfilApi {
 		} else {
 			resp = Response.ok().entity(AlunoQuestionarioRELServices.inserir(estiloAlunoDto)).build();
 		}
-		HashMap<Long, Long> mapa= new HashMap<Long, Long>();
-		mapa.put(2L, 3L);
-		mapa.put(3L, 4L);
-		mapa.put(5L, 6L);
-		mapa.put(7L, 8L);
-		estiloAlunoDto.setPontuacaoPorEstilo(mapa);
-		
-		System.out.println(new Gson().toJson(estiloAlunoDto));
 		return resp;
-		}
+	}
 	
 	@GET
 	@Path("/pontuacao/ultimaData")
