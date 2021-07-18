@@ -68,11 +68,10 @@ public class EstiloDTO {
 		
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return new Gson().toJson(this);
+		return "EstiloDTO [id=" + id + ", nome=" + nome + ", caracteristicas=" + caracteristicas + ", sugestoes="
+				+ sugestoes + "]";
 	}
-	
-	
 }
