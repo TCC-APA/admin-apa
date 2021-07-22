@@ -4,11 +4,15 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @XmlRootElement
 public class AlunoOut extends DefaultReturn{
 
 	private Long id;
 	private String nome;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date dataNascimento;
 	private String genero;
 	private String senha;
