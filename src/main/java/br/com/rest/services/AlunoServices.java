@@ -1,5 +1,8 @@
 package br.com.rest.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.AlunoDAO;
@@ -27,9 +30,9 @@ public class AlunoServices {
 		if(existeAluno) {
 			ao.addErro("Aluno já existente no banco, nada foi incluído.");
 		} else {
-			AlunoEntity alunoEntity = dtoToEntity(aluno);
 			PersistenceManager.getTransaction().begin();
 			try{
+				AlunoEntity alunoEntity = dtoToEntity(aluno);
 				alunoEntity = alunoDao.incluir(alunoEntity);	
 				PersistenceManager.getTransaction().commit();
 				System.out.println("Aluno "+ aluno.getMatricula() + " incluido");
@@ -54,9 +57,9 @@ public class AlunoServices {
 		}
 		
 		if(existeAluno) {
-			AlunoEntity alunoEntity = dtoToEntity(aluno);
 			PersistenceManager.getTransaction().begin();
 			try{
+				AlunoEntity alunoEntity = dtoToEntity(aluno);
 				alunoEntity = alunoDao.alterar(alunoEntity);	
 				PersistenceManager.getTransaction().commit();
 				System.out.println("Aluno "+ aluno.getMatricula() + " alterado");
@@ -122,12 +125,13 @@ public class AlunoServices {
 		return alunoOut;
 	}
 	
-	public static AlunoEntity dtoToEntity(AlunoIn alunoIn) {
+	public static AlunoEntity dtoToEntity(AlunoIn alunoIn) throws ParseException{
 		AlunoEntity alunoEntity = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		if(alunoIn != null) {
 			alunoEntity = new AlunoEntity();
 			alunoEntity.setGenero(alunoIn.getGenero());
-			alunoEntity.setDataNascimento(alunoIn.getDataNascimento());
+			alunoEntity.setDataNascimento(dateFormat.parse(alunoIn.getDataNascimento()));
 			alunoEntity.setMatricula(alunoIn.getMatricula());
 			alunoEntity.setNome(alunoIn.getNome());
 			alunoEntity.setSenha(alunoIn.getSenha());

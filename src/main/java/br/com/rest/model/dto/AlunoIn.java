@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AlunoIn {
 
 	private String nome;
-	private Date dataNascimento;
+	private String dataNascimento;
 	private String genero;
 	private String senha;
 	private String matricula;
@@ -20,10 +20,10 @@ public class AlunoIn {
 		this.nome = nome;
 	}
 	
-	public Date getDataNascimento() {
+	public String getDataNascimento() {
 		return dataNascimento;
 	}
-	public void setDataNascimento(Date dataNascimento) {
+	public void setDataNascimento(String dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 	public String getGenero() {
