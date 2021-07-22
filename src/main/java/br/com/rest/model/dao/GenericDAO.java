@@ -42,8 +42,9 @@ public class GenericDAO<T> {
 		em.flush();
 	}
 	
-	public void alterar(T entidade) {
+	public T alterar(T entidade) {
 		em.merge(entidade);
 		em.flush();
+		return entidade;
 	}
 }

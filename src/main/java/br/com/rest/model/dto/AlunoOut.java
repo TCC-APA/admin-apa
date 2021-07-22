@@ -1,5 +1,7 @@
 package br.com.rest.model.dto;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -7,7 +9,7 @@ public class AlunoOut extends DefaultReturn{
 
 	private Long id;
 	private String nome;
-	private Integer idade;
+	private Date dataNascimento;
 	private String genero;
 	private String senha;
 	private String matricula;
@@ -25,12 +27,7 @@ public class AlunoOut extends DefaultReturn{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Integer getIdade() {
-		return idade;
-	}
-	public void setIdade(Integer idade) {
-		this.idade = idade;
-	}
+	
 	public String getGenero() {
 		return genero;
 	}
@@ -48,5 +45,11 @@ public class AlunoOut extends DefaultReturn{
 	}
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
+	}
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}	
 }

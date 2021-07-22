@@ -1,6 +1,7 @@
 package br.com.rest.model.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public abstract class Usuario  implements Serializable {
 	private String nome;
 	
 	@Column
-	private Integer idade;
+	private Date dataNascimento;
 	
 	@Column
 	private String genero;
@@ -53,13 +54,13 @@ public abstract class Usuario  implements Serializable {
 		this.nome = nome;
 	}
 
-	public Integer getIdade() {
-		return idade;
+	public Date getDataNascimento() {
+		return dataNascimento;
 	}
 
 
-	public void setIdade(Integer idade) {
-		this.idade = idade;
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 

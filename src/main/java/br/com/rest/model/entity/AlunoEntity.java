@@ -28,7 +28,7 @@ public class AlunoEntity extends Usuario implements Serializable{
 	@Override
 	public String toString() {
 		return "AlunoEntity [matricula=" + matricula + ", id=" + getId() +  ", nome=" + getNome()
-				+ ", idade=" + getIdade() + ", genero=" + getGenero()+"]";
+				+ ", dataNascimento=" + getDataNascimento() + ", genero=" + getGenero()+"]";
 	}
 	
 	@Override

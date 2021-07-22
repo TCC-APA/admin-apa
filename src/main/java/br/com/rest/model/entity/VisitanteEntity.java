@@ -20,7 +20,7 @@ public class VisitanteEntity extends Usuario implements Serializable{
 	@Override
 	public String toString() {
 		return "VisitanteEntity [nivelEscolaridade=" + nivelEscolaridade + ", id=" + getId() + ", cpf=" + getNome()
-				+ ", idade=" + getIdade() + ", genero=" + getGenero()+"]";
+				+ ", dataNascimento=" + getDataNascimento() + ", genero=" + getGenero()+"]";
 	}
 	
 	@Override

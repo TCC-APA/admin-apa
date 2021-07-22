@@ -1,12 +1,14 @@
 package br.com.rest.model.dto;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class AlunoIn {
 
 	private String nome;
-	private Integer idade;
+	private Date dataNascimento;
 	private String genero;
 	private String senha;
 	private String matricula;
@@ -17,11 +19,12 @@ public class AlunoIn {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Integer getIdade() {
-		return idade;
+	
+	public Date getDataNascimento() {
+		return dataNascimento;
 	}
-	public void setIdade(Integer idade) {
-		this.idade = idade;
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 	public String getGenero() {
 		return genero;

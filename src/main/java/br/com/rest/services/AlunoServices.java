@@ -43,6 +43,35 @@ public class AlunoServices {
 		return ao;
 	}
 	
+	public static DefaultReturn alterarAluno(AlunoIn aluno) {
+		AlunoOut ao = new AlunoOut();
+		AlunoEntity alunoBanco = null;
+		Boolean existeAluno = false;
+		if(aluno != null && aluno.getMatricula() != null) {
+			alunoBanco = findAlunoByMatricula(aluno.getMatricula());
+			if(alunoBanco != null)
+				existeAluno = true;
+		}
+		
+		if(existeAluno) {
+			AlunoEntity alunoEntity = dtoToEntity(aluno);
+			PersistenceManager.getTransaction().begin();
+			try{
+				alunoEntity = alunoDao.alterar(alunoEntity);	
+				PersistenceManager.getTransaction().commit();
+				System.out.println("Aluno "+ aluno.getMatricula() + " alterado");
+				ao = entityToDto(alunoEntity);
+				ao.setMsg("Aluno incluído com sucesso!");
+			}catch(Exception e){
+				PersistenceManager.getTransaction().rollback();
+				ao.addErro("Ocorreu um erro ao inserir o aluno: "+e.getMessage());
+			}
+		} else {
+			ao.addErro("Aluno não existente no banco, nada foi alterado/inserido");
+		}
+		return ao;
+	}
+	
 	public static AlunoOut findAlunoByMatriculaSenha(String matricula, String senha) {
 		AlunoEntity aluno = null;
 		AlunoOut ao = null;
@@ -86,7 +115,7 @@ public class AlunoServices {
 			alunoOut = new AlunoOut();
 			alunoOut.setId(alunoEntity.getId());
 			alunoOut.setGenero(alunoEntity.getGenero());
-			alunoOut.setIdade(alunoEntity.getIdade());
+			alunoOut.setDataNascimento(alunoEntity.getDataNascimento());
 			alunoOut.setMatricula(alunoEntity.getMatricula());
 			alunoOut.setNome(alunoEntity.getNome());
 		}
@@ -98,7 +127,7 @@ public class AlunoServices {
 		if(alunoIn != null) {
 			alunoEntity = new AlunoEntity();
 			alunoEntity.setGenero(alunoIn.getGenero());
-			alunoEntity.setIdade(alunoIn.getIdade());
+			alunoEntity.setDataNascimento(alunoIn.getDataNascimento());
 			alunoEntity.setMatricula(alunoIn.getMatricula());
 			alunoEntity.setNome(alunoIn.getNome());
 			alunoEntity.setSenha(alunoIn.getSenha());
