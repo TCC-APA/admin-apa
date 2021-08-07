@@ -14,6 +14,8 @@ import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.ProfessorOut;
 import br.com.rest.model.dto.QuestionarioDTO;
 import br.com.rest.model.dto.TurmaDTO;
+import br.com.rest.model.dto.filtro.BuscarTurmasFiltroOut;
+import br.com.rest.model.dto.filtro.TurmaFiltroOut;
 import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
 import br.com.rest.model.entity.TurmaEntity;
@@ -59,26 +61,59 @@ public class TurmaServices {
 		}
 	}
 	
-	public static BuscarTurmasOut buscarTurmasFiltroProfessor(Long idProfessor) {
-		BuscarTurmasOut resposta = new BuscarTurmasOut();
-		List<TurmaEntity> turmas = null;
+
+	public static BuscarTurmasFiltroOut buscarTurmasFiltroProfessorSimplified(Long idProfessor) {
+		BuscarTurmasFiltroOut resposta = new BuscarTurmasFiltroOut();
+		List<TurmaEntity> turmas = new ArrayList<TurmaEntity>();
+		getTurmasByIdProfParameter(idProfessor, turmas);
 		
+		if(turmas != null && turmas.size() > 0)
+			turmasListToSimplifiedDto(resposta, turmas);
+		else {
+			resposta.setMsg("Nenhuma turma encontrada");
+		}
+		return resposta;
+	}
+
+	private static void turmasListToDto(BuscarTurmasOut resposta, List<TurmaEntity> turmas) {
+		List<TurmaDTO> turmasDto = new ArrayList<TurmaDTO>();
+		for(TurmaEntity turmaEntity: turmas) {
+			TurmaDTO turmaDto = entityToDto(turmaEntity);
+			turmasDto.add(turmaDto);
+		}
+		resposta.setTurmas(turmasDto);
+	}
+	
+
+	private static void turmasListToSimplifiedDto(BuscarTurmasFiltroOut resposta, List<TurmaEntity> turmas) {
+		List<TurmaFiltroOut> turmasDto = new ArrayList<TurmaFiltroOut>();
+		for(TurmaEntity turmaEntity: turmas) {
+			TurmaFiltroOut turmaDto = entityToFiltroOut(turmaEntity);
+			turmasDto.add(turmaDto);
+		}
+		resposta.setTurmas(turmasDto);
+	}
+	
+	private static void getTurmasByIdProfParameter(Long idProfessor, List<TurmaEntity> turmas) {		
+		List<TurmaEntity> turmasDb = null;
 		if(idProfessor != null) {
 			System.out.println("idProfessor passado como parametro, buscando para id: "+ idProfessor);
-			turmas = findByIdProfessor(idProfessor);
+			turmasDb = findByIdProfessor(idProfessor);
 		} else {
 			System.out.println("idProfessor nulo, buscando todas as turmas");
-			turmas = findAll();
+			turmasDb = findAll();
 		}
-		
-		if(turmas != null && turmas.size() > 0) {
-			List<TurmaDTO> turmasDto = new ArrayList<TurmaDTO>();
-			for(TurmaEntity turmaEntity: turmas) {
-				TurmaDTO turmaDto = entityToDto(turmaEntity);
-				turmasDto.add(turmaDto);
-			}
-			resposta.setTurmas(turmasDto);
-		} else {
+		turmas.addAll(turmasDb);
+	}
+	
+	public static BuscarTurmasOut buscarTurmasFiltroProfessor(Long idProfessor) {
+		BuscarTurmasOut resposta = new BuscarTurmasOut();
+		List<TurmaEntity> turmas =  new ArrayList<TurmaEntity>();
+		getTurmasByIdProfParameter(idProfessor, turmas);
+
+		if(turmas != null && turmas.size() > 0)
+			turmasListToDto(resposta, turmas);
+		else {
 			resposta.setMsg("Nenhuma turma encontrada");
 		}
 		
@@ -193,6 +228,17 @@ public class TurmaServices {
 					turma.addQuestionario(questionarioOut);
 				}
 			}
+		}
+		return turma;
+	}
+	
+	public static TurmaFiltroOut entityToFiltroOut(TurmaEntity turmaEntity) {
+		TurmaFiltroOut turma = null;
+		if(turmaEntity != null) {
+			turma = new TurmaFiltroOut();
+			turma.setCodigo(turmaEntity.getCodigo());
+			turma.setDisciplina(turmaEntity.getDisciplina());
+			turma.setId(turmaEntity.getId());
 		}
 		return turma;
 	}

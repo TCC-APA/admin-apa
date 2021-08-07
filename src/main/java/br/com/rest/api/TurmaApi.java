@@ -18,7 +18,13 @@ public class TurmaApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public DefaultReturn findTurmas(@QueryParam(value = "idProfessor") Long idProfessor) {
 		return TurmaServices.buscarTurmasFiltroProfessor(idProfessor);
-		
+	}
+	
+	@GET
+	@Path("filtro")
+	@Produces(MediaType.APPLICATION_JSON)
+	public DefaultReturn findTurmasFiltroProf(@QueryParam(value = "idProfessor") Long idProfessor) {
+		return TurmaServices.buscarTurmasFiltroProfessorSimplified(idProfessor);
 	}
 	
 	@GET
