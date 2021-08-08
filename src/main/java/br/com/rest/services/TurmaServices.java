@@ -62,16 +62,16 @@ public class TurmaServices {
 	}
 	
 
-	public static BuscarTurmasFiltroOut buscarTurmasFiltroProfessorSimplified(Long idProfessor) {
+	public static BuscarTurmasFiltroOut buscarTurmasFiltroProfessorSimplified(Long idProfessor) throws NoResultException{
 		BuscarTurmasFiltroOut resposta = new BuscarTurmasFiltroOut();
 		List<TurmaEntity> turmas = new ArrayList<TurmaEntity>();
 		getTurmasByIdProfParameter(idProfessor, turmas);
 		
 		if(turmas != null && turmas.size() > 0)
 			turmasListToSimplifiedDto(resposta, turmas);
-		else {
-			resposta.setMsg("Nenhuma turma encontrada");
-		}
+		else 
+			throw new NoResultException("Nenhuma turma encontrada");
+		
 		return resposta;
 	}
 
@@ -106,28 +106,8 @@ public class TurmaServices {
 		turmas.addAll(turmasDb);
 	}
 	
-	public static BuscarTurmasOut buscarTurmasFiltroProfessor(Long idProfessor) {
-		BuscarTurmasOut resposta = new BuscarTurmasOut();
-		List<TurmaEntity> turmas =  new ArrayList<TurmaEntity>();
-		getTurmasByIdProfParameter(idProfessor, turmas);
-
-		if(turmas != null && turmas.size() > 0)
-			turmasListToDto(resposta, turmas);
-		else {
-			resposta.setMsg("Nenhuma turma encontrada");
-		}
-		
-		return resposta;
-	}
-	
-	public static List<TurmaEntity> findAll() {
-		List<TurmaEntity> turmas = null;
-		try {
-			turmas = turmaDao.findAll();
-		} catch(NoResultException e) {
-			System.out.println("Nenhuma turma encontrada");
-		}
-		return turmas;
+	public static List<TurmaEntity> findAll() throws NoResultException{
+		return turmaDao.findAll();
 	}
 	
 	public static List<TurmaEntity> findByIdProfessor(Long id) {

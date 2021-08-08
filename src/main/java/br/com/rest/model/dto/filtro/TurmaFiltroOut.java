@@ -2,10 +2,8 @@ package br.com.rest.model.dto.filtro;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import br.com.rest.model.dto.DefaultReturn;
-
 @XmlRootElement
-public class TurmaFiltroOut extends DefaultReturn{
+public class TurmaFiltroOut{
 	private Long id;
 	private String codigo;
 	private String disciplina;

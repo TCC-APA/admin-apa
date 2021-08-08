@@ -1,30 +1,33 @@
 package br.com.rest.api;
 
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.services.TurmaServices;
 
 @Path("/turma")
 public class TurmaApi {
-	
-	@GET
-	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn findTurmas(@QueryParam(value = "idProfessor") Long idProfessor) {
-		return TurmaServices.buscarTurmasFiltroProfessor(idProfessor);
-	}
-	
+
 	@GET
 	@Path("filtro")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DefaultReturn findTurmasFiltroProf(@QueryParam(value = "idProfessor") Long idProfessor) {
-		return TurmaServices.buscarTurmasFiltroProfessorSimplified(idProfessor);
+	public Response findTurmasFiltroProf(@QueryParam(value = "idProfessor") Long idProfessor) {
+		try {
+			return Response.ok().entity(TurmaServices.buscarTurmasFiltroProfessorSimplified(idProfessor)).build();
+		} catch (NoResultException e) {
+			return Response.status(HttpsURLConnection.HTTP_NO_CONTENT).build();
+		}
 	}
 	
 	@GET
