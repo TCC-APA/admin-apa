@@ -1,8 +1,5 @@
 package br.com.rest.api;
 
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
 import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
