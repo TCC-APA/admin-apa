@@ -31,6 +31,20 @@ public class TurmaDAO extends GenericDAO<TurmaEntity>{
 				
 	}
 	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TurmaEntity> findAll() {
+		em.clear();
+		List<TurmaEntity> turmas = (List<TurmaEntity>) em.createQuery(
+					"SELECT t FROM Turma t WHERE UPPER(t.codigo) != :codigo")
+				.setParameter("codigo", "DEFAULT")
+				.getResultList();
+		
+		return turmas;
+				
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Set<TurmaEntity> buscarTurmaByAlunoMatricula(String matricula) {
 		em.clear();

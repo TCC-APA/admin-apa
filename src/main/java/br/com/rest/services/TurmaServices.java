@@ -75,16 +75,6 @@ public class TurmaServices {
 		return resposta;
 	}
 
-	private static void turmasListToDto(BuscarTurmasOut resposta, List<TurmaEntity> turmas) {
-		List<TurmaDTO> turmasDto = new ArrayList<TurmaDTO>();
-		for(TurmaEntity turmaEntity: turmas) {
-			TurmaDTO turmaDto = entityToDto(turmaEntity);
-			turmasDto.add(turmaDto);
-		}
-		resposta.setTurmas(turmasDto);
-	}
-	
-
 	private static void turmasListToSimplifiedDto(BuscarTurmasFiltroOut resposta, List<TurmaEntity> turmas) {
 		List<TurmaFiltroOut> turmasDto = new ArrayList<TurmaFiltroOut>();
 		for(TurmaEntity turmaEntity: turmas) {

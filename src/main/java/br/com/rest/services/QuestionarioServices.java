@@ -21,119 +21,148 @@ import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.QuestaoDTO;
 import br.com.rest.model.dto.QuestionarioDTO;
 import br.com.rest.model.dto.ValorAlternativaDTO;
+import br.com.rest.model.dto.filtro.BuscarQuestionariosFiltroOut;
+import br.com.rest.model.dto.filtro.QuestionarioFiltroOut;
 import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.QuestaoEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
 
 public class QuestionarioServices {
-	
+
 	private static QuestionarioDAO questionarioDao = QuestionarioDAO.getInstance();
 	private static GrupoAlunoDAO grupoAlunoDao = GrupoAlunoDAO.getInstance();
 	private static AlunoDAO alunoDao = AlunoDAO.getInstance();
-	
-	
+
+	public static BuscarQuestionariosFiltroOut buscarQuestionariosFiltroProfessorSimplified()
+			throws NoResultException {
+		BuscarQuestionariosFiltroOut resposta = new BuscarQuestionariosFiltroOut();
+		List<QuestionarioEntity> questionarios = questionarioDao.findAll();
+		if (questionarios != null && questionarios.size() > 0)
+			entityListToEntityDtoFiltro(resposta, questionarios);
+		else
+			throw new NoResultException("Nenhuma questionario encontrada");
+
+		return resposta;
+	}
+
+	private static void entityListToEntityDtoFiltro(BuscarQuestionariosFiltroOut resposta,
+			List<QuestionarioEntity> questionarios) {
+		for (QuestionarioEntity e : questionarios) {
+			QuestionarioFiltroOut out = entityToFiltroOut(e);
+			resposta.addQuestionario(out);
+		}
+	}
+
+	public static QuestionarioFiltroOut entityToFiltroOut(QuestionarioEntity questionarioEntity) {
+		QuestionarioFiltroOut questionario = null;
+		if (questionarioEntity != null) {
+			questionario = new QuestionarioFiltroOut();
+			questionario.setNome(questionarioEntity.getNome());
+			questionario.setId(questionarioEntity.getIdQuestionario());
+		}
+		return questionario;
+	}
+
 	public static Boolean incluirQuestionario(QuestionarioDTO questionario) {
 		QuestionarioEntity questionarioBanco = null;
-		
+
 		try {
-			 questionarioBanco = questionarioDao.findByNome(questionario.getNome());
+			questionarioBanco = questionarioDao.findByNome(questionario.getNome());
 		} catch (NoResultException e) {
 			System.out.println("Questionario não encontrado no banco, pode ser incluido");
-		
+
 		}
-		
-		if(questionarioBanco != null) {
+
+		if (questionarioBanco != null) {
 			return false;
 		} else {
 			PersistenceManager.getTransaction().begin();
-			
-			try{
+
+			try {
 				QuestionarioEntity quest = questionarioDtoToEntity(questionario);
-				questionarioDao.incluir(quest);	
+				questionarioDao.incluir(quest);
 				PersistenceManager.getTransaction().commit();
 				return true;
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 				PersistenceManager.getTransaction().rollback();
 				return false;
 			}
 		}
 	}
-	
-	public static BuscarQuestionariosOut findQuestionariosPorGruposAluno(String matricula){
+
+	public static BuscarQuestionariosOut findQuestionariosPorGruposAluno(String matricula) {
 		List<QuestionarioEntity> questionariosBanco = new ArrayList<QuestionarioEntity>();
 		AlunoEntity aluno = null;
 		BuscarQuestionariosOut questionariosOut = new BuscarQuestionariosOut();
-		
+
 		try {
 			aluno = alunoDao.findByMatricula(matricula);
-		} catch(NoResultException e) {
-			/*throw new WebApplicationException(
-				      Response.status(Response.Status.NO_CONTENT)
-				        .entity("Aluno não existe no banco")
-				        .build()
-				    );*/
+		} catch (NoResultException e) {
+			/*
+			 * throw new WebApplicationException(
+			 * Response.status(Response.Status.NO_CONTENT)
+			 * .entity("Aluno não existe no banco") .build() );
+			 */
 			System.out.println("Aluno não existe no banco");
 			questionariosOut.addErro("Aluno não existe no banco");
 			return questionariosOut;
 		}
-		
+
 		try {
 			questionariosBanco = grupoAlunoDao.findQuestionariosByGruposAluno(aluno);
-		} catch(NoResultException e) {
-			/*throw new WebApplicationException(
-				      Response.status(Response.Status.NO_CONTENT)
-				        .entity("Aluno não está em nenhum grupo de alunos com questionários disponíveis")
-				        .build()
-				    );*/
+		} catch (NoResultException e) {
+			/*
+			 * throw new WebApplicationException(
+			 * Response.status(Response.Status.NO_CONTENT)
+			 * .entity("Aluno não está em nenhum grupo de alunos com questionários disponíveis"
+			 * ) .build() );
+			 */
 			System.out.println("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
 			questionariosOut.addErro("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
 			return questionariosOut;
 
 		}
-		
+
 		List<QuestionarioDTO> listDto = new ArrayList<QuestionarioDTO>();
-		for(QuestionarioEntity questEntity : questionariosBanco) {
+		for (QuestionarioEntity questEntity : questionariosBanco) {
 			QuestionarioDTO questDto = questionarioEntityToDto(questEntity);
 			listDto.add(questDto);
 		}
-		
-		if(listDto.size() > 0)
+
+		if (listDto.size() > 0)
 			questionariosOut.setQuestionarios(listDto);
 		else
 			questionariosOut.addErro("Aluno não está em nenhum grupo de alunos com questionários disponíveis");
-		
+
 		return questionariosOut;
 	}
-	
-	public static QuestionarioEntity findQuestionariosPorNome(String nome){
+
+	public static QuestionarioEntity findQuestionariosPorNome(String nome) {
 		QuestionarioEntity questionarioBanco = null;
 		try {
 			questionarioBanco = questionarioDao.findByNome(nome);
-		} catch(NoResultException e) {
-			System.out.println("Turma nao encontrada");
+		} catch (NoResultException e) {
+			System.out.println("Questionario nao encontrada");
 		}
-				
+
 		return questionarioBanco;
 	}
-	
-	public static QuestionarioEntity findQuestionariosById(Long id){
+
+	public static QuestionarioEntity findQuestionariosById(Long id) {
 		QuestionarioEntity questionarioBanco = null;
-		if(id != null) {
+		if (id != null) {
 			try {
 				questionarioBanco = questionarioDao.find(id);
-			} catch(NoResultException e) {
-				throw new WebApplicationException(
-						Response.status(Response.Status.NO_CONTENT)
-						.entity("Questionario de id "+ id + " não encontrado.")
-						.build()
-						);
-			}			
+			} catch (NoResultException e) {
+				throw new WebApplicationException(Response.status(Response.Status.NO_CONTENT)
+						.entity("Questionario de id " + id + " não encontrado.").build());
+			}
 		}
 		return questionarioBanco;
 	}
-	
+
 	public static QuestionarioEntity questionarioDtoToEntity(QuestionarioDTO quest) {
 		if (quest != null) {
 			Map<String, EstiloEntity> estilosEntityIndexados = new HashMap<String, EstiloEntity>();
@@ -143,7 +172,7 @@ public class QuestionarioServices {
 				EstiloDTO estiloDto;
 				EstiloEntity estiloEntity;
 				questEntity = new QuestionarioEntity();
-				for (String index: quest.getEstilosIndexados().keySet()) {
+				for (String index : quest.getEstilosIndexados().keySet()) {
 					estiloDto = quest.getEstilosIndexados().get(index);
 					estiloEntity = new EstiloEntity();
 					estiloEntity.setCaracteristicas(estiloDto.getCaracteristicas());
@@ -187,57 +216,58 @@ public class QuestionarioServices {
 		} else
 			return null;
 	}
-	
+
 	public static QuestionarioDTO questionarioEntityToDto(QuestionarioEntity questEntity) {
 		QuestionarioDTO quest = null;
 		Map<EstiloDTO, String> indiceEstilos = new HashMap<EstiloDTO, String>();
-		if(questEntity != null){
+		if (questEntity != null) {
 			quest = new QuestionarioDTO();
-			if(questEntity.getEstilos() != null && questEntity.getEstilos().size() > 0) {
+			if (questEntity.getEstilos() != null && questEntity.getEstilos().size() > 0) {
 				EstiloDTO estilodto;
 				EstiloEntity estilo;
-				for(int i = 0; i < questEntity.getEstilos().size(); i++) {
+				for (int i = 0; i < questEntity.getEstilos().size(); i++) {
 					estilodto = new EstiloDTO();
 					estilo = questEntity.getEstilos().get(i);
 					estilodto.setCaracteristicas(estilo.getCaracteristicas());
 					estilodto.setId(estilo.getId());
 					estilodto.setNome(estilo.getNome());
 					estilodto.setSugestoes(estilo.getSugestoes());
-					quest.putEstilosIndexados(""+i, estilodto);
-					indiceEstilos.put(estilodto, ""+i);
+					quest.putEstilosIndexados("" + i, estilodto);
+					indiceEstilos.put(estilodto, "" + i);
 				}
 			}
-			if(questEntity.getIdQuestionario() != null)
+			if (questEntity.getIdQuestionario() != null)
 				quest.setId(questEntity.getIdQuestionario());
-			
-			if(questEntity.getNome() != null)
+
+			if (questEntity.getNome() != null)
 				quest.setNome(questEntity.getNome());
-			
-			if(questEntity.getQuestoes() != null && questEntity.getQuestoes().size() > 0) {
+
+			if (questEntity.getQuestoes() != null && questEntity.getQuestoes().size() > 0) {
 				QuestaoDTO questaodto;
-				for(QuestaoEntity questao : questEntity.getQuestoes()) {
+				for (QuestaoEntity questao : questEntity.getQuestoes()) {
 					questaodto = new QuestaoDTO();
-					if(questao.getIdQuestao() != null) {
+					if (questao.getIdQuestao() != null) {
 						questaodto.setIdQuestao(questao.getIdQuestao());
 					}
-					
-					if(questao.getTexto() != null)
+
+					if (questao.getTexto() != null)
 						questaodto.setTexto(questao.getTexto());
-					
-					if(questao.getEstilo() != null) {
-						//colocar o index do estilo no questionario
+
+					if (questao.getEstilo() != null) {
+						// colocar o index do estilo no questionario
 						EstiloDTO estilo = EstiloServices.entityToDto(questao.getEstilo());
 						String index = indiceEstilos.get(estilo);
 						questaodto.setEstiloKey(index);
 					}
-						
+
 					quest.addQuestao(questaodto);
 				}
 			}
-			
-			if(questEntity.getValorAlternativas() != null && questEntity.getValorAlternativas().keySet() != null && questEntity.getValorAlternativas().keySet().size() > 0) {
+
+			if (questEntity.getValorAlternativas() != null && questEntity.getValorAlternativas().keySet() != null
+					&& questEntity.getValorAlternativas().keySet().size() > 0) {
 				ValorAlternativaDTO vadto = null;
-				for(Integer i : questEntity.getValorAlternativas().keySet()) {
+				for (Integer i : questEntity.getValorAlternativas().keySet()) {
 					vadto = new ValorAlternativaDTO();
 					vadto.setValor(i);
 					vadto.setTextoAlternativa(questEntity.getValorAlternativas().get(i));
