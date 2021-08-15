@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import br.com.rest.model.dto.DefaultReturn;
 
 @XmlRootElement
-public class BuscarTurmasFiltroOut extends DefaultReturn{
+public class BuscarTurmasFiltroOut{
 
 	List<TurmaFiltroOut> turmas;
 

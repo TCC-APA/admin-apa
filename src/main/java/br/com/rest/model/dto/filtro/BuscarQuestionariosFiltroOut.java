@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import br.com.rest.model.dto.DefaultReturn;
 
 @XmlRootElement
-public class BuscarQuestionariosFiltroOut extends DefaultReturn{
+public class BuscarQuestionariosFiltroOut{
 
 	List<QuestionarioFiltroOut> questionarios;
 

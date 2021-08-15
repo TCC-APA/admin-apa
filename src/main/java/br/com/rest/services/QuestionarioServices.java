@@ -41,7 +41,7 @@ public class QuestionarioServices {
 		if (questionarios != null && questionarios.size() > 0)
 			entityListToEntityDtoFiltro(resposta, questionarios);
 		else
-			throw new NoResultException("Nenhuma questionario encontrada");
+			throw new NoResultException("Nenhum questionario encontrado");
 
 		return resposta;
 	}

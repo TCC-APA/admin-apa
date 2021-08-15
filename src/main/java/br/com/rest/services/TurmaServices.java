@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dao.TurmaDAO;
@@ -123,25 +124,23 @@ public class TurmaServices {
 		return turmas;
 	}
 	
-	public static DefaultReturn incluiAlunoTurma(String matricula, String codigoTurma) {
+	public static void incluiAlunoTurma(String matricula, String codigoTurma) {
 		AlunoEntity aluno = AlunoServices.findAlunoByMatricula(matricula);
 		TurmaEntity turma = consultarTurmaPorCodigo(codigoTurma);
-		DefaultReturn dr = new DefaultReturn();
 		if(aluno != null && turma != null) {
 			turma.addAluno(aluno);
 			PersistenceManager.getTransaction().begin();
 			try{
 				turmaDao.alterar(turma);	
 				PersistenceManager.getTransaction().commit();
-				dr.setMsg("Aluno " + matricula + " inserido com sucesso na turma " + codigoTurma);
 			}catch(Exception e){
 				PersistenceManager.getTransaction().rollback();
-				dr.addErro("erro ao incluir aluno na turma: "+e.getMessage());
+				throw e;
 			}
 		} else {
-			dr.addErro("turma ou aluno inválidos.");
+			System.out.println("Aluno ou turma não encontrada");
+			throw new IllegalStateException("Aluno ou turma não encontrada");
 		}
-		return dr;
 	}
 	
 	public static DefaultReturn incluiAlunoTurmaDefault(String matricula) {
