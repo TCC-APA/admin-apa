@@ -99,10 +99,12 @@ public class QuestionarioEntity  implements Serializable {
 		this.valorAlternativas.put(key, value);
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "QuestionarioEntity [idQuestionario=" + idQuestionario + ", nome=" + nome + ", questoes=" + questoes + ", valorAlternativas=" + valorAlternativas
-				+ "]";
+		return "QuestionarioEntity [idQuestionario=" + idQuestionario + ", nome=" + nome + ", questoes=" + questoes
+				+ ", valorAlternativas=" + valorAlternativas + ", estilos=" + estilos + "]";
 	}
 
 	@Override

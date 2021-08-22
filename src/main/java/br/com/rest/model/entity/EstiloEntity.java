@@ -125,6 +125,14 @@ public class EstiloEntity implements Serializable{
 		
 		this.rangeClassificacao.add(rangePontuacaoClassificacao);
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "EstiloEntity [id=" + id + ", nome=" + nome + ", caracteristicas=" + caracteristicas + ", sugestoes="
+				+ sugestoes + ", comoMelhorar=" + comoMelhorar + ", rangeClassificacao=" + rangeClassificacao + "]";
+	}
 
 	@Override
 	public int hashCode() {
