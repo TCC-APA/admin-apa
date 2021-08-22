@@ -249,6 +249,16 @@ public class QuestionarioServices {
 					estilodto.setSugestoes(estilo.getSugestoes());
 					quest.putEstilosIndexados("" + i, estilodto);
 					indiceEstilos.put(estilodto, "" + i);
+					if(estilo.getRangeClassificacao() != null && estilo.getRangeClassificacao().size() > 0) {
+						for(RangePontuacaoClassificacao r: estilo.getRangeClassificacao()) {
+							RangePontuacaoClassificacaoDTO dto = new RangePontuacaoClassificacaoDTO();
+							dto.setClassificacao(r.getClassificacao());
+							dto.setMinValue(r.getMinValue());
+							dto.setMaxValue(r.getMaxValue());
+							dto.setEstiloKey("" + i);
+							quest.addRanges(dto);
+						}
+					}
 				}
 			}
 			if (questEntity.getIdQuestionario() != null)
