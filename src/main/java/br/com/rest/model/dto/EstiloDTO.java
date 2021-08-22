@@ -1,5 +1,8 @@
 package br.com.rest.model.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.Gson;
 
 public class EstiloDTO {
@@ -8,6 +11,7 @@ public class EstiloDTO {
 	private String nome;
 	private String caracteristicas;
 	private String sugestoes;
+	
 	
 	public EstiloDTO() {
 		
@@ -38,7 +42,6 @@ public class EstiloDTO {
 	public void setSugestoes(String sugestoes) {
 		this.sugestoes = sugestoes;
 	}
-	
 
 	@Override
 	public int hashCode() {

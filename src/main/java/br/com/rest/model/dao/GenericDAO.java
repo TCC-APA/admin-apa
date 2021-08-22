@@ -47,4 +47,9 @@ public class GenericDAO<T> {
 		em.flush();
 		return entidade;
 	}
+	
+	public T refresh(T entidade) {
+		em.refresh(entidade);
+		return entidade;
+	}
 }

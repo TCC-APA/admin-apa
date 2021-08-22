@@ -20,6 +20,7 @@ import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.QuestaoDTO;
 import br.com.rest.model.dto.QuestionarioDTO;
+import br.com.rest.model.dto.RangePontuacaoClassificacaoDTO;
 import br.com.rest.model.dto.ValorAlternativaDTO;
 import br.com.rest.model.dto.filtro.BuscarQuestionariosFiltroOut;
 import br.com.rest.model.dto.filtro.QuestionarioFiltroOut;
@@ -27,6 +28,7 @@ import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.QuestaoEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
+import br.com.rest.model.entity.RangePontuacaoClassificacao;
 
 public class QuestionarioServices {
 
@@ -166,12 +168,11 @@ public class QuestionarioServices {
 	public static QuestionarioEntity questionarioDtoToEntity(QuestionarioDTO quest) {
 		if (quest != null) {
 			Map<String, EstiloEntity> estilosEntityIndexados = new HashMap<String, EstiloEntity>();
-			QuestionarioEntity questEntity = null;
+			QuestionarioEntity questEntity = new QuestionarioEntity();
 			if (quest.getEstilosIndexados() != null && quest.getEstilosIndexados().keySet() != null
 					&& quest.getEstilosIndexados().keySet().size() > 0) {
 				EstiloDTO estiloDto;
 				EstiloEntity estiloEntity;
-				questEntity = new QuestionarioEntity();
 				for (String index : quest.getEstilosIndexados().keySet()) {
 					estiloDto = quest.getEstilosIndexados().get(index);
 					estiloEntity = new EstiloEntity();
@@ -186,9 +187,6 @@ public class QuestionarioServices {
 			}
 
 			if (quest.getQuestoes() != null && quest.getQuestoes().size() > 0) {
-				if (questEntity == null)
-					questEntity = new QuestionarioEntity();
-
 				QuestaoEntity questaoEntity = null;
 				for (QuestaoDTO questaoDto : quest.getQuestoes()) {
 					questaoEntity = new QuestaoEntity();
@@ -201,11 +199,28 @@ public class QuestionarioServices {
 					questEntity.addQuestao(questaoEntity);
 				}
 			}
+			
+			if (quest.getRanges() != null && quest.getRanges().size() > 0) {
+				RangePontuacaoClassificacao rangeEntity = null;
+				for (RangePontuacaoClassificacaoDTO rangeDto : quest.getRanges()) {
+					rangeEntity = new RangePontuacaoClassificacao();
+					rangeEntity.setMinValue(rangeDto.getMinValue());
+					rangeEntity.setMaxValue(rangeDto.getMaxValue());
+					rangeEntity.setClassificacao(rangeDto.getClassificacao());
+					if (rangeDto.getEstiloKey() != null) {
+						EstiloEntity estiloQuestao = estilosEntityIndexados.get(rangeDto.getEstiloKey());
+						rangeEntity.setEstilo(estiloQuestao);
+						try {
+							estiloQuestao.addRangeClassificacao(rangeEntity);
+						} catch (Exception e) {
+							e.printStackTrace();
+							return null;
+						}
+					}
+				}
+			}
 
 			if (quest.getValoresAlternativas() != null && quest.getValoresAlternativas().size() > 0) {
-				if (questEntity == null)
-					questEntity = new QuestionarioEntity();
-
 				for (ValorAlternativaDTO valorDto : quest.getValoresAlternativas())
 					questEntity.addValorAlternativas(valorDto.getValor(), valorDto.getTextoAlternativa());
 			}

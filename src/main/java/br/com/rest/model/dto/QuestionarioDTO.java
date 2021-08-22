@@ -12,10 +12,11 @@ public class QuestionarioDTO extends DefaultReturn{
 	
 	private Long id;
 	private String nome;
-	private List<QuestaoDTO> questoes = new ArrayList<QuestaoDTO>();
 	private List<ValorAlternativaDTO> valoresAlternativas = new ArrayList<ValorAlternativaDTO>();
-	//Estilos com um indice para facilitar a transformacao em JSON
+	//Estilos com um indice para facilitar a transformacao em JSON, utilizado nas questoes e nas ranges
 	private Map<String, EstiloDTO> estilosIndexados = new HashMap<String, EstiloDTO>();
+	private List<QuestaoDTO> questoes = new ArrayList<QuestaoDTO>();
+	private List<RangePontuacaoClassificacaoDTO> ranges;
 	
 	public QuestionarioDTO() {
 		
@@ -82,6 +83,21 @@ public class QuestionarioDTO extends DefaultReturn{
 		this.valoresAlternativas.add(valorAlternativa);
 	}
 
+	public List<RangePontuacaoClassificacaoDTO> getRanges() {
+		return ranges;
+	}
+
+	public void setRanges(List<RangePontuacaoClassificacaoDTO> ranges) {
+		this.ranges = ranges;
+	}
+
+	public void addRanges(RangePontuacaoClassificacaoDTO range) {
+		if(this.ranges == null)
+			this.ranges = new ArrayList<RangePontuacaoClassificacaoDTO>();
+		
+		this.ranges.add(range);
+	}
+	
 	@Override
 	public String toString() {
 		return "QuestionarioDTO [id=" + id + ", nome=" + nome + ", questoes=" + questoes + ", valoresAlternativas="
