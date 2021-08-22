@@ -83,7 +83,6 @@ public class QuestionarioServices {
 
 			try {
 				QuestionarioEntity quest = questionarioDtoToEntity(questionario);
-				System.out.println(quest);
 				questionarioDao.incluir(quest);
 				PersistenceManager.getTransaction().commit();
 				return true;
