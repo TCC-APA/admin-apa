@@ -45,7 +45,7 @@ public class EstiloEntity implements Serializable{
 		
 	@OrderBy("minRange")
 	@OneToMany(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "fk_questionario")
+	@JoinColumn(name = "fk_estilo")
 	private List<RangePontuacaoClassificacao> rangeClassificacao;
 	
 	public Long getId() {
