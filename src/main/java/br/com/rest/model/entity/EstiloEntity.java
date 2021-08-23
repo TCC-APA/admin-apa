@@ -43,7 +43,7 @@ public class EstiloEntity implements Serializable{
 	@Column
 	private String comoMelhorar;
 		
-	@OrderBy("minRange")
+	@OrderBy("minValue")
 	@OneToMany(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "fk_estilo")
 	private List<RangePontuacaoClassificacao> rangeClassificacao;
