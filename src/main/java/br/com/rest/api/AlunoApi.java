@@ -54,6 +54,7 @@ public class AlunoApi {
 				} catch(Exception e) {
 					out = new DefaultReturn();
 					out.addErro("ocorreu um erro ao alterar o aluno");
+					e.printStackTrace();
 					response = Response.status(HttpsURLConnection.HTTP_BAD_REQUEST).entity(out).build();
 				}
 				
