@@ -106,6 +106,7 @@ public class AlunoServices {
 			alunoOut.setDataNascimento(alunoEntity.getDataNascimento());
 			alunoOut.setMatricula(alunoEntity.getMatricula());
 			alunoOut.setNome(alunoEntity.getNome());
+			alunoOut.setSenha(alunoEntity.getSenha());
 		}
 		return alunoOut;
 	}
