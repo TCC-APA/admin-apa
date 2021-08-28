@@ -46,19 +46,25 @@ public class AlunoApi {
 	public Response putAluno(@PathParam(value = "id") Long id, AlunoIn aluno) {
 		DefaultReturn out;
 		Response response = null;
-		if(id != null) {
-			AlunoEntity alu = AlunoServices.findAlunoByMatricula(aluno.getMatricula());
-			if(alu == null)
-				out = AlunoServices.alterarAluno(aluno);
-			else {
+		if(id != null && id > 0) {
+			if(aluno != null) {
+				try {
+					AlunoServices.alterarAluno(id, aluno);
+				} catch(Exception e) {
+					out = new DefaultReturn();
+					out.addErro("ocorreu um erro ao alterar o aluno");
+					response = Response.status(HttpsURLConnection.HTTP_BAD_REQUEST).entity(out).build();
+				}
+				
+			} else {
 				out = new DefaultReturn();
-				out.addErro("Matrícula já existe no banco de dados");
+				out.addErro("AlunoIn nao foi enviado no body");
 				response = Response.status(HttpsURLConnection.HTTP_BAD_REQUEST).entity(out).build();
 			}
 		} else {
 			out = new DefaultReturn();
 			out.addErro("'id' é um parâmetro obrigatório");
-			response = Response.status(HttpsURLConnection.HTTP_BAD_REQUEST).entity("'id' é um parâmetro obrigatório").build();
+			response = Response.status(HttpsURLConnection.HTTP_BAD_REQUEST).entity(out).build();
 		}
 			
 		return response;

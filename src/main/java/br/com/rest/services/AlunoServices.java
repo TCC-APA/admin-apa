@@ -46,33 +46,18 @@ public class AlunoServices {
 		return ao;
 	}
 	
-	public static DefaultReturn alterarAluno(AlunoIn aluno) {
-		AlunoOut ao = new AlunoOut();
-		AlunoEntity alunoBanco = null;
-		Boolean existeAluno = false;
-		if(aluno != null && aluno.getMatricula() != null) {
-			alunoBanco = findAlunoByMatricula(aluno.getMatricula());
-			if(alunoBanco != null)
-				existeAluno = true;
+	public static void alterarAluno(Long id, AlunoIn aluno) throws Exception{
+		PersistenceManager.getTransaction().begin();
+		try{
+			AlunoEntity alunoEntity = dtoToEntity(aluno);
+			alunoEntity.setId(id);
+			alunoDao.alterar(alunoEntity);	
+			PersistenceManager.getTransaction().commit();
+			System.out.println("Aluno "+ aluno.getMatricula() + " alterado");
+		}catch(Exception e){
+			PersistenceManager.getTransaction().rollback();
+			throw e;
 		}
-		
-		if(existeAluno) {
-			PersistenceManager.getTransaction().begin();
-			try{
-				AlunoEntity alunoEntity = dtoToEntity(aluno);
-				alunoEntity = alunoDao.alterar(alunoEntity);	
-				PersistenceManager.getTransaction().commit();
-				System.out.println("Aluno "+ aluno.getMatricula() + " alterado");
-				ao = entityToDto(alunoEntity);
-				ao.setMsg("Aluno incluído com sucesso!");
-			}catch(Exception e){
-				PersistenceManager.getTransaction().rollback();
-				ao.addErro("Ocorreu um erro ao inserir o aluno: "+e.getMessage());
-			}
-		} else {
-			ao.addErro("Aluno não existente no banco, nada foi alterado/inserido");
-		}
-		return ao;
 	}
 	
 	public static AlunoOut findAlunoByMatriculaSenha(String matricula, String senha) {
