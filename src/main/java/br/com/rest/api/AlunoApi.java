@@ -50,6 +50,7 @@ public class AlunoApi {
 			if(aluno != null) {
 				try {
 					AlunoServices.alterarAluno(id, aluno);
+					response = Response.status(HttpsURLConnection.HTTP_NO_CONTENT).build();
 				} catch(Exception e) {
 					out = new DefaultReturn();
 					out.addErro("ocorreu um erro ao alterar o aluno");
