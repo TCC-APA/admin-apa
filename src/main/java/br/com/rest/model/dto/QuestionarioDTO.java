@@ -17,6 +17,7 @@ public class QuestionarioDTO extends DefaultReturn{
 	private Map<String, EstiloDTO> estilosIndexados = new HashMap<String, EstiloDTO>();
 	private List<QuestaoDTO> questoes = new ArrayList<QuestaoDTO>();
 	private List<RangePontuacaoClassificacaoDTO> ranges;
+	private String sobre;
 	
 	public QuestionarioDTO() {
 		
@@ -102,6 +103,14 @@ public class QuestionarioDTO extends DefaultReturn{
 	public String toString() {
 		return "QuestionarioDTO [id=" + id + ", nome=" + nome + ", questoes=" + questoes + ", valoresAlternativas="
 				+ valoresAlternativas + ", estilosIndexados=" + estilosIndexados + "]";
+	}
+
+	public String getSobre() {
+		return sobre;
+	}
+
+	public void setSobre(String sobre) {
+		this.sobre = sobre;
 	}
 
 	@Override

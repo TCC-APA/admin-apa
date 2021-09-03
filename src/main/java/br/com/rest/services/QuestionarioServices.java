@@ -226,6 +226,7 @@ public class QuestionarioServices {
 			}
 
 			questEntity.setNome(quest.getNome());
+			questEntity.setSobre(quest.getSobre());
 			return questEntity;
 
 		} else
@@ -266,6 +267,9 @@ public class QuestionarioServices {
 
 			if (questEntity.getNome() != null)
 				quest.setNome(questEntity.getNome());
+			
+			if (questEntity.getSobre() != null)
+				quest.setSobre(questEntity.getSobre());
 
 			if (questEntity.getQuestoes() != null && questEntity.getQuestoes().size() > 0) {
 				QuestaoDTO questaodto;

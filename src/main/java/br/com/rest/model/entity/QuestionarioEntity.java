@@ -32,6 +32,9 @@ public class QuestionarioEntity  implements Serializable {
 	
 	@Column(unique=true)
 	private String nome;
+	
+	@Column
+	private String sobre;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "fk_questionario")
@@ -98,8 +101,14 @@ public class QuestionarioEntity  implements Serializable {
 	public void addValorAlternativas(Integer key, String value) {
 		this.valorAlternativas.put(key, value);
 	}
-
 	
+	public String getSobre() {
+		return sobre;
+	}
+
+	public void setSobre(String sobre) {
+		this.sobre = sobre;
+	}
 
 	@Override
 	public String toString() {
