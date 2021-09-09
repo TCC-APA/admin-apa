@@ -31,11 +31,11 @@ public class PerfilApi {
 	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BuscarPerfilAlunoOut consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
-								  @QueryParam(value = "matricula") String matricula, 
+	public Response consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
+								  @QueryParam(value = "nome") String nome, 
 			  					  @QueryParam(value = "startDate") String startDate,
 			  					  @QueryParam(value = "endDate") String endDate,
-								  @QueryParam(value = "turma") String turma) {
+								  @QueryParam(value = "turma") Long idTurma) {
 		if (idQuestionario == null) {
 		    throw new WebApplicationException(
 		      Response.status(Response.Status.BAD_REQUEST)
@@ -63,8 +63,8 @@ public class PerfilApi {
 			}
 		}
 		
-		BuscarPerfilAlunoOut resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, matricula, dataInicio, dataFim, turma);
-		return resumoEstilos;
+		BuscarPerfilAlunoOut resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, nome, dataInicio, dataFim, idTurma);
+		return null;
 	}
 	
 	@POST

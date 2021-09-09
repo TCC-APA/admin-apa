@@ -23,6 +23,7 @@ import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.AlunoQuestionarioREL;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
+import br.com.rest.model.entity.RangePontuacaoClassificacao;
 import br.com.rest.model.entity.TurmaEntity;
 
 public class AlunoQuestionarioRELServices {
@@ -30,39 +31,78 @@ public class AlunoQuestionarioRELServices {
 	private static AlunoQuestionarioDAO alunoQuestionarioDao = AlunoQuestionarioDAO.getInstance();
 	private static TurmaDAO turmaDao = TurmaDAO.getInstance();
 	
-	public static BuscarPerfilAlunoOut consultar(Long idQuestionario, String matricula, Date startDate, Date endDate,
-			String turma) {
+	public static BuscarPerfilAlunoOut consultar(Long idQuestionario, String nome, Date startDate, Date endDate,
+			Long idTurma) {
 		BuscarPerfilAlunoOut resposta = new BuscarPerfilAlunoOut();
 		List<AlunoQuestionarioREL> resumoEstiloAlunos = null;
-		List<PerfilAlunoOut> resumoEstiloAlunosDTO = null;
+		QuestionarioEntity questionario = null;
 		TurmaEntity turmaEntity = null;
-		if(turma != null) {
+		if(idTurma != null && idTurma > 0L) {
 			try {
-				turmaEntity = turmaDao.buscarByCodigo(turma);
+				turmaEntity = turmaDao.find(idTurma);
 				Set<QuestionarioEntity> listaQuestionarios = turmaEntity.getQuestionarios();
 				if(listaQuestionarios != null) {
-					if(!listaQuestionarios.stream().filter(o -> o.getIdQuestionario().equals(idQuestionario)).findFirst().isPresent())
-						resposta.addErro("Questionario de id: "+idQuestionario+" nao encontrado na turma de codigo "+turma);
+					questionario = listaQuestionarios.stream().filter(o -> o.getIdQuestionario().equals(idQuestionario)).findFirst().get();
+					if(questionario == null) {
+						System.out.println("Questionario de id: "+idQuestionario+" nao encontrado na turma de id "+idTurma);
+						return null;
+					}
 				} else {
-					resposta.addErro("Turma nao possui questionarios");
+					System.out.println("Turma de id: " + idTurma + " nao existente no banco");
+					return null; 
 				}
 			} catch (NoResultException e) {
 				e.printStackTrace();
-				resposta.addErro("Nenhuma turma com esse codigo foi encontrada");;
+				return null; 
 			}
 		}
-		if(resposta.getErros() == null) {
-			try {
-				resumoEstiloAlunos = alunoQuestionarioDao.dynamicQueryFiltro(idQuestionario, matricula, startDate, endDate, turmaEntity);
-				resumoEstiloAlunosDTO = new ArrayList<PerfilAlunoOut>();
-				for (AlunoQuestionarioREL estiloAluno : resumoEstiloAlunos) 
-					resumoEstiloAlunosDTO.add(entityToDto(estiloAluno));	
-				resposta.setListaPerfilAlunos(new ArrayList<PerfilAlunoOut>(resumoEstiloAlunosDTO));
-			} catch (NoResultException e) {
-				e.printStackTrace();
-				resposta.setMsg("nenhum registro encontrado");;
+
+		try {
+			resumoEstiloAlunos = alunoQuestionarioDao.dynamicQueryFiltro(idQuestionario, nome, startDate, endDate, turmaEntity);
+			//Quantos alunos sao predominantes por estilo
+			Map<EstiloEntity, Integer> estilosPredominantesQuantidade = new HashMap<>();
+			
+			for(EstiloEntity estiloQuestionario: questionario.getEstilos()) {
+				estilosPredominantesQuantidade.put(estiloQuestionario, 0);
 			}
+			
+			for(AlunoQuestionarioREL relAlunoQuestionario: resumoEstiloAlunos) {
+				Map<EstiloEntity, Long> pontuacaoPorEstilo = relAlunoQuestionario.getPontuacaoPorEstilo();
+				List<EstiloEntity> estilosPredominantes = new ArrayList<>();
+				int maiorGrauPredominancia = -1;
+				if(pontuacaoPorEstilo != null) {
+					for(EstiloEntity estilo: relAlunoQuestionario.getPontuacaoPorEstilo().keySet()) {
+						Long pontuacaoEstilo = pontuacaoPorEstilo.get(estilo);
+						
+						if(estilo.getRangeClassificacao() != null) {
+							for(int i = 0; i < estilo.getRangeClassificacao().size(); i++){
+								RangePontuacaoClassificacao rangeEstilo = estilo.getRangeClassificacao().get(i);
+								if(pontuacaoEstilo >= rangeEstilo.getMinValue() && pontuacaoEstilo <= rangeEstilo.getMaxValue()) {
+									if(i > maiorGrauPredominancia) {
+										estilosPredominantes.clear();
+										estilosPredominantes.add(estilo);
+										maiorGrauPredominancia = i;
+									} else if(i == maiorGrauPredominancia) {
+										estilosPredominantes.add(estilo);
+									}
+									break;
+								}
+							}					
+						}
+					}
+					for(EstiloEntity estiloPredominante: estilosPredominantes) {
+						Integer quantidade = estilosPredominantesQuantidade.get(estiloPredominante);
+						estilosPredominantesQuantidade.put(estiloPredominante, quantidade + 1);				
+					}
+				}	
+			}
+			
+			//TODO logica de pegar quantidade de alunos de cada estilo feita
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			return null;
 		}
+	
 		return resposta;
 	}
 	
