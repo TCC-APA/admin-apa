@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -46,7 +47,7 @@ public class QuestionarioEntity  implements Serializable {
 	@ElementCollection
 	private Map<Integer, String> valorAlternativas = new HashMap<Integer, String>();
 	
-	@OneToMany(cascade = {CascadeType.ALL})
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_questionario")
 	private List<EstiloEntity> estilos = new ArrayList<EstiloEntity>();
 	
