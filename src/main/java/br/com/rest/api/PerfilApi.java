@@ -3,10 +3,7 @@ package br.com.rest.api;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.activation.MimeType;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,6 +18,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 
 import br.com.rest.model.dto.BuscarPerfilAlunoOut;
+import br.com.rest.model.dto.BuscarPerfisFiltroProfessorOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InserirPerfilIn;
 import br.com.rest.services.AlunoQuestionarioRELServices;
@@ -62,9 +60,19 @@ public class PerfilApi {
 				System.out.println("Erro ao transformar data final");
 			}
 		}
+		BuscarPerfisFiltroProfessorOut resumoEstilos = null;
+		Response response;
+		try {
+			resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, nome, dataInicio, dataFim, idTurma);			
+		} catch(Exception e) {
+			response = Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(e).build();
+		}
+		if(resumoEstilos == null)
+			response = Response.status(HttpServletResponse.SC_NO_CONTENT).build();
+		else 
+			response = Response.ok().entity(resumoEstilos).build();
 		
-		BuscarPerfilAlunoOut resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, nome, dataInicio, dataFim, idTurma);
-		return null;
+		return response;
 	}
 	
 	@POST

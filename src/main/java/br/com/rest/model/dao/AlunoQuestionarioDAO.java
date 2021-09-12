@@ -50,6 +50,10 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL> {
 		if (turma != null) {
 			query.append(" AND a.aluno in :turmaAlunos");
 		}
+		
+		query.append(" AND a.dataRealizado = (select max(a2.dataRealizado)" + 
+					 "from AlunoQuestionarioPerfil a2" + 
+				 	 "where a.aluno = a2.aluno)");
 
 		query.append(" ORDER BY a.dataRealizado");
 		List<AlunoQuestionarioREL> listaPerfil = null;
