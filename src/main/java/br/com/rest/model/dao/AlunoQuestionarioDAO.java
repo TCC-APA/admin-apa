@@ -44,7 +44,7 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL> {
 		}
 
 		if (nome != null) {
-			query.append(" AND UPPER(a.aluno.nome) = :nome");
+			query.append(" AND UPPER(a.aluno.nome) like :nome");
 		}
 
 		if (turma != null) {
@@ -67,7 +67,7 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL> {
 		if (endDate != null)
 			queryDb.setParameter("endDate", endDate);
 		if (nome != null)
-			queryDb.setParameter("nome", nome);
+			queryDb.setParameter("nome", "%"+nome.toUpperCase()+"%");
 		if (turma != null)
 			queryDb.setParameter("turmaAlunos", turma.getAlunos());
 
