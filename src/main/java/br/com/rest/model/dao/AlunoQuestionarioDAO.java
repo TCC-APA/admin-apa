@@ -52,8 +52,8 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL> {
 		}
 		
 		query.append(" AND a.dataRealizado = (select max(a2.dataRealizado)" + 
-					 "from AlunoQuestionarioPerfil a2" + 
-				 	 "where a.aluno = a2.aluno)");
+					 " from AlunoQuestionarioPerfil a2" + 
+				 	 " where a.aluno = a2.aluno)");
 
 		query.append(" ORDER BY a.dataRealizado");
 		List<AlunoQuestionarioREL> listaPerfil = null;
