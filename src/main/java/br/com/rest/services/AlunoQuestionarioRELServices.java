@@ -44,11 +44,6 @@ public class AlunoQuestionarioRELServices {
 				if (listaQuestionarios != null) {
 					questionario = listaQuestionarios.stream().filter(o -> o.getIdQuestionario().equals(idQuestionario))
 							.findFirst().get();
-					if (questionario == null) {
-						System.out.println(
-								"Questionario de id: " + idQuestionario + " nao encontrado na turma de id " + idTurma);
-						return null;
-					}
 				} else {
 					System.out.println("Turma de id: " + idTurma + " nao existente no banco");
 					return null;
@@ -57,6 +52,13 @@ public class AlunoQuestionarioRELServices {
 				e.printStackTrace();
 				return null;
 			}
+		} else 
+			questionario = QuestionarioServices.findQuestionariosById(idQuestionario);
+		
+		if (questionario == null) {
+			System.out.println(
+					"Questionario de id: " + idQuestionario + " nao encontrado na turma de id " + idTurma);
+			return null;
 		}
 
 		try {
