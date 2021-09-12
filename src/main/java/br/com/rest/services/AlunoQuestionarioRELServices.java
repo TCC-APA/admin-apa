@@ -21,6 +21,7 @@ import br.com.rest.model.dto.PerfilAlunoOut;
 import br.com.rest.model.dto.RangePontuacaoClassificacaoDTO;
 import br.com.rest.model.dto.filtro.retorno.FiltroRetorno;
 import br.com.rest.model.dto.filtro.retorno.PerfilAlunoFiltroProfessor;
+import br.com.rest.model.dto.filtro.retorno.RangePontuacaoClassificacaoFiltro;
 import br.com.rest.model.dto.filtro.retorno.RetornoColetivoFiltroProfessorOut;
 import br.com.rest.model.dto.filtro.retorno.RetornoIndividualFiltroProfessorOut;
 import br.com.rest.model.entity.AlunoEntity;
@@ -92,7 +93,7 @@ public class AlunoQuestionarioRELServices {
 		for (AlunoQuestionarioREL relAlunoQuestionario : resumoEstiloAlunos) {
 			Map<EstiloEntity, Long> pontuacaoPorEstilo = relAlunoQuestionario.getPontuacaoPorEstilo();
 			List<Long> estilosPredominantes = new ArrayList<>();
-			Map<Long, RangePontuacaoClassificacaoDTO> estilosRangesPontuacao = new HashMap<Long, RangePontuacaoClassificacaoDTO>();
+			Map<Long, RangePontuacaoClassificacaoFiltro> estilosRangesPontuacao = new HashMap<Long, RangePontuacaoClassificacaoFiltro>();
 			int maiorGrauPredominancia = -1;
 			if (pontuacaoPorEstilo != null) {
 				for (EstiloEntity estilo : relAlunoQuestionario.getPontuacaoPorEstilo().keySet()) {
@@ -102,7 +103,9 @@ public class AlunoQuestionarioRELServices {
 							RangePontuacaoClassificacao rangeEstilo = estilo.getRangeClassificacao().get(i);
 							if (pontuacaoEstilo >= rangeEstilo.getMinValue()
 									&& pontuacaoEstilo <= rangeEstilo.getMaxValue()) {
-								estilosRangesPontuacao.put(estilo.getId(), RangePontuacaoClassicifacaoServices.entityToDto(rangeEstilo));
+								RangePontuacaoClassificacaoFiltro rpc = RangePontuacaoClassicifacaoServices.entityToDtoFiltro(rangeEstilo);
+								rpc.setPontuacao(pontuacaoEstilo);
+								estilosRangesPontuacao.put(estilo.getId(), rpc);
 								if (i > maiorGrauPredominancia) {
 									estilosPredominantes.clear();
 									estilosPredominantes.add(estilo.getId());

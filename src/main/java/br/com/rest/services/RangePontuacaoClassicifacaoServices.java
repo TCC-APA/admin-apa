@@ -4,6 +4,7 @@ import javax.persistence.NoResultException;
 
 import br.com.rest.model.dao.RangePontuacaoClassificacaoDAO;
 import br.com.rest.model.dto.RangePontuacaoClassificacaoDTO;
+import br.com.rest.model.dto.filtro.retorno.RangePontuacaoClassificacaoFiltro;
 import br.com.rest.model.entity.EstiloEntity;
 import br.com.rest.model.entity.RangePontuacaoClassificacao;
 
@@ -15,6 +16,17 @@ public class RangePontuacaoClassicifacaoServices {
 		RangePontuacaoClassificacaoDTO rpc = null;
 		if(rangePontuacaoClassificacaoEntity != null) {
 			rpc = new RangePontuacaoClassificacaoDTO();
+			rpc.setClassificacao(rangePontuacaoClassificacaoEntity.getClassificacao());
+			rpc.setMaxValue(rangePontuacaoClassificacaoEntity.getMaxValue());
+			rpc.setMinValue(rangePontuacaoClassificacaoEntity.getMinValue());
+		}
+		return rpc;
+	}
+	
+	public static RangePontuacaoClassificacaoFiltro entityToDtoFiltro(RangePontuacaoClassificacao rangePontuacaoClassificacaoEntity) {
+		RangePontuacaoClassificacaoFiltro rpc = null;
+		if(rangePontuacaoClassificacaoEntity != null) {
+			rpc = new RangePontuacaoClassificacaoFiltro();
 			rpc.setClassificacao(rangePontuacaoClassificacaoEntity.getClassificacao());
 			rpc.setMaxValue(rangePontuacaoClassificacaoEntity.getMaxValue());
 			rpc.setMinValue(rangePontuacaoClassificacaoEntity.getMinValue());
