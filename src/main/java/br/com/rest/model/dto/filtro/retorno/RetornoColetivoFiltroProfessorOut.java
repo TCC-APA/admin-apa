@@ -1,14 +1,16 @@
-package br.com.rest.model.dto;
+package br.com.rest.model.dto.filtro.retorno;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.com.rest.model.dto.EstiloDTO;
+
 @XmlRootElement
-public class BuscarPerfisFiltroProfessorOut {
+public class RetornoColetivoFiltroProfessorOut implements FiltroRetorno{
 	private Integer quantidadeTotal;
-	private Map<EstiloDTO, Integer> estilosPredominantesQuantidade;
+	private Map<Long, Integer> estilosPredominantesQuantidade;
 	private List<EstiloDTO> estilos;
 	public Integer getQuantidadeTotal() {
 		return quantidadeTotal;
@@ -16,10 +18,10 @@ public class BuscarPerfisFiltroProfessorOut {
 	public void setQuantidadeTotal(Integer quantidadeTotal) {
 		this.quantidadeTotal = quantidadeTotal;
 	}
-	public Map<EstiloDTO, Integer> getEstilosPredominantesQuantidade() {
+	public Map<Long, Integer> getEstilosPredominantesQuantidade() {
 		return estilosPredominantesQuantidade;
 	}
-	public void setEstilosPredominantesQuantidade(Map<EstiloDTO, Integer> estilosPredominantesQuantidade) {
+	public void setEstilosPredominantesQuantidade(Map<Long, Integer> estilosPredominantesQuantidade) {
 		this.estilosPredominantesQuantidade = estilosPredominantesQuantidade;
 	}
 	public List<EstiloDTO> getEstilos() {

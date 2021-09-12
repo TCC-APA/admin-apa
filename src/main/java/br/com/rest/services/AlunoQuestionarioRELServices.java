@@ -14,12 +14,15 @@ import javax.persistence.NoResultException;
 import br.com.rest.model.dao.AlunoQuestionarioDAO;
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dao.TurmaDAO;
-import br.com.rest.model.dto.BuscarPerfilAlunoOut;
-import br.com.rest.model.dto.BuscarPerfisFiltroProfessorOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.EstiloDTO;
 import br.com.rest.model.dto.InserirPerfilIn;
 import br.com.rest.model.dto.PerfilAlunoOut;
+import br.com.rest.model.dto.RangePontuacaoClassificacaoDTO;
+import br.com.rest.model.dto.filtro.retorno.FiltroRetorno;
+import br.com.rest.model.dto.filtro.retorno.PerfilAlunoFiltroProfessor;
+import br.com.rest.model.dto.filtro.retorno.RetornoColetivoFiltroProfessorOut;
+import br.com.rest.model.dto.filtro.retorno.RetornoIndividualFiltroProfessorOut;
 import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.model.entity.AlunoQuestionarioREL;
 import br.com.rest.model.entity.EstiloEntity;
@@ -32,8 +35,8 @@ public class AlunoQuestionarioRELServices {
 	private static AlunoQuestionarioDAO alunoQuestionarioDao = AlunoQuestionarioDAO.getInstance();
 	private static TurmaDAO turmaDao = TurmaDAO.getInstance();
 
-	public static BuscarPerfisFiltroProfessorOut consultar(Long idQuestionario, String nome, Date startDate,
-			Date endDate, Long idTurma) throws Exception {
+	public static FiltroRetorno consultar(Long idQuestionario, String nome, Date startDate, Date endDate,
+			Long idTurma) throws Exception {
 		List<AlunoQuestionarioREL> resumoEstiloAlunos = null;
 		QuestionarioEntity questionario = null;
 		TurmaEntity turmaEntity = null;
@@ -52,82 +55,140 @@ public class AlunoQuestionarioRELServices {
 				e.printStackTrace();
 				return null;
 			}
-		} else 
+		} else
 			questionario = QuestionarioServices.findQuestionariosById(idQuestionario);
-		
+
 		if (questionario == null) {
-			System.out.println(
-					"Questionario de id: " + idQuestionario + " nao encontrado na turma de id " + idTurma);
+			System.out.println("Questionario de id: " + idQuestionario + " nao encontrado na turma de id " + idTurma);
 			return null;
 		}
 
 		try {
 			resumoEstiloAlunos = alunoQuestionarioDao.dynamicQueryFiltro(idQuestionario, nome, startDate, endDate,
 					turmaEntity);
-			// Quantos alunos sao predominantes por estilo
 		} catch (NoResultException e) {
 			e.printStackTrace();
 			return null;
 		}
 		try {
-			
-		Map<EstiloEntity, Integer> estilosPredominantesQuantidade = new HashMap<>();
-
-		System.out.println(questionario.toString());
-		for (EstiloEntity estiloQuestionario : questionario.getEstilos()) {
-			estilosPredominantesQuantidade.put(estiloQuestionario, 0);
-		}
-		if (resumoEstiloAlunos != null && resumoEstiloAlunos.size() > 0) {
-			for (AlunoQuestionarioREL relAlunoQuestionario : resumoEstiloAlunos) {
-				Map<EstiloEntity, Long> pontuacaoPorEstilo = relAlunoQuestionario.getPontuacaoPorEstilo();
-				List<EstiloEntity> estilosPredominantes = new ArrayList<>();
-				int maiorGrauPredominancia = -1;
-				if (pontuacaoPorEstilo != null) {
-					for (EstiloEntity estilo : relAlunoQuestionario.getPontuacaoPorEstilo().keySet()) {
-						Long pontuacaoEstilo = pontuacaoPorEstilo.get(estilo);
-
-						if (estilo.getRangeClassificacao() != null) {
-							for (int i = 0; i < estilo.getRangeClassificacao().size(); i++) {
-								RangePontuacaoClassificacao rangeEstilo = estilo.getRangeClassificacao().get(i);
-								if (pontuacaoEstilo >= rangeEstilo.getMinValue()
-										&& pontuacaoEstilo <= rangeEstilo.getMaxValue()) {
-									if (i > maiorGrauPredominancia) {
-										estilosPredominantes.clear();
-										estilosPredominantes.add(estilo);
-										maiorGrauPredominancia = i;
-									} else if (i == maiorGrauPredominancia) {
-										estilosPredominantes.add(estilo);
-									}
-									break;
-								}
-							}
-						}
-					}
-					for (EstiloEntity estiloPredominante : estilosPredominantes) {
-						Integer quantidade = estilosPredominantesQuantidade.get(estiloPredominante);
-						estilosPredominantesQuantidade.put(estiloPredominante, quantidade + 1);
-					}
+			if (resumoEstiloAlunos != null && resumoEstiloAlunos.size() > 0) {
+				if (nome != null && nome.length() > 0) {
+					return getDadosIndividuais(resumoEstiloAlunos, questionario);
+				} else {
+					return getDadosColetivo(resumoEstiloAlunos, questionario);
 				}
-			}
-		}
-		BuscarPerfisFiltroProfessorOut out = new BuscarPerfisFiltroProfessorOut();
-		List<EstiloDTO> estilosDto = new ArrayList<EstiloDTO>();
-		Map<EstiloDTO, Integer> estilosDtoQuantidade = new HashMap<EstiloDTO, Integer>();
-		for (EstiloEntity e : questionario.getEstilos()) {
-			EstiloDTO estiloDto = EstiloServices.entityToDto(e);
-			estilosDto.add(estiloDto);
-			Integer quantidadeEstilo = estilosPredominantesQuantidade.get(e);
-			estilosDtoQuantidade.put(estiloDto, quantidadeEstilo);
-		}
-		out.setQuantidadeTotal(resumoEstiloAlunos.size());
-		out.setEstilos(estilosDto);
-		out.setEstilosPredominantesQuantidade(estilosDtoQuantidade);
-		return out;
+			} else 
+				return null;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e);
 		}
 
+	}
+
+	private static FiltroRetorno getDadosIndividuais(List<AlunoQuestionarioREL> resumoEstiloAlunos, QuestionarioEntity questionario) {
+		List<PerfilAlunoFiltroProfessor> perfilAlunosFiltroProfessor = new ArrayList<PerfilAlunoFiltroProfessor>();
+		for (AlunoQuestionarioREL relAlunoQuestionario : resumoEstiloAlunos) {
+			Map<EstiloEntity, Long> pontuacaoPorEstilo = relAlunoQuestionario.getPontuacaoPorEstilo();
+			List<Long> estilosPredominantes = new ArrayList<>();
+			Map<Long, RangePontuacaoClassificacaoDTO> estilosRangesPontuacao = new HashMap<Long, RangePontuacaoClassificacaoDTO>();
+			int maiorGrauPredominancia = -1;
+			if (pontuacaoPorEstilo != null) {
+				for (EstiloEntity estilo : relAlunoQuestionario.getPontuacaoPorEstilo().keySet()) {
+					Long pontuacaoEstilo = pontuacaoPorEstilo.get(estilo);
+					if (estilo.getRangeClassificacao() != null) {
+						for (int i = 0; i < estilo.getRangeClassificacao().size(); i++) {
+							RangePontuacaoClassificacao rangeEstilo = estilo.getRangeClassificacao().get(i);
+							if (pontuacaoEstilo >= rangeEstilo.getMinValue()
+									&& pontuacaoEstilo <= rangeEstilo.getMaxValue()) {
+								estilosRangesPontuacao.put(estilo.getId(), RangePontuacaoClassicifacaoServices.entityToDto(rangeEstilo));
+								if (i > maiorGrauPredominancia) {
+									estilosPredominantes.clear();
+									estilosPredominantes.add(estilo.getId());
+									maiorGrauPredominancia = i;
+								} else if (i == maiorGrauPredominancia) {
+									estilosPredominantes.add(estilo.getId());
+								}
+								break;
+							}
+						}
+					}
+				}
+				AlunoEntity aluno = relAlunoQuestionario.getAluno();
+				PerfilAlunoFiltroProfessor perfil = new PerfilAlunoFiltroProfessor();
+				perfil.setId(aluno.getId());
+				perfil.setNome(aluno.getNome());
+				perfil.setMatricula(aluno.getMatricula());
+				perfil.setEstilosRangesPontuacao(estilosRangesPontuacao);
+				perfil.setEstilosPredominantes(estilosPredominantes);
+				
+				perfilAlunosFiltroProfessor.add(perfil);
+			}
+		}
+		RetornoIndividualFiltroProfessorOut out = new RetornoIndividualFiltroProfessorOut();
+		List<EstiloDTO> estilosDto = new ArrayList<EstiloDTO>();
+		for (EstiloEntity e : questionario.getEstilos()) 
+			estilosDto.add(EstiloServices.entityToDto(e));
+		
+		out.setPerfilAlunoFiltroProfessor(perfilAlunosFiltroProfessor);
+		out.setEstilos(estilosDto);
+		return out;
+	}
+
+	private static FiltroRetorno getDadosColetivo(List<AlunoQuestionarioREL> resumoEstiloAlunos,
+			QuestionarioEntity questionario) {
+
+		Map<EstiloEntity, Integer> estilosPredominantesQuantidade = new HashMap<>();
+
+		for (EstiloEntity estiloQuestionario : questionario.getEstilos()) {
+			estilosPredominantesQuantidade.put(estiloQuestionario, 0);
+		}
+		for (AlunoQuestionarioREL relAlunoQuestionario : resumoEstiloAlunos) {
+			Map<EstiloEntity, Long> pontuacaoPorEstilo = relAlunoQuestionario.getPontuacaoPorEstilo();
+			List<EstiloEntity> estilosPredominantes = new ArrayList<>();
+			int maiorGrauPredominancia = -1;
+			if (pontuacaoPorEstilo != null) {
+				for (EstiloEntity estilo : relAlunoQuestionario.getPontuacaoPorEstilo().keySet()) {
+					Long pontuacaoEstilo = pontuacaoPorEstilo.get(estilo);
+
+					if (estilo.getRangeClassificacao() != null) {
+						for (int i = 0; i < estilo.getRangeClassificacao().size(); i++) {
+							RangePontuacaoClassificacao rangeEstilo = estilo.getRangeClassificacao().get(i);
+							if (pontuacaoEstilo >= rangeEstilo.getMinValue()
+									&& pontuacaoEstilo <= rangeEstilo.getMaxValue()) {
+								if (i > maiorGrauPredominancia) {
+									estilosPredominantes.clear();
+									estilosPredominantes.add(estilo);
+									maiorGrauPredominancia = i;
+								} else if (i == maiorGrauPredominancia) {
+									estilosPredominantes.add(estilo);
+								}
+								break;
+							}
+						}
+					}
+				}
+				for (EstiloEntity estiloPredominante : estilosPredominantes) {
+					Integer quantidade = estilosPredominantesQuantidade.get(estiloPredominante);
+					estilosPredominantesQuantidade.put(estiloPredominante, quantidade + 1);
+				}
+			}
+
+		}
+		RetornoColetivoFiltroProfessorOut out = new RetornoColetivoFiltroProfessorOut();
+		List<EstiloDTO> estilosDto = new ArrayList<EstiloDTO>();
+		Map<Long, Integer> estilosIdQuantidade = new HashMap<Long, Integer>();
+		for (EstiloEntity e : questionario.getEstilos()) {
+			EstiloDTO estiloDto = EstiloServices.entityToDto(e);
+			estilosDto.add(estiloDto);
+			Integer quantidadeEstilo = estilosPredominantesQuantidade.get(e);
+			estilosIdQuantidade.put(estiloDto.getId(), quantidadeEstilo);
+		}
+		out.setQuantidadeTotal(resumoEstiloAlunos.size());
+		out.setEstilos(estilosDto);
+		out.setEstilosPredominantesQuantidade(estilosIdQuantidade);
+		return out;
 	}
 
 	public static DefaultReturn inserir(InserirPerfilIn estiloDto) {

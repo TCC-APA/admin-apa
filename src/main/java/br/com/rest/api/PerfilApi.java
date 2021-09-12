@@ -18,9 +18,10 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 
 import br.com.rest.model.dto.BuscarPerfilAlunoOut;
-import br.com.rest.model.dto.BuscarPerfisFiltroProfessorOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InserirPerfilIn;
+import br.com.rest.model.dto.filtro.retorno.FiltroRetorno;
+import br.com.rest.model.dto.filtro.retorno.RetornoColetivoFiltroProfessorOut;
 import br.com.rest.services.AlunoQuestionarioRELServices;
 
 @Path("/perfil")
@@ -60,7 +61,7 @@ public class PerfilApi {
 				System.out.println("Erro ao transformar data final");
 			}
 		}
-		BuscarPerfisFiltroProfessorOut resumoEstilos = null;
+		FiltroRetorno resumoEstilos = null;
 		Response response;
 		try {
 			resumoEstilos = AlunoQuestionarioRELServices.consultar(idQuestionario, nome, dataInicio, dataFim, idTurma);			
