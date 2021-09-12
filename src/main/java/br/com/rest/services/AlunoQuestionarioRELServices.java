@@ -34,7 +34,6 @@ public class AlunoQuestionarioRELServices {
 
 	public static BuscarPerfisFiltroProfessorOut consultar(Long idQuestionario, String nome, Date startDate,
 			Date endDate, Long idTurma) throws Exception {
-		BuscarPerfilAlunoOut resposta = new BuscarPerfilAlunoOut();
 		List<AlunoQuestionarioREL> resumoEstiloAlunos = null;
 		QuestionarioEntity questionario = null;
 		TurmaEntity turmaEntity = null;

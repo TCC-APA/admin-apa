@@ -57,6 +57,7 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL> {
 
 		query.append(" ORDER BY a.dataRealizado");
 		List<AlunoQuestionarioREL> listaPerfil = null;
+		System.out.println("query: "+query.toString());
 		Query queryDb = em.createQuery(query.toString());
 
 		if (idQuestionario != null)
