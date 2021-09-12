@@ -9,7 +9,7 @@ public class PerfilAlunoFiltroProfessor {
 	private Long id;
 	private String nome;
 	private String matricula;
-	private Map<Long, RangePontuacaoClassificacaoDTO> estilosRangesPontuacao;
+	private Map<Long, RangePontuacaoClassificacaoFiltro> estilosRangesPontuacao;
 	private List<Long> estilosPredominantes;
 	
 	public Long getId() {
@@ -30,10 +30,10 @@ public class PerfilAlunoFiltroProfessor {
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
-	public Map<Long, RangePontuacaoClassificacaoDTO> getEstilosRangesPontuacao() {
+	public Map<Long, RangePontuacaoClassificacaoFiltro> getEstilosRangesPontuacao() {
 		return estilosRangesPontuacao;
 	}
-	public void setEstilosRangesPontuacao(Map<Long, RangePontuacaoClassificacaoDTO> estilosRangesPontuacao) {
+	public void setEstilosRangesPontuacao(Map<Long, RangePontuacaoClassificacaoFiltro> estilosRangesPontuacao) {
 		this.estilosRangesPontuacao = estilosRangesPontuacao;
 	}
 	public List<Long> getEstilosPredominantes() {
