@@ -71,7 +71,6 @@ public class AlunoQuestionarioDAO extends GenericDAO<AlunoQuestionarioREL> {
 		if (turma != null)
 			queryDb.setParameter("turmaAlunos", turma.getAlunos());
 
-		System.out.println("query: " + query.toString());
 		listaPerfil = (List<AlunoQuestionarioREL>) queryDb.getResultList();
 
 		return listaPerfil;

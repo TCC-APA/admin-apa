@@ -112,8 +112,7 @@ public class QuestionarioEntity  implements Serializable {
 
 	@Override
 	public String toString() {
-		return "QuestionarioEntity [idQuestionario=" + idQuestionario + ", nome=" + nome + ", questoes=" + questoes
-				+ ", valorAlternativas=" + valorAlternativas + ", estilos=" + estilos + "]";
+		return "QuestionarioEntity [idQuestionario=" + idQuestionario + ", nome=" + nome + "]";
 	}
 
 	@Override

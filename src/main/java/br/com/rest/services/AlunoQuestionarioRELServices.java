@@ -71,6 +71,7 @@ public class AlunoQuestionarioRELServices {
 			
 		Map<EstiloEntity, Integer> estilosPredominantesQuantidade = new HashMap<>();
 
+		System.out.println(questionario.toString());
 		for (EstiloEntity estiloQuestionario : questionario.getEstilos()) {
 			estilosPredominantesQuantidade.put(estiloQuestionario, 0);
 		}
