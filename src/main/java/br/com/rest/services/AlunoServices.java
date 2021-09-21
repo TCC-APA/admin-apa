@@ -110,8 +110,19 @@ public class AlunoServices {
 		return alunos;
 	}
 	
+	public static List<AlunoEntity> findAll(String orderBy) {
+		List<AlunoEntity> alunos = null;
+		try {
+			alunos = alunoDao.findAll();
+		} catch(NoResultException e) {
+			System.out.println("Nao ha alunos no banco de dados");
+		}
+		return alunos;
+	}
+	
 	public static List<AlunoSimplifiedOut> findAllSimplified() {
-		List<AlunoEntity> alunos = findAll();
+		String orderBy = "a.nome, a.matricula";
+		List<AlunoEntity> alunos = findAll(orderBy);
 		List<AlunoSimplifiedOut> alunosOut = null;
 		if(alunos != null && !alunos.isEmpty()) {
 			alunosOut = new ArrayList<AlunoSimplifiedOut>();

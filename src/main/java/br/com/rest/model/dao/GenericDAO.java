@@ -14,6 +14,13 @@ public class GenericDAO<T> {
 		this.em = em;
 	}
 	
+	public List<T> findAll(String orderBy){
+		@SuppressWarnings("unchecked")
+		List<T> lista = em.createQuery("from " + t.getName() + " a order by "+orderBy).getResultList();
+		
+		return lista;
+	}
+	
 	public List<T> findAll(){
 		@SuppressWarnings("unchecked")
 		List<T> lista = em.createQuery("from " + t.getName()).getResultList();
