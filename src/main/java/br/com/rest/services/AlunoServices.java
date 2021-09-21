@@ -113,7 +113,7 @@ public class AlunoServices {
 	public static List<AlunoEntity> findAll(String orderBy) {
 		List<AlunoEntity> alunos = null;
 		try {
-			alunos = alunoDao.findAll();
+			alunos = alunoDao.findAll(orderBy);
 		} catch(NoResultException e) {
 			System.out.println("Nao ha alunos no banco de dados");
 		}
