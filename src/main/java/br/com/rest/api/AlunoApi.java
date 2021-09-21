@@ -1,6 +1,10 @@
 package br.com.rest.api;
 
+import java.util.List;
+
 import javax.net.ssl.HttpsURLConnection;
+import javax.persistence.NoResultException;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -11,10 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.rest.model.dto.AlunoIn;
-import br.com.rest.model.dto.AlunoOut;
+import br.com.rest.model.dto.AlunoSimplifiedOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.LoginDTO;
-import br.com.rest.model.entity.AlunoEntity;
 import br.com.rest.services.AlunoServices;
 import br.com.rest.services.TurmaServices;
 
@@ -70,6 +73,19 @@ public class AlunoApi {
 		}
 			
 		return response;
+	}
+	
+	@GET
+	@Path("")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAlunos() {
+		try {
+			return Response.ok().entity(AlunoServices.findAllSimplified()).build();
+		} catch (NoResultException e) {
+			return Response.status(HttpsURLConnection.HTTP_NO_CONTENT).build();
+		} catch (Exception e) {
+			return Response.status(HttpsURLConnection.HTTP_INTERNAL_ERROR).build();
+		}
 	}
 
 }

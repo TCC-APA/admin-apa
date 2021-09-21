@@ -2,6 +2,8 @@ package br.com.rest.services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
@@ -9,6 +11,7 @@ import br.com.rest.model.dao.AlunoDAO;
 import br.com.rest.model.dao.PersistenceManager;
 import br.com.rest.model.dto.AlunoIn;
 import br.com.rest.model.dto.AlunoOut;
+import br.com.rest.model.dto.AlunoSimplifiedOut;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.entity.AlunoEntity;
 
@@ -91,10 +94,33 @@ public class AlunoServices {
 		AlunoEntity aluno = null;
 		try {
 			aluno = alunoDao.find(id);
-			return aluno;
 		} catch(NoResultException e) {
-			return aluno;
+			System.out.println("nao foi encontrado aluno com esse id");
 		}
+		return aluno;
+	}
+	
+	public static List<AlunoEntity> findAll() {
+		List<AlunoEntity> alunos = null;
+		try {
+			alunos = alunoDao.findAll();
+		} catch(NoResultException e) {
+			System.out.println("Nao ha alunos no banco de dados");
+		}
+		return alunos;
+	}
+	
+	public static List<AlunoSimplifiedOut> findAllSimplified() {
+		List<AlunoEntity> alunos = findAll();
+		List<AlunoSimplifiedOut> alunosOut = null;
+		if(alunos != null && !alunos.isEmpty()) {
+			alunosOut = new ArrayList<AlunoSimplifiedOut>();
+			for(AlunoEntity a: alunos) 
+				alunosOut.add(entityToSimplifiedDto(a));
+		} else 
+			throw new NoResultException();
+		
+		return alunosOut;
 	}
 	
 	public static AlunoOut entityToDto(AlunoEntity alunoEntity) {
@@ -123,5 +149,16 @@ public class AlunoServices {
 			alunoEntity.setSenha(alunoIn.getSenha());
 		}
 		return alunoEntity;
+	}
+	
+	public static AlunoSimplifiedOut entityToSimplifiedDto(AlunoEntity alunoEntity) {
+		AlunoSimplifiedOut alunoOut = null;
+		if(alunoEntity != null) {
+			alunoOut = new AlunoSimplifiedOut();
+			alunoOut.setId(alunoEntity.getId());
+			alunoOut.setMatricula(alunoEntity.getMatricula());
+			alunoOut.setNome(alunoEntity.getNome());
+		}
+		return alunoOut;
 	}
 }
