@@ -121,7 +121,7 @@ public class AlunoServices {
 	}
 	
 	public static List<AlunoSimplifiedOut> findAllSimplified() {
-		String orderBy = "a.nome, a.matricula";
+		String orderBy = "a.matricula, a.nome";
 		List<AlunoEntity> alunos = findAll(orderBy);
 		List<AlunoSimplifiedOut> alunosOut = null;
 		if(alunos != null && !alunos.isEmpty()) {
