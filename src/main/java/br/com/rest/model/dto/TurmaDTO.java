@@ -13,7 +13,7 @@ public class TurmaDTO extends DefaultReturn{
 	private List<QuestionarioDTO> questionarios;
 	private List<AlunoOut> alunos;
 	private String codigo;
-	private ProfessorOut professor;
+	private Set<ProfessorOut> professores;
 	private String disciplina;
 	
 	public Long getId() {
@@ -40,11 +40,11 @@ public class TurmaDTO extends DefaultReturn{
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-	public ProfessorOut getProfessor() {
-		return professor;
+	public Set<ProfessorOut> getProfessores() {
+		return professores;
 	}
-	public void setProfessor(ProfessorOut professor) {
-		this.professor = professor;
+	public void setProfessores(Set<ProfessorOut> professor) {
+		this.professores = professor;
 	}
 	public String getDisciplina() {
 		return disciplina;

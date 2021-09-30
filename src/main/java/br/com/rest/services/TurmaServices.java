@@ -1,6 +1,7 @@
 package br.com.rest.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import br.com.rest.model.dto.TurmaDTO;
 import br.com.rest.model.dto.filtro.BuscarTurmasFiltroOut;
 import br.com.rest.model.dto.filtro.TurmaFiltroOut;
 import br.com.rest.model.entity.AlunoEntity;
+import br.com.rest.model.entity.ProfessorEntity;
 import br.com.rest.model.entity.QuestionarioEntity;
 import br.com.rest.model.entity.TurmaEntity;
 
@@ -181,9 +183,13 @@ public class TurmaServices {
 			turma.setCodigo(turmaEntity.getCodigo());
 			turma.setDisciplina(turmaEntity.getDisciplina());
 			turma.setId(turmaEntity.getId());
-			if(turmaEntity.getProfessor() != null) {
-				ProfessorOut prof = ProfessorServices.entityToDto(turmaEntity.getProfessor());
-				turma.setProfessor(prof);
+			if(turmaEntity.getProfessores() != null && turmaEntity.getProfessores().size() > 0) {
+				Set<ProfessorOut> poutSet = new HashSet<ProfessorOut>();
+				for(ProfessorEntity p: turmaEntity.getProfessores()) {					
+					ProfessorOut prof = ProfessorServices.entityToDto(p);
+					poutSet.add(prof);
+				}
+				turma.setProfessores(poutSet);
 			}
 			if(turmaEntity.getAlunos() != null && turmaEntity.getAlunos().size() > 0) {
 				for(AlunoEntity aluno: turmaEntity.getAlunos()) {

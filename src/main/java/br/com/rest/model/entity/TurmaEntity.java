@@ -1,12 +1,15 @@
 package br.com.rest.model.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,9 +29,10 @@ public class TurmaEntity extends GrupoAluno implements Serializable {
 	private Set<QuestionarioEntity> questionarios;*///TODO ver se funciona sem esse e so com o do grupoaluno
 	
 	
-	@ManyToOne
-	@JoinColumn(name = "fk_professor")
-	private ProfessorEntity professor;
+	@ManyToMany
+	@JoinTable(name = "REL_GRUPO_PROFESSOR",
+    joinColumns = @JoinColumn(name = "fk_turma"), inverseJoinColumns = @JoinColumn(name = "fk_professor"))
+	private Set<ProfessorEntity> professores;
 	
 	@Column
 	private String disciplina;
@@ -41,12 +45,12 @@ public class TurmaEntity extends GrupoAluno implements Serializable {
 		this.codigo = codigo;
 	}
 
-	public ProfessorEntity getProfessor() {
-		return professor;
+	public Set<ProfessorEntity> getProfessores() {
+		return professores;
 	}
 
-	public void setProfessor(ProfessorEntity professor) {
-		this.professor = professor;
+	public void setProfessores(Set<ProfessorEntity> professor) {
+		this.professores = professor;
 	}
 
 	public String getDisciplina() {

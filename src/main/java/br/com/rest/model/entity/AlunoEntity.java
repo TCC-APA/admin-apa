@@ -47,7 +47,7 @@ public class AlunoEntity extends Usuario implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProfessorEntity other = (ProfessorEntity) obj;
+		AlunoEntity other = (AlunoEntity) obj;
 		if (getId() == null) {
 			if (other.getId() != null)
 				return false;

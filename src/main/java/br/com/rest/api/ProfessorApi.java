@@ -14,7 +14,6 @@ import com.sun.istack.NotNull;
 import br.com.rest.model.dto.DefaultReturn;
 import br.com.rest.model.dto.InsereProfessorIn;
 import br.com.rest.model.dto.LoginDTO;
-import br.com.rest.services.AlunoServices;
 import br.com.rest.services.ProfessorServices;
 
 @Path("/prof")

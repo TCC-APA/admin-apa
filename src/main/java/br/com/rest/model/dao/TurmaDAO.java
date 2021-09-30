@@ -62,7 +62,7 @@ public class TurmaDAO extends GenericDAO<TurmaEntity>{
 	public List<TurmaEntity> buscarByIdProfessor(Long idProfessor) {
 		em.clear();
 		List<TurmaEntity> turmas = em.createQuery(
-					"SELECT a from Turma a WHERE a.professor.id = :idProfessor")
+					"SELECT a from Turma a WHERE a.professores contains (SELECT p from Professor p WHERE p.id = :idProfessor)")
 				.setParameter("idProfessor", idProfessor)
 				.getResultList();
 		
