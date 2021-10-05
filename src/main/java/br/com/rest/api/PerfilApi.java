@@ -27,7 +27,7 @@ public class PerfilApi {
 
 	@GET
 	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response consultarResumo(@QueryParam(value = "questionario") Long idQuestionario, 
 								  @QueryParam(value = "nome") String nome, 
 			  					  @QueryParam(value = "startDate") String startDate,
