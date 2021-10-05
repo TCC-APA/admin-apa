@@ -18,7 +18,7 @@ public class TurmaApi {
 
 	@GET
 	@Path("filtro")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response findTurmasFiltroProf(@QueryParam(value = "idProfessor") Long idProfessor) {
 		try {
 			return Response.ok().entity(TurmaServices.buscarTurmasFiltroProfessorSimplified(idProfessor)).build();
@@ -31,7 +31,7 @@ public class TurmaApi {
 	
 	@GET
 	@Path("inclui/{codigoTurma}/aluno/{matricula}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response incluiAlunoTurma(@PathParam(value = "codigoTurma") String codigoTurma,
 										  @PathParam(value = "matricula") String matricula) {
 		try{

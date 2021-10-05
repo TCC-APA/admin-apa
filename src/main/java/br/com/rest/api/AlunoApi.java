@@ -26,7 +26,7 @@ public class AlunoApi {
 
 	@POST
 	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public DefaultReturn inserirAluno(AlunoIn aluno, @QueryParam(value = "turmaDefault") Boolean turmaDefault) {
 		DefaultReturn dr = AlunoServices.incluirAluno(aluno);
 		if((dr.getErros() == null || dr.getErros().size() == 0) && (turmaDefault != null && turmaDefault)) {
@@ -38,14 +38,14 @@ public class AlunoApi {
 
 	@POST
 	@Path("login")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public DefaultReturn realizarLoginPorMatriculaSenha(LoginDTO login) {
 		return AlunoServices.findAlunoByMatriculaSenha(login.getMatricula(), login.getSenha());
 	}
 	
 	@PUT
 	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response putAluno(@PathParam(value = "id") Long id, AlunoIn aluno) {
 		DefaultReturn out;
 		Response response = null;
@@ -77,7 +77,7 @@ public class AlunoApi {
 	
 	@GET
 	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response getAlunos() {
 		try {
 			return Response.ok().entity(AlunoServices.findAllSimplified()).build();

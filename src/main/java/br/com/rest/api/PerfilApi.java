@@ -77,7 +77,7 @@ public class PerfilApi {
 	@POST
 	@Path("/pontuacao")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response inserirPontuacaoByQuestionario(InserirPerfilIn estiloAlunoDto) {
 		Response resp = null;
 		DefaultReturn retorno = validaParametroInserirPontuacaoByQuestionario(estiloAlunoDto);
@@ -91,7 +91,7 @@ public class PerfilApi {
 	
 	@GET
 	@Path("/pontuacao/ultimaData")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response buscarPontuacaoUltimaDataByMatriculaQuestionario(@QueryParam(value = "matricula") String matricula, @QueryParam(value = "idQuestionario") Long idQuestionario) {
 		Response resp = null;
 		if(matricula == null || matricula.length() == 0 || idQuestionario == null || idQuestionario <= 0L) {

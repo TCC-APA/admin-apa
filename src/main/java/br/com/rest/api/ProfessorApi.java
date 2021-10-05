@@ -21,28 +21,28 @@ public class ProfessorApi {
 
 	@POST
 	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public DefaultReturn inserirProfessor(InsereProfessorIn professorIn) {
 		return ProfessorServices.incluirProfessor(professorIn);
 	}
 
 	@GET
 	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public DefaultReturn buscarProfessorPorSiape(@NotNull @QueryParam(value = "siape") String siape) {
 		return ProfessorServices.consultarProfessorPorSiape(siape);
 	}
 	
 	@DELETE
 	@Path("/{siape}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public DefaultReturn deletarProfessorPorSiape(@PathParam(value = "siape") String siape) {
 		return null;//ProfessorServices.deleteProfessorPorSiape(siape).toString();
 	}
 	
 	@POST
 	@Path("login")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public DefaultReturn realizarLoginPorMatriculaSenha(LoginDTO login) {
 		return ProfessorServices.findProfessorByMatriculaSenha(login.getMatricula(), login.getSenha());
 	}

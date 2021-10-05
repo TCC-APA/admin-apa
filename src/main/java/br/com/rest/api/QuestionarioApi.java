@@ -22,7 +22,7 @@ public class QuestionarioApi {
 	//Foi colocado o retorno como string, pois o mapa estava convertendo errado
 	@GET
 	@Path("grupos")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public String consultarQuestionariosPorGruposAluno(@QueryParam(value = "matricula") String matricula) {
 		return new Gson().toJson(QuestionarioServices.findQuestionariosPorGruposAluno(matricula));
 	}
@@ -30,7 +30,7 @@ public class QuestionarioApi {
 
 	@GET
 	@Path("filtro")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public Response findQuestionariosFiltroProf() {
 		try {
 			return Response.ok().entity(QuestionarioServices.buscarQuestionariosFiltroProfessorSimplified()).build();
@@ -41,7 +41,7 @@ public class QuestionarioApi {
 	
 	@POST
 	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON+ ";charset=utf-8")
 	public String inserirQuestionario(QuestionarioDTO quest) {
 		return QuestionarioServices.incluirQuestionario(quest).toString();
 	}
