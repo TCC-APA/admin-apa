@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class QuestionarioEntity  implements Serializable {
 
 	private static final long serialVersionUID = -3786491879878344497L;
+	
+	public static final Integer TIPO_GRAFICO_TEIA = 0;
 
 	@Id
 	@GeneratedValue
@@ -36,6 +38,9 @@ public class QuestionarioEntity  implements Serializable {
 	
 	@Column
 	private String sobre;
+	
+	@Column
+	private Integer tipoGrafico;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "fk_questionario")
@@ -140,7 +145,13 @@ public class QuestionarioEntity  implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
+	public Integer getTipoGrafico() {
+		return tipoGrafico;
+	}
+
+	public void setTipoGrafico(Integer tipoGrafico) {
+		this.tipoGrafico = tipoGrafico;
+	}
 
 }
