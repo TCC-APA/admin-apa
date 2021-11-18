@@ -270,6 +270,9 @@ public class QuestionarioServices {
 			
 			if (questEntity.getSobre() != null)
 				quest.setSobre(questEntity.getSobre());
+			
+			if (questEntity.getTipoGrafico() != null)
+				quest.setTipoGrafico(questEntity.getTipoGrafico());
 
 			if (questEntity.getQuestoes() != null && questEntity.getQuestoes().size() > 0) {
 				QuestaoDTO questaodto;

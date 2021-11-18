@@ -18,6 +18,7 @@ public class QuestionarioDTO extends DefaultReturn{
 	private List<QuestaoDTO> questoes = new ArrayList<QuestaoDTO>();
 	private List<RangePontuacaoClassificacaoDTO> ranges;
 	private String sobre;
+	private Integer tipoGrafico;
 	
 	public QuestionarioDTO() {
 		
@@ -111,6 +112,14 @@ public class QuestionarioDTO extends DefaultReturn{
 
 	public void setSobre(String sobre) {
 		this.sobre = sobre;
+	}
+	
+	public Integer getTipoGrafico() {
+		return tipoGrafico;
+	}
+
+	public void setTipoGrafico(Integer tipoGrafico) {
+		this.tipoGrafico = tipoGrafico;
 	}
 
 	@Override
