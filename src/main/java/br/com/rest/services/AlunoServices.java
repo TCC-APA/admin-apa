@@ -33,6 +33,7 @@ public class AlunoServices {
 		if(existeAluno) {
 			ao.addErro("Aluno já existente no banco, nada foi incluído.");
 		} else {
+			
 			PersistenceManager.getTransaction().begin();
 			try{
 				AlunoEntity alunoEntity = dtoToEntity(aluno);
