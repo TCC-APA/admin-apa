@@ -29,6 +29,8 @@ public class ProfessorServices {
 				professorOut.addErro("Professor já existente no banco, nada foi incluído.");
 			} else {
 				ProfessorEntity profEntity = dtoToEntity(professorIn);
+				if(PersistenceManager.getTransaction().isActive()) 
+					PersistenceManager.getTransaction().rollback();
 				PersistenceManager.getTransaction().begin();
 				try {
 					professorDao.incluir(profEntity);
@@ -74,6 +76,8 @@ public class ProfessorServices {
 		try {
 			professor = professorDao.buscarBySiape(siape);
 			if (professor != null) {
+				if(PersistenceManager.getTransaction().isActive()) 
+					PersistenceManager.getTransaction().rollback();
 				PersistenceManager.getTransaction().begin();
 				try {
 					professorDao.excluirById(professor.getId());

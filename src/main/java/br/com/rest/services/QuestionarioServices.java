@@ -79,6 +79,8 @@ public class QuestionarioServices {
 		if (questionarioBanco != null) {
 			return false;
 		} else {
+			if(PersistenceManager.getTransaction().isActive()) 
+				PersistenceManager.getTransaction().rollback();
 			PersistenceManager.getTransaction().begin();
 
 			try {

@@ -33,6 +33,8 @@ public class AlunoServices {
 		if(existeAluno) {
 			ao.addErro("Aluno já existente no banco, nada foi incluído.");
 		} else {
+			if(PersistenceManager.getTransaction().isActive()) 
+				PersistenceManager.getTransaction().rollback();
 			
 			PersistenceManager.getTransaction().begin();
 			try{
@@ -51,6 +53,8 @@ public class AlunoServices {
 	}
 	
 	public static void alterarAluno(Long id, AlunoIn aluno) throws Exception{
+		if(PersistenceManager.getTransaction().isActive()) 
+			PersistenceManager.getTransaction().rollback();
 		PersistenceManager.getTransaction().begin();
 		try{
 			AlunoEntity alunoEntity = dtoToEntity(aluno);

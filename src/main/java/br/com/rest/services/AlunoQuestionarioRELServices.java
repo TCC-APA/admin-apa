@@ -197,6 +197,8 @@ public class AlunoQuestionarioRELServices {
 	public static DefaultReturn inserir(InserirPerfilIn estiloDto) {
 		DefaultReturn retornoPadrao = new DefaultReturn();
 		AlunoQuestionarioREL estiloAluno = null;
+		if(PersistenceManager.getTransaction().isActive()) 
+			PersistenceManager.getTransaction().rollback();
 		PersistenceManager.getTransaction().begin();
 
 		try {

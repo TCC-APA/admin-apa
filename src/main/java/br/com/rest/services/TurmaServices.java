@@ -40,6 +40,8 @@ public class TurmaServices {
 		if(turmaBanco != null) {
 			return false;
 		} else {
+			if(PersistenceManager.getTransaction().isActive()) 
+				PersistenceManager.getTransaction().rollback();
 			PersistenceManager.getTransaction().begin();
 			
 			try{
@@ -131,6 +133,8 @@ public class TurmaServices {
 		TurmaEntity turma = consultarTurmaPorCodigo(codigoTurma);
 		if(aluno != null && turma != null) {
 			turma.addAluno(aluno);
+			if(PersistenceManager.getTransaction().isActive()) 
+				PersistenceManager.getTransaction().rollback();
 			PersistenceManager.getTransaction().begin();
 			try{
 				turmaDao.alterar(turma);	
@@ -155,6 +159,8 @@ public class TurmaServices {
 			turma.addQuestionario(QuestionarioServices.findQuestionariosPorNome("CAMEA40"));
 			incluirTurma(turma);
 		}
+		if(PersistenceManager.getTransaction().isActive()) 
+			PersistenceManager.getTransaction().rollback();
 		PersistenceManager.getTransaction().begin();
 		DefaultReturn dr = new DefaultReturn();
 		if(aluno != null && turma != null) {
